@@ -18,7 +18,7 @@ export async function createStream(valoHost, valoPort, [tenant, collection, name
     try {
         const uri = buildUri(valoHost, valoPort, "streams", tenant, collection, name);
         console.log("> Creating stream: ", uri);
-        const res = await http.put(uri, {schema}, {headers});
+        const res = await http.put(uri, schema, {headers});
         return res;
     } catch(e) {
         // Check if there is a response
@@ -37,9 +37,26 @@ export async function createStream(valoHost, valoPort, [tenant, collection, name
 }
 
 
-export function setStreamRepository(valoHost, valoPort, tenant, collection, name, data) {
+export async function setStreamRepository(valoHost, valoPort, [tenant, collection, name], data, headers) {
 
-
+    try {
+        const uri = buildUri(valoHost, valoPort, "streams", tenant, collection, name, "repository");
+        console.log("> Setting repository: ", uri);
+        const res = await http.put(uri, data, {headers});
+        return res;
+    } catch(e) {
+        // Check if there is a response
+        const response = e.response;
+        throwValoApiError(
+            {
+                401 : "Unauthorized",
+                404 : "NotFound",
+                409 : "Conflict",
+            },
+            response,
+            e
+        );
+    }
 }
 
 export function publishEventToStream(valoHost, valoPort, tenant, collection, name, event) {

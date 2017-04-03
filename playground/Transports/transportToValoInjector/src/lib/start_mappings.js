@@ -3,8 +3,9 @@
  */
 import WrapError from './error';
 import {
+    retryOnConflict,
     createStream,
-    retryOnConflict
+    setStreamRepository
 } from './valo';
 
 /**
@@ -25,7 +26,7 @@ function validateMappings(mappings) {
  *
  * @returns null
  * @param {Mapping}
- * @throws {ErrorCreatingStream|}  (Assume a validated mapping)
+ * @throws {ErrorCreatingStream|ErrorSettingStreamRepository}  (Assume a validated mapping)
  */
 async function startMapping(mapping) {
 
@@ -48,20 +49,44 @@ async function startMapping(mapping) {
     ////////////////////////////////////////////////////////////////////////////
     // Create valo stream if needed
     ////////////////////////////////////////////////////////////////////////////
-
     try {
         const res = await (retryOnConflict(createStream))(
             valoHost, valoPort,
-            [valoTenant, valoCollection, valoStream], valoSchema
+            [valoTenant, valoCollection, valoStream], {schema: valoSchema}
         );
     } catch(e) {
         //console.log(e);
         if (e.type === "VALO.Conflict") {
-            // TODO: retry is better...
             console.log("> Stream already exists. Skipping stream creation... ");
         } else {
             throw WrapError(new Error(), {
                 type: "ErrorCreatingStream",
+                cause: e
+            });
+        }
+    }
+
+    ////////////////////////////////////////////////////////////////////////////
+    // Persist stream in repository
+    ////////////////////////////////////////////////////////////////////////////
+    try {
+        const res = await (retryOnConflict(setStreamRepository))(
+            valoHost, valoPort,
+            [valoTenant, valoCollection, valoStream],
+            {
+                "name" : valoRepo,
+                "config" : {
+                    "defaultStringAnalyzer" : "StandardAnalyzer"
+                }
+            }
+        );
+    } catch(e) {
+        //console.log(e);
+        if (e.type === "VALO.Conflict") {
+            console.log("> Stream already exists. Skipping stream creation... ");
+        } else {
+            throw WrapError(new Error(), {
+                type: "ErrorSettingStreamRepository",
                 cause: e
             });
         }
