@@ -7,6 +7,13 @@ import {
     createStream,
     setStreamRepository
 } from './valo';
+import mqtt from 'mqtt'; // Eventually, add a transport dispacher layer
+
+////////////////////////////////////////////////////////////////////////////////
+// DEFINITIONS
+//
+const TRANSPORT_TIMEOUT =  2000; // Wait for 2 seconds for transport to connect
+////////////////////////////////////////////////////////////////////////////////
 
 /**
  * Validate mappings
@@ -25,8 +32,12 @@ function validateMappings(mappings) {
  * Start a single mapping
  *
  * @returns null
- * @param {Mapping}
- * @throws {ErrorCreatingStream|ErrorSettingStreamRepository}  (Assume a validated mapping)
+ * @param {Mapping} (Assume a validated mapping, so it won't cause errors)
+ * @throws { ErrorCreatingStream |
+             ErrorSettingStreamRepository |
+             NonSupportedTransportType |
+             TransportTimeout
+            }
  */
 async function startMapping(mapping) {
 
@@ -34,7 +45,7 @@ async function startMapping(mapping) {
     // Get mapping data
     ////////////////////////////////////////////////////////////////////////////
     const {
-        transportClient : {host: transportHost, host: transportPort},
+        transportClient : {host: transportHost, port: transportPort},
         transportType,
         transportOrigin,
 
@@ -92,7 +103,58 @@ async function startMapping(mapping) {
         }
     }
 
-    //conectTransportToStream();
+    ////////////////////////////////////////////////////////////////////////////
+    // Connect to transport
+    ////////////////////////////////////////////////////////////////////////////
+    // TODO: eventually, different transports should be supported
+    // TODO: for the moment, assume mqtt
+    if (transportType !== 'mqtt') throw WrapError(new Error(), {
+        type : "NonSupportedTransportType",
+        msg : "Only mqtt transporft supported for now!",
+        mapping
+    });
+
+    // TODO: here should be some dispatching to transports in the future
+    try {
+        const uri = `${transportType}://${transportHost}`;
+        console.log(`> Connecting to transport: ${uri} ...`);
+        const client = mqtt.connect(uri);
+
+        //
+        // Wait until connection is up and running!
+        //
+        await new Promise( (resolve, reject) => {
+            // Fails when timeout
+            setTimeout(
+                () => {
+                    reject(WrapError(new Error, {
+                        type: "TransportTimeout",
+                        timeoutInMillis: TRANSPORT_TIMEOUT
+                    }))
+                }, TRANSPORT_TIMEOUT
+            );
+            // Succeeds when connected
+            client.on('connect', () => {
+                console.log("> Transport connected");
+                resolve();
+            })
+        });
+
+        //
+        // Client is ready now to subscribe
+        //
+        client.subscribe(transportOrigin);
+        client.on('message', (topic, message) => {
+            console.log("> Message: ", topic, message.toString());
+        });
+        client.on('error', (e) => {
+            console.log("> Transport Error: ", e);
+        });
+
+    } catch (e) {
+        throw e;
+    }
+
 }
 
 
@@ -109,6 +171,8 @@ export default async function startMappings(mappings) {
     if ( ! validateMappings(mappings) ) throw WrapError(new Error(), {
         type : "InvalidMappings"
     });
+
+
     console.log("> Starting mappings...");
     // Start each single mapping
     return await Promise.all(mappings.map(startMapping));

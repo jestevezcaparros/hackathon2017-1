@@ -55,7 +55,7 @@ export async function setStreamRepository(valoHost, valoPort, [tenant, collectio
     }
 }
 
-export function publishEventToStream(valoHost, valoPort, tenant, collection, name, event) {
+export function publishEventToStream(valoHost, valoPort, [tenant, collection, name], event, headers) {
 
 
 }
@@ -64,7 +64,6 @@ export function publishEventToStream(valoHost, valoPort, tenant, collection, nam
  * Retry-on-conflict DECORATOR for API calls
  */
 export function retryOnConflict(f) {
-    console.log("> Retry On Conflict");
     const getValoConfigVersionFromBody = body => {
         const regex = /Valo-Config-Version: *([^ \n\r]*)/g ;
         const resultArray = regex.exec(body);

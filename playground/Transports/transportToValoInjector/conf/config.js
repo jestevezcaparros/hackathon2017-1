@@ -28,7 +28,7 @@ const mqttClientConfigs = {
 // (We write the schemas as in JSON for convenience
 ///////////////////////////////////////////////////////////////////////////////
 const valoSchemas = {
-    temperature :
+    single :
     {
         "version": "",
         "config": {},
@@ -56,9 +56,20 @@ const mappings = [
         "valoTenant" : "demo",
         "valoCollection" : "iot",
         "valoStream" : "temperature",
-        "valoSchema" : valoSchemas.temperature,
+        "valoSchema" : valoSchemas.single,
         "valoRepo" : "tsr" // "tsr"|"ssr"|null
+    },
+    {
+        "transportType" : "mqtt",
+        "transportClient" : mqttClientConfigs.mqtt1,
+        "transportOrigin" : '/jonthebeach/sensors/humidity',
 
+        "valoClient" : valoClientConfigs.valo1,
+        "valoTenant" : "demo",
+        "valoCollection" : "iot",
+        "valoStream" : "humidity",
+        "valoSchema" : valoSchemas.single,
+        "valoRepo" : "tsr" // "tsr"|"ssr"|null
     }
 
 
