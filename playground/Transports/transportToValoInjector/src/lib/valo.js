@@ -20,14 +20,13 @@ export async function createStream(valoHost, valoPort, [tenant, collection, name
         console.log("> Creating stream: ", uri);
         return await http.put(uri, schema, {headers});
     } catch(e) {
-        throwValoApiError(
+        throwValoApiError(e,
             {
                 401 : "Unauthorized",
                 403 : "Forbidden",
                 409 : "Conflict",
                 502 : "BadGateway"
-            },
-            e
+            }
         );
     }
 }
@@ -46,13 +45,12 @@ export async function setStreamRepository(valoHost, valoPort, [tenant, collectio
         return await http.put(uri, data, {headers});
     } catch(e) {
 
-        throwValoApiError(
+        throwValoApiError(e,
             {
                 401 : "Unauthorized",
                 404 : "NotFound",
                 409 : "Conflict",
-            },
-            e
+            }
         );
     }
 }
@@ -114,7 +112,7 @@ function buildUri(host, port, ...pathSegments) {
 /*
  *  Builds and throws error from API status code
  */
-function throwValoApiError(statusToErrorMap, cause) {
+function throwValoApiError(cause, statusToErrorMap) {
     // Check if there is a response
     const response = cause.response;
     if (!response) {
