@@ -3,7 +3,8 @@
  */
 import WrapError from './error';
 import {
-    createStream
+    createStream,
+    retryOnConflict
 } from './valo';
 
 /**
@@ -49,15 +50,15 @@ async function startMapping(mapping) {
     ////////////////////////////////////////////////////////////////////////////
 
     try {
-        const res = await createStream(
+        const res = await (retryOnConflict(createStream))(
             valoHost, valoPort,
-            valoTenant, valoCollection, valoStream, valoSchema
+            [valoTenant, valoCollection, valoStream], valoSchema
         );
     } catch(e) {
         //console.log(e);
         if (e.type === "VALO.Conflict") {
             // TODO: retry is better...
-            console.log("> Stream already exists. Skipping stream creation... ")
+            console.log("> Stream already exists. Skipping stream creation... ");
         } else {
             throw WrapError(new Error(), {
                 type: "ErrorCreatingStream",

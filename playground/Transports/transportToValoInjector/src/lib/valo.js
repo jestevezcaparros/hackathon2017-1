@@ -13,12 +13,12 @@ import WrapError from './error';
  * @returns {Object} - Streams's schema
  * @throws {VALO.NoResponseFromValo | VALO.Unauthorized | VALO.Forbidden | VALO.Conflict | VALO.BadGateway }
  */
-export async function createStream(valoHost, valoPort, tenant, collection, name, schema) {
+export async function createStream(valoHost, valoPort, [tenant, collection, name], schema, headers) {
 
     try {
         const uri = buildUri(valoHost, valoPort, "streams", tenant, collection, name);
         console.log("> Creating stream: ", uri);
-        const res = await http.put(uri, {schema});
+        const res = await http.put(uri, {schema}, {headers});
         return res;
     } catch(e) {
         // Check if there is a response
@@ -47,6 +47,46 @@ export function publishEventToStream(valoHost, valoPort, tenant, collection, nam
 
 }
 
+/**
+ * Retry-on-conflict decorator for API calls
+ * Grabs
+ */
+export function retryOnConflict(f) {
+    console.log("> Retry On Conflict");
+    const getValoConfigVersionFromBody = body => {
+        const regex = /Valo-Config-Version: *([^ \n\r]*)/g ;
+        const resultArray = regex.exec(body);
+        if (resultArray.length < 2) {
+            return null;
+        } else {
+            return resultArray[1];
+        }
+    };
+    // Return decorated function
+    return async function(...args) {
+        try {
+            const res1 = await f(...args);
+            return res1;
+        } catch(e) {
+            // Handle VALO.Conflict
+            if ( e.type !== "VALO.Conflict") {
+                // Transparently bubble up error if other than VALO.Conflict
+                throw e;
+            } else {
+                // Handle 409 by retrying ONCE with correct headers
+                const response = e.response;
+                const valoConfigVersion = getValoConfigVersionFromBody(response.data);
+                // TODO: steps above could fail and throw errors!!
+                console.log(`> CONFLICT: found existing version ${valoConfigVersion} . Retrying 1 time ...`);
+                // Update headers argument, "Valo-Config-Version" field --- [host, port, path, body, headers]
+                args[4] = Object.assign({}, args[4], {"Valo-Config-Version" : valoConfigVersion});
+                const res2 = await f(...args);
+                return res2;
+            }
+        }
+    }
+}
+
 ////////////////////////////////////////////////////////////////////////////////
 // AUX
 ////////////////////////////////////////////////////////////////////////////////
@@ -72,14 +112,8 @@ function throwValoApiError(statusToErrorMap, response, cause) {
             type : `VALO.${errorType}`,
             status : response.status,
             cause,
-            msg : response.data
+            msg : response.data,
+            response
         });
     }
-}
-
-/**
- * Retry-on-conflict decorator
- */
-function retryOnConflict(f) {
-
 }
