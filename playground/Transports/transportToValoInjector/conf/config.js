@@ -35,7 +35,21 @@ const valoSchemas = {
         "topDef": {
             "type": "record",
             "properties": {
-                "value" : {"type": "double"}
+                "value" : {"type": "double"},
+                "origin" : {"type": "string"}
+            }
+        }
+    },
+    singleWithTimestamp :
+    {
+        "version": "",
+        "config": {},
+        "topDef": {
+            "type": "record",
+            "properties": {
+                "value" : {"type": "double"},
+                "timestamp" : {"type": "datetime"},
+                "origin" : {"type": "string"}
             }
         }
     }
@@ -51,28 +65,57 @@ const mappings = [
         "transportType" : "mqtt",
         "transportClient" : mqttClientConfigs.mqtt1,
         "transportOrigin" : '/jonthebeach/sensors/temperature',
-
         "valoClient" : valoClientConfigs.valo1,
         "valoTenant" : "demo",
         "valoCollection" : "iot",
         "valoStream" : "temperature",
-        "valoSchema" : valoSchemas.single,
+        "valoSchema" : valoSchemas.singleWithTimestamp,
         "valoRepo" : "tsr" // "tsr"|"ssr"|null
     },
     {
         "transportType" : "mqtt",
         "transportClient" : mqttClientConfigs.mqtt1,
         "transportOrigin" : '/jonthebeach/sensors/humidity',
-
         "valoClient" : valoClientConfigs.valo1,
         "valoTenant" : "demo",
         "valoCollection" : "iot",
         "valoStream" : "humidity",
-        "valoSchema" : valoSchemas.single,
+        "valoSchema" : valoSchemas.singleWithTimestamp,
+        "valoRepo" : "tsr" // "tsr"|"ssr"|null
+    },
+    {
+        "transportType" : "mqtt",
+        "transportClient" : mqttClientConfigs.mqtt1,
+        "transportOrigin" : '/jonthebeach/sensors/alcohol',
+        "valoClient" : valoClientConfigs.valo1,
+        "valoTenant" : "demo",
+        "valoCollection" : "iot",
+        "valoStream" : "alcohol",
+        "valoSchema" : valoSchemas.singleWithTimestamp,
+        "valoRepo" : "tsr" // "tsr"|"ssr"|null
+    },
+    {
+        "transportType" : "mqtt",
+        "transportClient" : mqttClientConfigs.mqtt1,
+        "transportOrigin" : '/jonthebeach/sensors/light',
+        "valoClient" : valoClientConfigs.valo1,
+        "valoTenant" : "demo",
+        "valoCollection" : "iot",
+        "valoStream" : "light",
+        "valoSchema" : valoSchemas.singleWithTimestamp,
+        "valoRepo" : "tsr" // "tsr"|"ssr"|null
+    },
+    {
+        "transportType" : "mqtt",
+        "transportClient" : mqttClientConfigs.mqtt1,
+        "transportOrigin" : '/jonthebeach/sensors/distance',
+        "valoClient" : valoClientConfigs.valo1,
+        "valoTenant" : "demo",
+        "valoCollection" : "iot",
+        "valoStream" : "distance",
+        "valoSchema" : valoSchemas.singleWithTimestamp,
         "valoRepo" : "tsr" // "tsr"|"ssr"|null
     }
-
-
 ];
 
 ///////////////////////////////////////////////////////////////////////////////

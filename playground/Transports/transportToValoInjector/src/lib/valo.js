@@ -9,7 +9,9 @@ import WrapError from './error';
 
 /**
  * Creates stream in Valo - PUT /streams/:tenant/:collection/:name
+ * https://valo.io/docs/api_reference/streams_api.html#put-a-stream
  *
+ * @async
  * @returns {Object} - Streams's schema
  * @throws {VALO.NoResponseFromValo | VALO.Unauthorized | VALO.Forbidden | VALO.Conflict | VALO.BadGateway }
  */
@@ -33,7 +35,9 @@ export async function createStream(valoHost, valoPort, [tenant, collection, name
 
 /**
  * Sets stream's repository in Valo - PUT /streams/:tenant/:collection/:name/repository
+ * https://valo.io/docs/api_reference/streams_api.html#put-the-repository-mapping
  *
+ * @async
  * @returns {Object} - Streams's repo config
  * @throws {VALO.NoResponseFromValo | VALO.Unauthorized | VALO.NotFound| VALO.Conflict}
  */
@@ -44,7 +48,6 @@ export async function setStreamRepository(valoHost, valoPort, [tenant, collectio
         console.log("> Setting repository: ", uri);
         return await http.put(uri, data, {headers});
     } catch(e) {
-
         throwValoApiError(e,
             {
                 401 : "Unauthorized",
@@ -55,9 +58,29 @@ export async function setStreamRepository(valoHost, valoPort, [tenant, collectio
     }
 }
 
-export function publishEventToStream(valoHost, valoPort, [tenant, collection, name], event, headers) {
+/**
+ * Sets stream's repository in Valo - PUT /streams/:tenant/:collection/:name/repository
+ * https://valo.io/docs/api_reference/streams_api.html#post-data-to-a-stream
+ *
+ * @async
+ * @returns null
+ * @throws {VALO.NoResponseFromVal | VALO.NotFound | VALO.InternalServerError}
+ */
+export async function publishEventToStream(valoHost, valoPort, [tenant, collection, name], evt, headers) {
 
-
+    try {
+        const uri = buildUri(valoHost, valoPort, "streams", tenant, collection, name);
+        console.log("> Sending event to: ", uri);
+        // TODO: what happens if Valo is not reachable!!! Should be an error!
+        return await http.post(uri, evt, {headers});
+    } catch(e) {
+        throwValoApiError(e,
+            {
+                404 : "NotFound",
+                500 : "InternalServerError",
+            }
+        );
+    }
 }
 
 /**
