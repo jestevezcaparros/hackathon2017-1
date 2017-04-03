@@ -18,8 +18,7 @@ export async function createStream(valoHost, valoPort, [tenant, collection, name
     try {
         const uri = buildUri(valoHost, valoPort, "streams", tenant, collection, name);
         console.log("> Creating stream: ", uri);
-        const res = await http.put(uri, schema, {headers});
-        return res;
+        return await http.put(uri, schema, {headers});
     } catch(e) {
         // Check if there is a response
         const response = e.response;
@@ -42,8 +41,7 @@ export async function setStreamRepository(valoHost, valoPort, [tenant, collectio
     try {
         const uri = buildUri(valoHost, valoPort, "streams", tenant, collection, name, "repository");
         console.log("> Setting repository: ", uri);
-        const res = await http.put(uri, data, {headers});
-        return res;
+        return await http.put(uri, data, {headers});
     } catch(e) {
         // Check if there is a response
         const response = e.response;
@@ -65,8 +63,7 @@ export function publishEventToStream(valoHost, valoPort, tenant, collection, nam
 }
 
 /**
- * Retry-on-conflict decorator for API calls
- * Grabs
+ * Retry-on-conflict DECORATOR for API calls
  */
 export function retryOnConflict(f) {
     console.log("> Retry On Conflict");
