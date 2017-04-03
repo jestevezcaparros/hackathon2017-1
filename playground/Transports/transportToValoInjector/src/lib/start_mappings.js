@@ -55,10 +55,15 @@ async function startMapping(mapping) {
         );
     } catch(e) {
         //console.log(e);
-        throw WrapError(new Error(), {
-            type: "ErrorCreatingStream",
-            cause: e
-        });
+        if (e.type === "VALO.Conflict") {
+            // TODO: retry is better...
+            console.log("> Stream already exists. Skipping stream creation... ")
+        } else {
+            throw WrapError(new Error(), {
+                type: "ErrorCreatingStream",
+                cause: e
+            });
+        }
     }
 
     //conectTransportToStream();

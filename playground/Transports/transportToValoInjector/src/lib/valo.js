@@ -11,7 +11,7 @@ import WrapError from './error';
  * Creates stream in Valo - PUT /streams/:tenant/:collection/:name
  *
  * @returns {Object} - Streams's schema
- * @throws {NoResponseFromValo | VALO.Unauthorized | VALO.Forbidden | VALO.Conflict | VALO.BadGateway }
+ * @throws {VALO.NoResponseFromValo | VALO.Unauthorized | VALO.Forbidden | VALO.Conflict | VALO.BadGateway }
  */
 export async function createStream(valoHost, valoPort, tenant, collection, name, schema) {
 
@@ -23,23 +23,16 @@ export async function createStream(valoHost, valoPort, tenant, collection, name,
     } catch(e) {
         // Check if there is a response
         const response = e.response;
-        if (!response) {
-            throw WrapError(new Error(), {
-                type: "NoResponseFromValo",
-                cause: e
-            });
-        } else {
-            throwValoApiError(
-                {
-                    401 : "Unauthorized",
-                    403 : "Forbidden",
-                    409 : "Conflict",
-                    502 : "BadGateway"
-                },
-                response,
-                e
-            );
-        }
+        throwValoApiError(
+            {
+                401 : "Unauthorized",
+                403 : "Forbidden",
+                409 : "Conflict",
+                502 : "BadGateway"
+            },
+            response,
+            e
+        );
     }
 }
 
@@ -68,11 +61,25 @@ function buildUri(host, port, ...pathSegments) {
  *  Builds and throws error from API status code
  */
 function throwValoApiError(statusToErrorMap, response, cause) {
-    const errorType = statusToErrorMap[response.status] || "Unknown";
-    throw WrapError(new Error(), {
-        type : `VALO.${errorType}`,
-        status : response.status,
-        cause,
-        msg : response.data
-    });
+    if (!response) {
+        throw WrapError(new Error(), {
+            type: "VALO.NoResponseFromValo",
+            cause
+        });
+    } else {
+        const errorType = statusToErrorMap[response.status] || "Unknown";
+        throw WrapError(new Error(), {
+            type : `VALO.${errorType}`,
+            status : response.status,
+            cause,
+            msg : response.data
+        });
+    }
+}
+
+/**
+ * Retry-on-conflict decorator
+ */
+function retryOnConflict(f) {
+
 }
