@@ -20,8 +20,6 @@ export async function createStream(valoHost, valoPort, [tenant, collection, name
         console.log("> Creating stream: ", uri);
         return await http.put(uri, schema, {headers});
     } catch(e) {
-        // Check if there is a response
-        const response = e.response;
         throwValoApiError(
             {
                 401 : "Unauthorized",
@@ -29,13 +27,17 @@ export async function createStream(valoHost, valoPort, [tenant, collection, name
                 409 : "Conflict",
                 502 : "BadGateway"
             },
-            response,
             e
         );
     }
 }
 
-
+/**
+ * Sets stream's repository in Valo - PUT /streams/:tenant/:collection/:name/repository
+ *
+ * @returns {Object} - Streams's repo config
+ * @throws {VALO.NoResponseFromValo | VALO.Unauthorized | VALO.NotFound| VALO.Conflict}
+ */
 export async function setStreamRepository(valoHost, valoPort, [tenant, collection, name], data, headers) {
 
     try {
@@ -43,15 +45,13 @@ export async function setStreamRepository(valoHost, valoPort, [tenant, collectio
         console.log("> Setting repository: ", uri);
         return await http.put(uri, data, {headers});
     } catch(e) {
-        // Check if there is a response
-        const response = e.response;
+
         throwValoApiError(
             {
                 401 : "Unauthorized",
                 404 : "NotFound",
                 409 : "Conflict",
             },
-            response,
             e
         );
     }
@@ -114,7 +114,9 @@ function buildUri(host, port, ...pathSegments) {
 /*
  *  Builds and throws error from API status code
  */
-function throwValoApiError(statusToErrorMap, response, cause) {
+function throwValoApiError(statusToErrorMap, cause) {
+    // Check if there is a response
+    const response = cause.response;
     if (!response) {
         throw WrapError(new Error(), {
             type: "VALO.NoResponseFromValo",
