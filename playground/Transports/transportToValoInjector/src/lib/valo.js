@@ -20,7 +20,8 @@ export async function createStream(valoHost, valoPort, [tenant, collection, name
     try {
         const uri = buildUri(valoHost, valoPort, "streams", tenant, collection, name);
         console.log("> Creating stream: ", uri);
-        return await http.put(uri, schema, {headers});
+        const {data: body} = await http.put(uri, schema, {headers});
+        return body;
     } catch(e) {
         throwValoApiError(e,
             {
@@ -46,7 +47,8 @@ export async function setStreamRepository(valoHost, valoPort, [tenant, collectio
     try {
         const uri = buildUri(valoHost, valoPort, "streams", tenant, collection, name, "repository");
         console.log("> Setting repository: ", uri);
-        return await http.put(uri, data, {headers});
+        const {data: body} = await http.put(uri, data, {headers});
+        return body;
     } catch(e) {
         throwValoApiError(e,
             {
@@ -72,7 +74,7 @@ export async function publishEventToStream(valoHost, valoPort, [tenant, collecti
         const uri = buildUri(valoHost, valoPort, "streams", tenant, collection, name);
         console.log("> Sending event to: ", uri);
         // TODO: what happens if Valo is not reachable!!! Should be an error!
-        return await http.post(uri, evt, {headers});
+        await http.post(uri, evt, {headers});
     } catch(e) {
         throwValoApiError(e,
             {
@@ -113,6 +115,7 @@ export function retryOnConflict(f) {
                 // TODO: steps above could fail and throw errors!!
                 console.log(`> CONFLICT: found existing version ${valoConfigVersion} . Retrying 1 time ...`);
                 // Update headers argument, "Valo-Config-Version" field --- [host, port, path, body, headers]
+                // TODO: this takes for granted that headers param is in position 4
                 args[4] = Object.assign({}, args[4], {"Valo-Config-Version" : valoConfigVersion});
                 const res2 = await f(...args);
                 return res2;
@@ -151,5 +154,75 @@ function throwValoApiError(cause, statusToErrorMap) {
             msg : response.data,
             response
         });
+    }
+}
+
+////////////////////////////////////////////////////////////////////////////////
+// SESSIONS + QUERIES
+////////////////////////////////////////////////////////////////////////////////
+
+/**
+ * Create session - POST /execution/:tenant/sessions
+ * https://valo.io/docs/api_reference/execution_api.html#create-a-new-session
+ *
+ * @async
+ * @returns {"session": "/execution/demo/sessions/4dc03528-59c8-4cb4-8618-71c26681484e"}
+ * @throws {VALO.NoResponseFromValo | VALO.NotFound}
+ */
+export async function createSession(valoHost, valoPort, tenant) {
+
+    try {
+        const uri = buildUri(valoHost, valoPort, "execution", tenant, "sessions");
+        console.log("> Creating session: ", uri);
+        const {data: body} = await http.post(uri);
+        return body;
+    } catch(e) {
+        throwValoApiError(e,
+            {
+                404 : "NotFound"
+            }
+        );
+    }
+}
+
+/**
+ * Create (or update) execution context - PUT /execution/:tenant/sessions/:id
+ * https://valo.io/docs/api_reference/execution_api.html#put-an-execution-environment
+ *
+ * @async
+ * @returns
+ * @throws {VALO.NoResponseFromValo}
+ */
+export async function startExecutionContext(valoHost, valoPort, [tenant, id], data, headers) {
+
+    try {
+        const uri = buildUri(valoHost, valoPort, "execution", tenant, "sessions", id);
+        console.log("> Starting execution context: ", uri);
+        const {data: body} = await http.put(uri, data, {headers});
+        return body;
+    } catch(e) {
+        throwValoApiError(e, {});
+    }
+}
+
+
+
+/**
+ * Make query - PUT /execution/:tenant/sessions/:id/queries
+ * https://valo.io/docs/api_reference/execution_api.html#put-a-query
+ *
+ * @async
+ * @returns
+ * @throws {VALO.NoResponseFromValo}
+ */
+export async function setQuery(valoHost, valoPort, [tenant, id], data, headers) {
+
+    try {
+        const uri = buildUri(valoHost, valoPort, "execution", tenant, "sessions", id, "queries");
+        console.log("> Sending query: ", uri);
+        const {data: body} = await http.put(uri, data, {headers});
+        return body;
+    } catch(e) {
+        throwValoApiError(e, {});
     }
 }
