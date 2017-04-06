@@ -11,7 +11,9 @@
   "license": "",
   "dependencies": {
     "axios": "^0.15.3",
-    "mqtt": "^2.5.0"
+    "eventsource": "^0.2.2",
+    "mqtt": "^2.5.0",
+    "rx-lite": "^4.0.8"
   },
   "devDependencies": {
     "babel-cli": "^6.24.0",

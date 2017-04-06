@@ -109,6 +109,8 @@ export async function publishEventToStream(
 
 /**
  * Retry-on-conflict DECORATOR for API calls
+ * TODO: only useful for api functions with a body to be sent (3rd param)
+ *  as this decorator expects the options in the 4th parameter.
  */
 export function retryOnConflict(f) {
 
@@ -250,8 +252,6 @@ export async function startExecutionContext(
     }
 }
 
-
-
 /**
  * Make query - PUT /execution/:tenant/sessions/:id/queries
  * https://valo.io/docs/api_reference/execution_api.html#put-a-query
@@ -271,6 +271,35 @@ export async function setQuery(
         const uri = buildUri(valoHost, valoPort, "execution", tenant, "sessions", id, "queries");
         console.log("> Sending query: ", uri);
         const {data: body} = await http.put(uri, data, {headers});
+        return body;
+    } catch(e) {
+        throwValoApiError(e, {});
+    }
+}
+
+
+
+/**
+ * Start query - PUT /execution/:tenant/sessions/:id/queries/:queryId/_start
+ * https://valo.io/docs/api_reference/execution_api.html#start-a-query
+ *
+ * @async
+ * @returns
+ * @throws {VALO.NoResponseFromValo}
+ */
+export async function startQuery(
+    {valoHost, valoPort},
+    [tenant, sessionId, queryId],
+    {headers = DEFAULT_HEADERS} = {}
+) {
+
+    try {
+        const uri = buildUri(
+            valoHost, valoPort,"execution", tenant,
+            "sessions", sessionId, "queries", queryId, "_start"
+        );
+        console.log("> Starting query: ", uri);
+        const {data: body} = await http.put(uri, {headers});
         return body;
     } catch(e) {
         throwValoApiError(e, {});
