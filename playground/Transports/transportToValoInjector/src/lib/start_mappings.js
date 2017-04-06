@@ -63,7 +63,7 @@ async function startMapping(mapping) {
     ////////////////////////////////////////////////////////////////////////////
     try {
         const res = await (retryOnConflict(createStream))(
-            valoHost, valoPort,
+            {valoHost, valoPort},
             [valoTenant, valoCollection, valoStream], {schema: valoSchema}
         );
     } catch(e) {
@@ -83,7 +83,7 @@ async function startMapping(mapping) {
     ////////////////////////////////////////////////////////////////////////////
     try {
         const res = await (retryOnConflict(setStreamRepository))(
-            valoHost, valoPort,
+            {valoHost, valoPort},
             [valoTenant, valoCollection, valoStream],
             {
                 "name" : valoRepo,

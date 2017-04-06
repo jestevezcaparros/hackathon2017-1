@@ -7,6 +7,13 @@
 import http from 'axios';
 import WrapError from './error';
 
+//
+// DEFINITIONS
+//
+const DEFAULT_HOST = "localhost";
+const DEFAULT_PORT = 8888;
+const DEFAULT_HEADERS = {"Content-Type" : "application/json"};
+
 /**
  * Creates stream in Valo - PUT /streams/:tenant/:collection/:name
  * https://valo.io/docs/api_reference/streams_api.html#put-a-stream
@@ -15,7 +22,12 @@ import WrapError from './error';
  * @returns {Object} - Streams's schema
  * @throws {VALO.NoResponseFromValo | VALO.Unauthorized | VALO.Forbidden | VALO.Conflict | VALO.BadGateway }
  */
-export async function createStream(valoHost, valoPort, [tenant, collection, name], schema, headers) {
+export async function createStream(
+    {valoHost = DEFAULT_PORT, valoPort = DEFAULT_PORT},
+    [tenant, collection, name],
+    schema,
+    {headers = DEFAULT_HEADERS} = {}
+) {
 
     try {
         const uri = buildUri(valoHost, valoPort, "streams", tenant, collection, name);
@@ -42,7 +54,12 @@ export async function createStream(valoHost, valoPort, [tenant, collection, name
  * @returns {Object} - Streams's repo config
  * @throws {VALO.NoResponseFromValo | VALO.Unauthorized | VALO.NotFound| VALO.Conflict}
  */
-export async function setStreamRepository(valoHost, valoPort, [tenant, collection, name], data, headers) {
+export async function setStreamRepository(
+    {valoHost = DEFAULT_PORT, valoPort = DEFAULT_PORT},
+    [tenant, collection, name],
+    data,
+    {headers = DEFAULT_HEADERS} = {}
+) {
 
     try {
         const uri = buildUri(valoHost, valoPort, "streams", tenant, collection, name, "repository");
@@ -68,12 +85,17 @@ export async function setStreamRepository(valoHost, valoPort, [tenant, collectio
  * @returns null
  * @throws {VALO.NoResponseFromVal | VALO.NotFound | VALO.InternalServerError}
  */
-export async function publishEventToStream(valoHost, valoPort, [tenant, collection, name], evt, headers) {
+export async function publishEventToStream(
+    {valoHost = DEFAULT_PORT, valoPort = DEFAULT_PORT},
+    [tenant, collection, name],
+    evt,
+    {headers = DEFAULT_HEADERS} = {}
+) {
 
     try {
         const uri = buildUri(valoHost, valoPort, "streams", tenant, collection, name);
         console.log("> Sending event to: ", uri);
-        // TODO: what happens if Valo is not reachable!!! Should be an error!
+        // TODO: what happens if Valo is not reachable!!! There should be an error!
         await http.post(uri, evt, {headers});
     } catch(e) {
         throwValoApiError(e,
@@ -89,6 +111,7 @@ export async function publishEventToStream(valoHost, valoPort, [tenant, collecti
  * Retry-on-conflict DECORATOR for API calls
  */
 export function retryOnConflict(f) {
+
     const getValoConfigVersionFromBody = body => {
         const regex = /Valo-Config-Version: *([^ \n\r]*)/g ;
         const resultArray = regex.exec(body);
@@ -98,6 +121,7 @@ export function retryOnConflict(f) {
             return resultArray[1];
         }
     };
+
     // Return decorated function
     return async function(...args) {
         try {
@@ -115,8 +139,20 @@ export function retryOnConflict(f) {
                 // TODO: steps above could fail and throw errors!!
                 console.log(`> CONFLICT: found existing version ${valoConfigVersion} . Retrying 1 time ...`);
                 // Update headers argument, "Valo-Config-Version" field --- [host, port, path, body, headers]
-                // TODO: this takes for granted that headers param is in position 4
-                args[4] = Object.assign({}, args[4], {"Valo-Config-Version" : valoConfigVersion});
+                // TODO: This takes for granted that headers field is in options param in position 3
+                // This obviously does not work for api functions that do not have a body to be sent
+                const receivedHeaders = args[3] && args[3].headers  || {};
+                args[3] = Object.assign(
+                    {},
+                    args[3],
+                    {
+                        headers: Object.assign(
+                            {},
+                            receivedHeaders,
+                            {"Valo-Config-Version" : valoConfigVersion}
+                        )
+                    }
+                );
                 const res2 = await f(...args);
                 return res2;
             }
@@ -169,8 +205,12 @@ function throwValoApiError(cause, statusToErrorMap) {
  * @returns {"session": "/execution/demo/sessions/4dc03528-59c8-4cb4-8618-71c26681484e"}
  * @throws {VALO.NoResponseFromValo | VALO.NotFound}
  */
-export async function createSession(valoHost, valoPort, tenant) {
-
+export async function createSession(
+    {valoHost, valoPort},
+    tenant
+) {
+    // Check if 2nd param is delivered as an array with 1 item [tenant] and unwrap it
+    tenant = tenant.constructor === Array ? tenant[0] : tenant;
     try {
         const uri = buildUri(valoHost, valoPort, "execution", tenant, "sessions");
         console.log("> Creating session: ", uri);
@@ -193,7 +233,12 @@ export async function createSession(valoHost, valoPort, tenant) {
  * @returns
  * @throws {VALO.NoResponseFromValo}
  */
-export async function startExecutionContext(valoHost, valoPort, [tenant, id], data, headers) {
+export async function startExecutionContext(
+    {valoHost, valoPort},
+    [tenant, id],
+    data,
+    {headers = DEFAULT_HEADERS} = {}
+) {
 
     try {
         const uri = buildUri(valoHost, valoPort, "execution", tenant, "sessions", id);
@@ -215,7 +260,12 @@ export async function startExecutionContext(valoHost, valoPort, [tenant, id], da
  * @returns
  * @throws {VALO.NoResponseFromValo}
  */
-export async function setQuery(valoHost, valoPort, [tenant, id], data, headers) {
+export async function setQuery(
+    {valoHost, valoPort},
+    [tenant, id],
+    data,
+    {headers = DEFAULT_HEADERS} = {}
+) {
 
     try {
         const uri = buildUri(valoHost, valoPort, "execution", tenant, "sessions", id, "queries");
