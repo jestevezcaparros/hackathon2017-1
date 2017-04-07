@@ -37,7 +37,7 @@ async function main() {
 
         observable.subscribe(
             evt => {
-                //console.log("Valo event: ", JSON.stringify(evt, null, 4));
+                console.log("Valo event: ", JSON.stringify(evt, null, 4));
             },
             err => {
                 console.error("ERROR in ouput channel's SSE stream", err);
