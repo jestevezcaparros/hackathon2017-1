@@ -9,9 +9,6 @@ import WrapError from '../lib/error';
 import EventSource from 'eventsource';
 import rx from 'rx-lite';
 
-console.log(createSession);
-console.log("here");
-
 const HOST = "localhost";
 const PORT = 8888;
 const TENANT = "demo";
@@ -27,6 +24,7 @@ async function main() {
             {valoHost: HOST, valoPort: PORT},
             TENANT
         );
+        // TODO: write utitily function to convert from sessionUri to sessionId
         const sessionId = session.replace(/.*\//, "");
         console.log("Session created: ", sessionId);
 
@@ -54,8 +52,7 @@ async function main() {
                 "id": MY_QUERY_ID,
                 "body": "from /streams/demo/infrastructure/cpu",
                 "query_type": "valo-query-lang",
-                "variables": [
-                ]
+                "variables": []
             }
         );
         console.log("Query state: ", JSON.stringify(queryState, null, 4));
@@ -86,7 +83,7 @@ async function main() {
             };
 
             sseSource.onmessage = msg => {
-                console.log("SSE MSG: ", msg);
+                //console.log("SSE MSG: ", msg);
                 observer.onNext(msg);
             };
 
@@ -102,10 +99,11 @@ async function main() {
         });
 
         const processedObservable = observable
-        .map( evt => JSON.parse(evt.data))
-        .filter( evt => evt.type === "increment")
-        .map(evt => evt.items)
-        //.filter( evt => evt.action === "add")
+        .pluck("data")
+        .map(JSON.parse)
+        .filter(evt => evt.type === "increment")
+        .flatMap(evt => evt.items)
+        .pluck("data")
         ;
 
         processedObservable.subscribe(
