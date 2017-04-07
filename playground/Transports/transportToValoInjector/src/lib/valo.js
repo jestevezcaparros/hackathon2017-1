@@ -457,6 +457,7 @@ export async function runSingleQuery(
 
         ////////////////////////////////////////////////////////////////////////
         // Create observable
+        // TODO: WAIT for observable to OPEN!!!
         ////////////////////////////////////////////////////////////////////////
         const rawObservable = rx.Observable.create( observer => {
 
@@ -464,6 +465,7 @@ export async function runSingleQuery(
 
             sseSource.onopen = () => {
                 console.log("> SSE opened");
+                // TODO: WAIT for observable to OPEN!!!
             };
 
             sseSource.onmessage = msg => {
