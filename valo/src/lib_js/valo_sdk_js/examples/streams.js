@@ -9,7 +9,7 @@
 import * as streams from '../api/streams';
 import {
     retryOnConflict
-} from '../util';
+} from '../index';
 
 
 //

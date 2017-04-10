@@ -8,7 +8,7 @@
  */
 import {
     runSingleQuery
-} from '../api/queries';
+} from '../index';
 
 //
 // DEFINITIONS
@@ -51,8 +51,57 @@ async function runQuery_A() {
         throw e;
     }
 }
+//
+// Run a single query, Async/Await style
+//  and get query's metadata (needed for visualization)
+//
+async function runQueryAndGetInfo_A() {
+
+    try {
+        const {
+            observable,
+            output,
+            outputUri,
+            schema,
+            outputType,
+            isHistorical
+        } = await runSingleQuery(
+            LOCAL_VALO,
+            TENANT_1,
+            `from /streams/${TENANT_1}/${COLLECTION_1}/${STREAM_NAME_1}`
+            /*
+            {
+                //"id": MY_QUERY_ID,
+                "body": "from /streams/demo/infrastructure/cpu",
+                //"query_type": "valo-query-lang",
+                //"variables": []
+            }
+            */
+        );
+
+        console.log("Listening to output channel: ", output);
+        console.log(`Query is ${isHistorical?"HISTORICAL":"REAL-TIME"} and ${outputType}`);
+
+        observable.subscribe(
+            evt => {
+                console.log("Valo event: ", JSON.stringify(evt, null, 4));
+            },
+            err => {
+                console.error("ERROR in ouput channel's SSE stream", err);
+            },
+            () => {
+                console.log("Valo output channel closed");
+            }
+        );
+
+    } catch(e) {
+        console.log("Error: ", e);
+    }
+
+}
 
 ///////////////////////////////////////////////////////////////////////////////
 // Main
 ///////////////////////////////////////////////////////////////////////////////
-runQuery_A()
+//runQuery_A();
+runQueryAndGetInfo_A();
