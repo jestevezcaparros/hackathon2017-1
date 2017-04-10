@@ -206,7 +206,6 @@ export default async function startMappings(mappings) {
         type : "InvalidMappings"
     });
 
-
     console.log("> Starting mappings...");
     // Start each single mapping
     return await Promise.all(mappings.map(startMapping));

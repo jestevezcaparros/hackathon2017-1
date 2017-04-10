@@ -13,7 +13,6 @@
 ///////////////////////////////////////////////////////////////////////////////
 // Clients' config
 ///////////////////////////////////////////////////////////////////////////////
-
 const valoClientConfigs = {
     valo1 : {
         host : 'localhost',
@@ -76,7 +75,6 @@ const mappings = [
         "valoSchema" : valoSchemas.singleWithTimestamp,
         "valoRepo" : "tsr" // "tsr"|"ssr"|null
     },
-    /*
     {
         "transportType" : "mqtt",
         "transportClient" : mqttClientConfigs.mqtt1,
@@ -121,7 +119,6 @@ const mappings = [
         "valoSchema" : valoSchemas.singleWithTimestamp,
         "valoRepo" : "tsr" // "tsr"|"ssr"|null
     }
-    */
 ];
 
 ///////////////////////////////////////////////////////////////////////////////
