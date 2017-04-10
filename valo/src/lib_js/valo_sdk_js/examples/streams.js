@@ -1,8 +1,12 @@
+"use strict";
 /**
  * Examples about how Valo streams API is used
+ * https://valo.io/docs/api_reference/streams_api.html
+ * @license MIT
+ * @author Álvaro Santamaría Herrero <asantamaria@itrsgroup.com>
+ * @author (Each contributor append a line here)
  */
 import * as streams from '../api/streams';
-import * as queries from '../api/queries';
 import {
     retryOnConflict
 } from '../util';

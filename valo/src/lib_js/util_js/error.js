@@ -1,3 +1,11 @@
+"use strict";
+/**
+ * Simple error wrapper
+ * @license MIT
+ * @author Álvaro Santamaría Herrero <asantamaria@itrsgroup.com>
+ * @author (Each contributor appends a line here)
+ */
+
 /**
  * Wraps a custom error in a proper JS Error, but summarizes stack to 1 line
  */

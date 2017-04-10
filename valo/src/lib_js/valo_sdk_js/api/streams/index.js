@@ -1,3 +1,11 @@
+"use strict";
+/**
+ * Binding to Valo's streams API
+ * https://valo.io/docs/api_reference/streams_api.html
+ * @license MIT
+ * @author Álvaro Santamaría Herrero <asantamaria@itrsgroup.com>
+ * @author (Each contributor append a line here)
+ */
 import http from 'axios';
 import {
     buildUri,

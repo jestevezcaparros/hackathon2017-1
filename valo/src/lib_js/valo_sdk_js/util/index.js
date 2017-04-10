@@ -1,3 +1,11 @@
+"use strict";
+/**
+ * Utility/helper functions for the javascript Valo sdk
+ * https://valo.io/docs/api_reference/execution_api.html
+ * @license MIT
+ * @author Álvaro Santamaría Herrero <asantamaria@itrsgroup.com>
+ * @author (Each contributor append a line here)
+ */
 import WrapError from '../../util_js/error';
 
 /*
