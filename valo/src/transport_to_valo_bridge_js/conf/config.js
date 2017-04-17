@@ -51,7 +51,7 @@ const valoSchemas = {
             "type": "record",
             "properties": {
                 "value" : {"type": "double"},
-                "timestamp" : {"type": "datetime"},
+                "timestamp" : {"type": "datetime", "annotations":  ["urn:itrs:default-timestamp"]},
                 "origin" : {"type": "string"}
             }
         }
@@ -63,7 +63,6 @@ const valoSchemas = {
 ///////////////////////////////////////////////////////////////////////////////
 
 const mappings = [
-
     {
         "transportType" : "mqtt",
         "transportClient" : mqttClientConfigs.mqtt1,

@@ -17,7 +17,7 @@ import mqtt from 'mqtt'; // Eventually, add a transport dispacher layer
 ////////////////////////////////////////////////////////////////////////////////
 // DEFINITIONS
 //
-const TRANSPORT_TIMEOUT =  2000; // Wait for 2 seconds for transport to connect
+const TRANSPORT_TIMEOUT =  60000; // Wait for 1 minute for transport to connect
 ////////////////////////////////////////////////////////////////////////////////
 
 /**
