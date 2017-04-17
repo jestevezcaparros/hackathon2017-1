@@ -49,6 +49,7 @@ async function main() {
             [TENANT, CONTRIBUTOR_TYPE],
             CONTRIBUTOR_SCHEMA
         );
+        console.log(JSON.stringify(response, null, 4));
 
         //
         // Register contributor instance
@@ -64,6 +65,7 @@ async function main() {
                 }
             }
         );
+        console.log(JSON.stringify(response2, null, 4));
 
     } catch(e)  {
         console.error(e);
