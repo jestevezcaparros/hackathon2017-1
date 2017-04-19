@@ -4,17 +4,22 @@
  * https://valo.io/docs/api_reference/execution_api.html
  * @license MIT
  * @author Álvaro Santamaría Herrero <asantamaria@itrsgroup.com>
+ * @author Zuri Pabón <zpabon@itrsgroup.com>
  * @author (Each contributor append a line here)
  */
 
+/* External dependencies */
 import http from 'axios';
 import rx from 'rx-lite';
-import EventSource from 'eventsource';
+// import EventSource from 'eventsource';
+
+/* Internal services dependencies*/
 import {
     buildUri,
     throwValoApiError,
     processValoSseObservable
 } from '../../util';
+import WrapError from '../../../util_js/error';
 
 //
 // DEFINITIONS
