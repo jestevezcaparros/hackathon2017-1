@@ -1,0 +1,10 @@
+{
+    "id" : "mobile-user-00002",
+    "user" : {
+        "name" : "Lisbeth Salander",
+        "typeOfParticipant" : "SPEAKER",
+        "company" : "MILLENIUM",
+        "country" : "Sweden",
+        "profile" : "Hacker"
+    }
+}

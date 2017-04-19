@@ -1,0 +1,20 @@
+{
+    "schema": {
+        "type": "record",
+        "properties": {
+            "id": {
+                "type": "contributor"
+            },
+            "user": {
+                "type" : "record",
+                "properties" : {
+                    "name" : {"type": "string"},
+                    "typeOfParticipant" : {"type" : "string"},
+                    "company" : {"type" : "string"},
+                    "country" : {"type" : "string"},
+                    "profile" : {"type" : "string"}
+                }   
+            }
+        }
+    }
+}
