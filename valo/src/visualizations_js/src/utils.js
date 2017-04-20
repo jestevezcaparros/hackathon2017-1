@@ -11,6 +11,18 @@ import {
     runSingleQuery
 } from '../../lib_js/valo_sdk_js';
 
+import {
+  AUDITORIO_POLYGON,
+  POLYGON_ROOM_STYLE,
+  MOLLETE_POLYGON,
+  PITUFO_POLYGON,
+  ENTRANCE_POLYGON,
+  POLYGON_BATHROOM_STYLE,
+  BATHROOM_POLYGON,
+  ITRS_COORDINATES,
+  ICON_URL
+} from './settings'
+
 const iconStore = new Map();
 
 export function getIcon(src){
@@ -39,5 +51,41 @@ export function plotPoint(context, point, projection) {
  */
 export function createMap(container, coordinates, options) {
     options.center = new window.google.maps.LatLng(coordinates.lat, coordinates.lon);
-    return new window.google.maps.Map(container, options);
+    const map = new window.google.maps.Map(container, options);
+
+    // CREATE LA TERMICA ROOMS POLYGON
+    addPolygon(map, AUDITORIO_POLYGON, POLYGON_ROOM_STYLE);
+    addPolygon(map, MOLLETE_POLYGON, POLYGON_ROOM_STYLE);
+    addPolygon(map, PITUFO_POLYGON, POLYGON_ROOM_STYLE);
+    addPolygon(map, ENTRANCE_POLYGON, POLYGON_ROOM_STYLE);
+    addPolygon(map, BATHROOM_POLYGON, POLYGON_BATHROOM_STYLE);
+
+    // Add Icons
+    addMarker(map,
+        `${ICON_URL}huella3.svg`, {
+        latitude: 36.689226,
+        longitude: -4.443997
+    })
+
+    return map;
+}
+
+function addPolygon(map, coords, options = {}) {
+    const opt = Object.assign(options, {path: coords});
+    const polygon = new google.maps.Polygon(opt);
+    polygon.setMap(map);
+}
+
+function addMarker(map, icon, position) {
+
+    const LatLng = new google.maps.LatLng(
+        position.latitude,
+        position.longitude
+    );
+
+    const marker = new google.maps.Marker({
+        position: LatLng,
+        icon: icon,
+        map: map
+    })
 }

@@ -8,6 +8,7 @@
  * @author (Each contributor append a line here)
  */
 
+
 import Map from './map';
 
 import {
@@ -23,11 +24,11 @@ import {
   createLocationMapPoint
 } from './valo/vos'
 
+
 async function initMap(){
 
   try {
 
-    // create google maps visualisation
     const map = Map(
         document.querySelector(MAP_CONTAINER_CSS_SELECTOR),
         LA_TERMICA_COORDINATES,
@@ -55,7 +56,6 @@ async function initMap(){
   }
 
 }
-
 
 (function init(){
   window.initMap = initMap;
