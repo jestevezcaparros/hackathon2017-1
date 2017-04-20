@@ -3630,6 +3630,13 @@ exports.default = WrapError;
 
 "use strict";
 
+/**
+ * Utils module
+ * @license MIT
+ * @author Andres Ramirez <aramirez@itrsgroup.com>
+ * @author Zuri Pabón <zpabon@itrsgroup.com>
+ * @author (Each contributor append a line here)
+ */
 
 Object.defineProperty(exports, "__esModule", {
   value: true
@@ -3651,16 +3658,16 @@ var runQuery = exports.runQuery = function () {
           case 3:
             _ref2 = _context.sent;
             observable = _ref2.observable;
-            return _context.abrupt('return', observable);
+            return _context.abrupt("return", observable);
 
           case 8:
             _context.prev = 8;
-            _context.t0 = _context['catch'](0);
+            _context.t0 = _context["catch"](0);
 
             console.error(_context.t0);
 
           case 11:
-          case 'end':
+          case "end":
             return _context.stop();
         }
       }
@@ -4452,6 +4459,13 @@ if(new $WeakMap().set((Object.freeze || Object)(tmp), 7).get(tmp) != 7){
 
 "use strict";
 
+/**
+ * Main module
+ * @license MIT
+ * @author Andres Ramirez <aramirez@itrsgroup.com>
+ * @author Zuri Pabón <zpabon@itrsgroup.com>
+ * @author (Each contributor append a line here)
+ */
 
 var initMap = function () {
   var _ref = _asyncToGenerator(regeneratorRuntime.mark(function _callee() {
@@ -6256,6 +6270,13 @@ Object.defineProperty(exports, 'retryOnConflict', {
 
 "use strict";
 
+/**
+ * Map module
+ * @license MIT
+ * @author Andres Ramirez <aramirez@itrsgroup.com>
+ * @author Zuri Pabón <zpabon@itrsgroup.com>
+ * @author (Each contributor append a line here)
+ */
 
 Object.defineProperty(exports, "__esModule", {
       value: true
@@ -6325,7 +6346,6 @@ function initCanvasOverlay() {
 
       return CanvasOverlay;
 }
-
 exports.default = function () {
       var CanvasOverlay = initCanvasOverlay();
       return new CanvasOverlay(_utils.createMap.apply(undefined, arguments));
@@ -6337,6 +6357,13 @@ exports.default = function () {
 
 "use strict";
 
+/**
+ * Settings module
+ * @license MIT
+ * @author Andres Ramirez <aramirez@itrsgroup.com>
+ * @author Zuri Pabón <zpabon@itrsgroup.com>
+ * @author (Each contributor append a line here)
+ */
 
 Object.defineProperty(exports, "__esModule", {
     value: true
@@ -6345,46 +6372,19 @@ var HOST = exports.HOST = { valoHost: "localhost", valoPort: 8888 };
 var TENANT = exports.TENANT = 'demo';
 var QUERY = exports.QUERY = 'from /streams/demo/jotb/attenders';
 var QUERY_POSITION = exports.QUERY_POSITION = 'from /streams/demo/jotb/position';
-var ICON_URL = exports.ICON_URL = 'http://localhost:8080/';
-//export const LA_TERMICA_COORDINATES = {
-//     lat: 36.7347359,
-//     lon: -4.557628
-// };
+var ICON_URL = exports.ICON_URL = 'http://localhost:8080/icons/';
 var LA_TERMICA_COORDINATES = exports.LA_TERMICA_COORDINATES = {
-    lat: 36.689150,
-    lon: -4.445000
+    lat: 36.7347359,
+    lon: -4.557628
 };
+// export const LA_TERMICA_COORDINATES = {
+//     lat: 36.689150,
+//     lon: -4.445000
+// };
 var MAP_OPTIONS = exports.MAP_OPTIONS = {
-    zoom: 20,
+    zoom: 19,
     disableDefaultUI: true,
-    backgroundColor: "#bbb",
-    styles: [{
-        "featureType": "all",
-        "elementType": "labels.text.fill",
-        "stylers": [{
-            "visibility": "off"
-        }]
-    }, {
-        "featureType": "all",
-        "elementType": "labels.text.stroke",
-        "stylers": [{
-            "visibility": "off"
-        }]
-    }, {
-        "featureType": "all",
-        "elementType": "labels.icon",
-        "stylers": [{
-            "visibility": "off"
-        }]
-    }, {
-        "featureType": "all",
-        "elementType": "all",
-        "stylers": [{
-            "saturation": -80,
-            "hue": "#bbb",
-            "gamma": 0.8
-        }]
-    }]
+    backgroundColor: "#bbb"
 };
 
 /***/ }),
