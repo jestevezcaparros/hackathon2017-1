@@ -28,18 +28,27 @@ async function initMap(){
 
   try {
 
+    // create google maps visualisation
     const map = Map(
         document.querySelector(MAP_CONTAINER_CSS_SELECTOR),
         LA_TERMICA_COORDINATES,
         MAP_OPTIONS
     );
 
+    // read events from Valo mob_happiness stream
     valoDao.readMobileHappinesEvents(valoPayload => {
+
+      // convert Valo event to MapPoint, add it to the map
       map.addPoints(createHappinessMapPoint(valoPayload));
+
     });
 
+    // read events from Valo mob_location stream
     valoDao.readMobileLocationEvents(valoPayload => {
+
+      // convert Valo event to MapPoint, add it to the map
       map.addPoints(createLocationMapPoint(valoPayload));
+
     });
 
   } catch (e) {

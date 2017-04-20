@@ -24,6 +24,7 @@ export async function readMobileHappinesEvents(callback){
       console.log('status', payload);
       payload && callback(payload);
     });
+    // TODO on error?
  } catch (e) {
    console.error(e);
    throw e;
@@ -37,6 +38,7 @@ export async function readMobileLocationEvents(){
      console.log('status', payload);
      payload && callback(payload);
    });
+   // TODO on error?
  } catch (e) {
    console.error(e);
    throw e;
