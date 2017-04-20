@@ -11,6 +11,18 @@ import {
     runSingleQuery
 } from '../../lib_js/valo_sdk_js';
 
+import {
+  AUDITORIO_POLYGON,
+  POLYGON_ROOM_STYLE,
+  MOLLETE_POLYGON,
+  PITUFO_POLYGON,
+  ENTRANCE_POLYGON,
+  POLYGON_BATHROOM_STYLE,
+  BATHROOM_POLYGON,
+  ITRS_COORDINATES,
+  ICON_URL
+} from './settings'
+
 const iconStore = new Map();
 
 export function getIcon(src){
@@ -19,6 +31,14 @@ export function getIcon(src){
   iconImg.src = src;
   iconStore.set(src, iconImg);
   return iconImg;
+}
+
+export function printError(...args){
+  console.error(...args);
+}
+
+export function printLog(...args){
+  console.log(...args);
 }
 
 export function plotPoint(context, point, projection) {
@@ -30,18 +50,6 @@ export function plotPoint(context, point, projection) {
       point.iconSize || 32);
 }
 
-export async function runQuery(host, tenant, query){
-  try {
-    const {observable} = await runSingleQuery(
-        host,
-        tenant,
-        query
-    );
-    return observable;
-  } catch (e) {
-    console.error(e);
-  }
-}
 
  /**
  *
@@ -49,7 +57,43 @@ export async function runQuery(host, tenant, query){
  * @param {*} container
  * @param {*} coordinates
  */
-export function createMap(container, coordinates, options) {
-    options.center = new window.google.maps.LatLng(coordinates.lat, coordinates.lon);
-    return new window.google.maps.Map(container, options);
+export function createMap({domElement, options}) {
+    options.center = new window.google.maps.LatLng(options.center.lat, options.center.lon);
+    const map = new window.google.maps.Map(domElement, options);
+
+    // CREATE LA TERMICA ROOMS POLYGON
+    addPolygon(map, AUDITORIO_POLYGON, POLYGON_ROOM_STYLE);
+    addPolygon(map, MOLLETE_POLYGON, POLYGON_ROOM_STYLE);
+    addPolygon(map, PITUFO_POLYGON, POLYGON_ROOM_STYLE);
+    addPolygon(map, ENTRANCE_POLYGON, POLYGON_ROOM_STYLE);
+    addPolygon(map, BATHROOM_POLYGON, POLYGON_BATHROOM_STYLE);
+
+    // Add Icons
+    addMarker(map,
+        `${ICON_URL}huella3.svg`, {
+        latitude: 36.689226,
+        longitude: -4.443997
+    })
+
+    return map;
+}
+
+function addPolygon(map, coords, options = {}) {
+    const opt = Object.assign(options, {path: coords});
+    const polygon = new google.maps.Polygon(opt);
+    polygon.setMap(map);
+}
+
+function addMarker(map, icon, position) {
+
+    const LatLng = new google.maps.LatLng(
+        position.latitude,
+        position.longitude
+    );
+
+    const marker = new google.maps.Marker({
+        position: LatLng,
+        icon: icon,
+        map: map
+    })
 }
