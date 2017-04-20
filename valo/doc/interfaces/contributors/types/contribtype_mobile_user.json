@@ -11,8 +11,10 @@
                     "name" : {"type": "string"},
                     "typeOfParticipant" : {"type" : "string"},
                     "company" : {"type" : "string"},
+                    "role" : {"type" : "string"},
                     "country" : {"type" : "string"},
-                    "profile" : {"type" : "string"}
+                    "gender" : {"type" : "string"},
+                    "birthday" : {"type" : "date"}
                 }   
             }
         }
