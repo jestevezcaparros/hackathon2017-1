@@ -27,6 +27,11 @@ const config = {
                 }
             }
         ]
+  },
+  watch: true,
+  watchOptions: {
+    aggregateTimeout: 300,
+    ignored: /node_modules/
   }
 };
 

@@ -9,7 +9,7 @@
     "premake:viz": "npm install",
     "make:viz": "webpack --config valo/src/visualizations_js/webpack.config.js",
     "prelaunch:viz": "npm install",
-    "launch:viz": "http-server valo/src/visualizations_js -s -o"
+    "launch:viz": "http-server valo/src/visualizations_js -s -o -c-1"
   },
   "author": "",
   "license": "",
