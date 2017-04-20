@@ -52,7 +52,6 @@ async function initMap(){
 
     // read events from Valo mob_happiness stream
     readMobileHappinesEvents((error, valoPayload) => {
-      printLog('happiness', valoPayload);
       // Manage your error
       if(error) return printError(error);
       // convert Valo event to MapPoint, add it to the map
@@ -61,7 +60,6 @@ async function initMap(){
 
     // read events from Valo mob_location stream
     readMobileLocationEvents((error, valoPayload) => {
-      printLog('position', valoPayload);
       // Manage your error
       if(error) return printError(error);
       // convert Valo event to MapPoint, add it to the map

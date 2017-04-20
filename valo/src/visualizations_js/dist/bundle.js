@@ -11718,7 +11718,6 @@ var initMap = function () {
               // read events from Valo mob_happiness stream
 
               (0, _dao.readMobileHappinesEvents)(function (error, valoPayload) {
-                (0, _utils.printLog)('happiness', valoPayload);
                 // Manage your error
                 if (error) return (0, _utils.printError)(error);
                 // convert Valo event to MapPoint, add it to the map
@@ -11727,7 +11726,6 @@ var initMap = function () {
 
               // read events from Valo mob_location stream
               (0, _dao.readMobileLocationEvents)(function (error, valoPayload) {
-                (0, _utils.printLog)('position', valoPayload);
                 // Manage your error
                 if (error) return (0, _utils.printError)(error);
                 // convert Valo event to MapPoint, add it to the map
