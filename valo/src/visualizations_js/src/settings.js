@@ -4,18 +4,19 @@
  * @license MIT
  * @author Andres Ramirez <aramirez@itrsgroup.com>
  * @author Zuri Pabón <zpabon@itrsgroup.com>
+ * @author Danilo Rossi <drossi@itrsgroup.com>
  * @author (Each contributor append a line here)
  */
 
 export const HOST = {valoHost: "192.168.35.19", valoPort: 8888};
 export const TENANT = 'demo';
-export const QUERY = 'from /streams/demo/jotb/attenders';
-export const QUERY_POSITION = 'from /streams/demo/jotb/position';
+
+export const QUERY_MOB_HAPPINESS = 'from /streams/demo/jotb/mob_happiness';
+export const QUERY_MOB_LOCATION = 'from /streams/demo/jotb/mob_location';
 export const ICON_URL = 'http://localhost:8080/icons/'
-//export const LA_TERMICA_COORDINATES = {
-//     lat: 36.7347359,
-//     lon: -4.557628
-// };
+export const MAP_CONTAINER_CSS_SELECTOR = '.map-container';
+
+
 export const LA_TERMICA_COORDINATES = {
     lat: 36.689150,
     lon: -4.445000

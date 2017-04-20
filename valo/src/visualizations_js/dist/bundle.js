@@ -3639,44 +3639,44 @@ exports.default = WrapError;
  */
 
 Object.defineProperty(exports, "__esModule", {
-  value: true
+    value: true
 });
 exports.runQuery = undefined;
 
 var runQuery = exports.runQuery = function () {
-  var _ref = _asyncToGenerator(regeneratorRuntime.mark(function _callee(host, tenant, query) {
-    var _ref2, observable;
+    var _ref = _asyncToGenerator(regeneratorRuntime.mark(function _callee(host, tenant, query) {
+        var _ref2, observable;
 
-    return regeneratorRuntime.wrap(function _callee$(_context) {
-      while (1) {
-        switch (_context.prev = _context.next) {
-          case 0:
-            _context.prev = 0;
-            _context.next = 3;
-            return (0, _valo_sdk_js.runSingleQuery)(host, tenant, query);
+        return regeneratorRuntime.wrap(function _callee$(_context) {
+            while (1) {
+                switch (_context.prev = _context.next) {
+                    case 0:
+                        _context.prev = 0;
+                        _context.next = 3;
+                        return (0, _valo_sdk_js.runSingleQuery)(host, tenant, query);
 
-          case 3:
-            _ref2 = _context.sent;
-            observable = _ref2.observable;
-            return _context.abrupt("return", observable);
+                    case 3:
+                        _ref2 = _context.sent;
+                        observable = _ref2.observable;
+                        return _context.abrupt('return', observable);
 
-          case 8:
-            _context.prev = 8;
-            _context.t0 = _context["catch"](0);
+                    case 8:
+                        _context.prev = 8;
+                        _context.t0 = _context['catch'](0);
 
-            console.error(_context.t0);
+                        console.error(_context.t0);
 
-          case 11:
-          case "end":
-            return _context.stop();
-        }
-      }
-    }, _callee, this, [[0, 8]]);
-  }));
+                    case 11:
+                    case 'end':
+                        return _context.stop();
+                }
+            }
+        }, _callee, this, [[0, 8]]);
+    }));
 
-  return function runQuery(_x, _x2, _x3) {
-    return _ref.apply(this, arguments);
-  };
+    return function runQuery(_x, _x2, _x3) {
+        return _ref.apply(this, arguments);
+    };
 }();
 
 /**
@@ -3693,25 +3693,61 @@ exports.createMap = createMap;
 
 var _valo_sdk_js = __webpack_require__(147);
 
+var _settings = __webpack_require__(149);
+
 function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
 
 var iconStore = new Map();
 
 function getIcon(src) {
-  if (iconStore.has(src)) return iconStore.get(src);
-  var iconImg = new Image();
-  iconImg.src = src;
-  iconStore.set(src, iconImg);
-  return iconImg;
+    if (iconStore.has(src)) return iconStore.get(src);
+    var iconImg = new Image();
+    iconImg.src = src;
+    iconStore.set(src, iconImg);
+    return iconImg;
 }
 
 function plotPoint(context, point, projection) {
-  context.drawImage(getIcon(point.icon), projection.fromLatLngToContainerPixel(point.geo).x, projection.fromLatLngToContainerPixel(point.geo).y, point.iconSize || 32, point.iconSize || 32);
+    context.drawImage(getIcon(point.icon), projection.fromLatLngToContainerPixel(point.geo).x, projection.fromLatLngToContainerPixel(point.geo).y, point.iconSize || 32, point.iconSize || 32);
 }
 
 function createMap(container, coordinates, options) {
-  options.center = new window.google.maps.LatLng(coordinates.lat, coordinates.lon);
-  return new window.google.maps.Map(container, options);
+    options.center = new window.google.maps.LatLng(coordinates.lat, coordinates.lon);
+    var map = new window.google.maps.Map(container, options);
+
+    // CREATE LA TERMICA ROOMS POLYGON
+    addPolygon(map, _settings.AUDITORIO_POLYGON, _settings.POLYGON_ROOM_STYLE);
+    addPolygon(map, _settings.MOLLETE_POLYGON, _settings.POLYGON_ROOM_STYLE);
+    addPolygon(map, _settings.PITUFO_POLYGON, _settings.POLYGON_ROOM_STYLE);
+    addPolygon(map, _settings.ENTRANCE_POLYGON, _settings.POLYGON_ROOM_STYLE);
+    addPolygon(map, _settings.BATHROOM_POLYGON, _settings.POLYGON_BATHROOM_STYLE);
+
+    // Add Icons
+    addMarker(map, _settings.ICON_URL + 'huella3.svg', {
+        latitude: 36.689226,
+        longitude: -4.443997
+    });
+
+    return map;
+}
+
+function addPolygon(map, coords) {
+    var options = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
+
+    var opt = Object.assign(options, { path: coords });
+    var polygon = new google.maps.Polygon(opt);
+    polygon.setMap(map);
+}
+
+function addMarker(map, icon, position) {
+
+    var LatLng = new google.maps.LatLng(position.latitude, position.longitude);
+
+    var marker = new google.maps.Marker({
+        position: LatLng,
+        icon: icon,
+        map: map
+    });
 }
 
 /***/ }),
@@ -4464,122 +4500,74 @@ if(new $WeakMap().set((Object.freeze || Object)(tmp), 7).get(tmp) != 7){
  * @license MIT
  * @author Andres Ramirez <aramirez@itrsgroup.com>
  * @author Zuri Pabón <zpabon@itrsgroup.com>
+ * @author Danilo Rossi <drossi@itrsgroup.com>
  * @author (Each contributor append a line here)
  */
 
 var initMap = function () {
-    var _ref = _asyncToGenerator(regeneratorRuntime.mark(function _callee() {
-        var mapContainer, map, overlay, statusObservable, positionObservable;
-        return regeneratorRuntime.wrap(function _callee$(_context) {
-            while (1) {
-                switch (_context.prev = _context.next) {
-                    case 0:
-                        _context.prev = 0;
-                        mapContainer = d3.select('body').append('div').attr('class', 'map');
-                        map = (0, _utils.createMap)(mapContainer.node(), _settings.ITRS_COORDINATES, _settings.MAP_OPTIONS);
-                        overlay = (0, _map2.default)(map);
+  var _ref = _asyncToGenerator(regeneratorRuntime.mark(function _callee() {
+    var map;
+    return regeneratorRuntime.wrap(function _callee$(_context) {
+      while (1) {
+        switch (_context.prev = _context.next) {
+          case 0:
 
-                        // CREATE LA TERMICA ROOMS POLYGON
+            try {
+              map = (0, _map2.default)(document.querySelector(_settings.MAP_CONTAINER_CSS_SELECTOR), _settings.LA_TERMICA_COORDINATES, _settings.MAP_OPTIONS);
 
-                        addPolygon(map, _settings.AUDITORIO_POLYGON, _settings.POLYGON_ROOM_STYLE);
-                        addPolygon(map, _settings.MOLLETE_POLYGON, _settings.POLYGON_ROOM_STYLE);
-                        addPolygon(map, _settings.PITUFO_POLYGON, _settings.POLYGON_ROOM_STYLE);
-                        addPolygon(map, _settings.ENTRANCE_POLYGON, _settings.POLYGON_ROOM_STYLE);
-                        addPolygon(map, _settings.BATHROOM_POLYGON, _settings.POLYGON_BATHROOM_STYLE);
+              // read events from Valo mob_happiness stream
 
-                        // Add Icons
-                        addMarker(map, _settings.ICON_URL + 'plano.svg', {
-                            latitude: 36.689226,
-                            longitude: -4.443997
-                        });
+              valoDao.readMobileHappinesEvents(function (valoPayload) {
 
-                        _context.next = 12;
-                        return (0, _utils.runQuery)(_settings.HOST, _settings.TENANT, _settings.QUERY);
+                // convert Valo event to MapPoint, add it to the map
+                map.addPoints((0, _valo_vo.createHappinessMapPoint)(valoPayload));
+              });
 
-                    case 12:
-                        statusObservable = _context.sent;
+              // read events from Valo mob_location stream
+              valoDao.readMobileLocationEvents(function (valoPayload) {
 
-                        statusObservable.subscribe(function (payload) {
-                            console.log('status', payload);
-                            if (!payload) return;
-                            overlay.addPoints({
-                                latitude: payload.position.latitude,
-                                longitude: payload.position.longitude,
-                                icon: '' + _settings.ICON_URL + payload.status + '.png'
-                            });
-                        });
-
-                        _context.next = 16;
-                        return (0, _utils.runQuery)(_settings.HOST, _settings.TENANT, _settings.QUERY_POSITION);
-
-                    case 16:
-                        positionObservable = _context.sent;
-
-                        positionObservable.subscribe(function (payload) {
-                            console.log('position', payload);
-                            if (!payload) return;
-                            overlay.addPoints({
-                                latitude: payload.position.latitude,
-                                longitude: payload.position.longitude,
-                                icon: _settings.ICON_URL + 'huella3.svg'
-                            });
-                        });
-
-                        _context.next = 23;
-                        break;
-
-                    case 20:
-                        _context.prev = 20;
-                        _context.t0 = _context['catch'](0);
-
-                        console.error(_context.t0);
-
-                    case 23:
-                    case 'end':
-                        return _context.stop();
-                }
+                // convert Valo event to MapPoint, add it to the map
+                map.addPoints((0, _valo_vo.createLocationMapPoint)(valoPayload));
+              });
+            } catch (e) {
+              console.error(e);
             }
-        }, _callee, this, [[0, 20]]);
-    }));
 
-    return function initMap() {
-        return _ref.apply(this, arguments);
-    };
+          case 1:
+          case 'end':
+            return _context.stop();
+        }
+      }
+    }, _callee, this);
+  }));
+
+  return function initMap() {
+    return _ref.apply(this, arguments);
+  };
 }();
 
 var _map = __webpack_require__(148);
 
 var _map2 = _interopRequireDefault(_map);
 
+var _settings = __webpack_require__(149);
+
 var _utils = __webpack_require__(97);
 
-var _settings = __webpack_require__(149);
+var _valo_dao = __webpack_require__(335);
+
+var valoDao = _interopRequireWildcard(_valo_dao);
+
+var _valo_vo = __webpack_require__(336);
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
 
-function addPolygon(map, coords) {
-    var options = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
-
-    var opt = Object.assign(options, { path: coords });
-    var polygon = new google.maps.Polygon(opt);
-    polygon.setMap(map);
-}
-
-function addMarker(map, icon, position) {
-
-    var LatLng = new google.maps.LatLng(position.latitude, position.longitude);
-
-    var marker = new google.maps.Marker({
-        position: LatLng,
-        icon: icon,
-        map: map
-    });
-}
-
 (function init() {
-    window.initMap = initMap;
+  window.initMap = initMap;
 })();
 
 /***/ }),
@@ -6381,9 +6369,9 @@ function initCanvasOverlay() {
 
       return CanvasOverlay;
 }
-exports.default = function (map) {
+exports.default = function () {
       var CanvasOverlay = initCanvasOverlay();
-      return new CanvasOverlay(map);
+      return new CanvasOverlay(_utils.createMap.apply(undefined, arguments));
 };
 
 /***/ }),
@@ -6397,6 +6385,7 @@ exports.default = function (map) {
  * @license MIT
  * @author Andres Ramirez <aramirez@itrsgroup.com>
  * @author Zuri Pabón <zpabon@itrsgroup.com>
+ * @author Danilo Rossi <drossi@itrsgroup.com>
  * @author (Each contributor append a line here)
  */
 
@@ -6405,13 +6394,12 @@ Object.defineProperty(exports, "__esModule", {
 });
 var HOST = exports.HOST = { valoHost: "192.168.35.19", valoPort: 8888 };
 var TENANT = exports.TENANT = 'demo';
-var QUERY = exports.QUERY = 'from /streams/demo/jotb/attenders';
-var QUERY_POSITION = exports.QUERY_POSITION = 'from /streams/demo/jotb/position';
+
+var QUERY_MOB_HAPPINESS = exports.QUERY_MOB_HAPPINESS = 'from /streams/demo/jotb/mob_happiness';
+var QUERY_MOB_LOCATION = exports.QUERY_MOB_LOCATION = 'from /streams/demo/jotb/mob_location';
 var ICON_URL = exports.ICON_URL = 'http://localhost:8080/icons/';
-//export const LA_TERMICA_COORDINATES = {
-//     lat: 36.7347359,
-//     lon: -4.557628
-// };
+var MAP_CONTAINER_CSS_SELECTOR = exports.MAP_CONTAINER_CSS_SELECTOR = '.map-container';
+
 var LA_TERMICA_COORDINATES = exports.LA_TERMICA_COORDINATES = {
     lat: 36.689150,
     lon: -4.445000
@@ -18402,6 +18390,176 @@ module.exports = function(module) {
 __webpack_require__(127);
 module.exports = __webpack_require__(126);
 
+
+/***/ }),
+/* 335 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+/**
+ * Utils module
+ * @license MIT
+ * @author Danilo Rossi <drossi@itrsgroup.com>
+ * @author (Each contributor append a line here)
+ */
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.readMobileLocationEvents = exports.readMobileHappinesEvents = undefined;
+
+var readMobileHappinesEvents = exports.readMobileHappinesEvents = function () {
+  var _ref = _asyncToGenerator(regeneratorRuntime.mark(function _callee(callback) {
+    var _ref2, observable;
+
+    return regeneratorRuntime.wrap(function _callee$(_context) {
+      while (1) {
+        switch (_context.prev = _context.next) {
+          case 0:
+            _context.prev = 0;
+            _context.next = 3;
+            return (0, _valo_sdk_js.runSingleQuery)(_settings.HOST, _settings.TENANT, _settings.QUERY_MOB_HAPPINESS);
+
+          case 3:
+            _ref2 = _context.sent;
+            observable = _ref2.observable;
+
+            observable.subscribe(function (payload) {
+              console.log('status', payload);
+              payload && callback(payload);
+            });
+            // TODO on error?
+            _context.next = 12;
+            break;
+
+          case 8:
+            _context.prev = 8;
+            _context.t0 = _context['catch'](0);
+
+            console.error(_context.t0);
+            throw _context.t0;
+
+          case 12:
+          case 'end':
+            return _context.stop();
+        }
+      }
+    }, _callee, this, [[0, 8]]);
+  }));
+
+  return function readMobileHappinesEvents(_x) {
+    return _ref.apply(this, arguments);
+  };
+}();
+
+var readMobileLocationEvents = exports.readMobileLocationEvents = function () {
+  var _ref3 = _asyncToGenerator(regeneratorRuntime.mark(function _callee2() {
+    var _ref4, observable;
+
+    return regeneratorRuntime.wrap(function _callee2$(_context2) {
+      while (1) {
+        switch (_context2.prev = _context2.next) {
+          case 0:
+            _context2.prev = 0;
+            _context2.next = 3;
+            return (0, _valo_sdk_js.runSingleQuery)(_settings.HOST, _settings.TENANT, _settings.QUERY_MOB_LOCATION);
+
+          case 3:
+            _ref4 = _context2.sent;
+            observable = _ref4.observable;
+
+            observable.subscribe(function (payload) {
+              console.log('status', payload);
+              payload && callback(payload);
+            });
+            // TODO on error?
+            _context2.next = 12;
+            break;
+
+          case 8:
+            _context2.prev = 8;
+            _context2.t0 = _context2['catch'](0);
+
+            console.error(_context2.t0);
+            throw _context2.t0;
+
+          case 12:
+          case 'end':
+            return _context2.stop();
+        }
+      }
+    }, _callee2, this, [[0, 8]]);
+  }));
+
+  return function readMobileLocationEvents() {
+    return _ref3.apply(this, arguments);
+  };
+}();
+
+var _valo_sdk_js = __webpack_require__(147);
+
+var _settings = __webpack_require__(149);
+
+function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
+
+/***/ }),
+/* 336 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+/**
+ * Utils module
+ * @license MIT
+ * @author Danilo Rossi <drossi@itrsgroup.com>
+ * @author (Each contributor append a line here)
+ */
+
+// icons base folder
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.createHappinessMapPoint = createHappinessMapPoint;
+exports.createLocationMapPoint = createLocationMapPoint;
+
+var _settings = __webpack_require__(149);
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+/**
+ * Represents a map point for google maps
+ */
+var MapPoint = function MapPoint(latitude, longitude, icon) {
+  _classCallCheck(this, MapPoint);
+
+  this.latitude = latitude;
+  this.longitude = longitude;
+  this.icon = icon;
+};
+
+/**
+ * Create a valid MapPoint given an event from Valo mobile happiness stream
+ * @method createHappinessMapPoint
+ * @param  {Object}                valoPayload   A mob_happiness Valo stream event
+ * @return {MapPoint}                            A valid MapPoint
+ */
+
+
+function createHappinessMapPoint(valoPayload) {
+  return new MapPoint(payload.position.latitude, payload.position.longitude, "" + _settings.ICON_URL + payload.status + ".png");
+}
+
+/**
+ * Create a valid MapPoint given an event from Valo mobile location stream
+ * @method createLocationMapPoint
+ * @param  {Object}                valoPayload   A mob_location Valo stream event
+ * @return {MapPoint}                            A valid MapPoint
+ */
+function createLocationMapPoint(valoPayload) {
+  return new MapPoint(payload.position.latitude, payload.position.longitude, _settings.ICON_URL + "footprints.png");
+}
 
 /***/ })
 /******/ ]);
