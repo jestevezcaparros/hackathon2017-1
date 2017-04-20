@@ -16,10 +16,10 @@
                 "type": "record",
                 "properties": {
                     "latitude" : {"type": "double"},
-                    "longitude" : {"type": "double"},
+                    "longitude" : {"type": "double"}
                 }
             },
-            "temperature" : {"type": "double"},
+            "temperature" : {"type": "double"}
          }
       }
    }

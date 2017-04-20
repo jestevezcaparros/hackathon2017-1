@@ -13,8 +13,7 @@
                     "company" : {"type" : "string"},
                     "role" : {"type" : "string"},
                     "country" : {"type" : "string"},
-                    "gender" : {"type" : "string"},
-                    "birthday" : {"type" : "date"}
+                    "gender" : {"type" : "string"}
                 }   
             }
         }

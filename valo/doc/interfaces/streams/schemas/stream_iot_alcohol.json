@@ -16,10 +16,10 @@
                 "type": "record",
                 "properties": {
                     "latitude" : {"type": "double"},
-                    "longitude" : {"type": "double"},
+                    "longitude" : {"type": "double"}
                 }
             },
-            "alcohol" : {"type": "double"},
+            "alcohol" : {"type": "double"}
          }
       }
    }
