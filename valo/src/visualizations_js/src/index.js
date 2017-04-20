@@ -4,63 +4,50 @@
  * @license MIT
  * @author Andres Ramirez <aramirez@itrsgroup.com>
  * @author Zuri Pabón <zpabon@itrsgroup.com>
+ * @author Danilo Rossi <drossi@itrsgroup.com>
  * @author (Each contributor append a line here)
  */
 
 import Map from './map';
+
 import {
-  runQuery
-} from './utils';
-import {
-  HOST,
-  TENANT,
-  QUERY,
-  QUERY_POSITION,
+  MAP_CONTAINER_CSS_SELECTOR,
   LA_TERMICA_COORDINATES,
   MAP_OPTIONS,
   ICON_URL
 } from './settings'
 
+import * as valoDao from './valo/valo_dao'
+
+import {
+  createHappinessMapPoint,
+  createLocationMapPoint
+} from './valo/valo_vo'
+
 async function initMap(){
 
   try {
 
-    const mapContainer = d3.select('body')
-        .append('div')
-        .attr('class', 'map');
-
     const map = Map(
-        mapContainer.node(),
+        document.querySelector(MAP_CONTAINER_CSS_SELECTOR),
         LA_TERMICA_COORDINATES,
         MAP_OPTIONS
     );
 
-    const statusObservable =  await runQuery(HOST, TENANT, QUERY);
-    statusObservable.subscribe(payload => {
-      console.log('status', payload);
-      if(!payload) return;
-      map.addPoints({
-        latitude: payload.position.latitude,
-        longitude: payload.position.longitude,
-        icon: `${ICON_URL}${payload.status}.png`
-      });
+    valoDao.readMobileHappinesEvents(valoPayload => {
+      map.addPoints(createHappinessMapPoint(valoPayload));
     });
 
-    const positionObservable = await runQuery(HOST, TENANT, QUERY_POSITION);
-    positionObservable.subscribe(payload => {
-      console.log('position', payload);
-      if(!payload) return;
-      map.addPoints({
-        latitude: payload.position.latitude,
-        longitude: payload.position.longitude,
-        icon:`${ICON_URL}footprints.png`
-      });
+    valoDao.readMobileLocationEvents(valoPayload => {
+      map.addPoints(createLocationMapPoint(valoPayload));
     });
 
   } catch (e) {
     console.error(e);
   }
+
 }
+
 
 (function init(){
   window.initMap = initMap;
