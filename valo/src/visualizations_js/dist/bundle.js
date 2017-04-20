@@ -3641,52 +3641,6 @@ exports.default = WrapError;
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports.runQuery = undefined;
-
-var runQuery = exports.runQuery = function () {
-    var _ref = _asyncToGenerator(regeneratorRuntime.mark(function _callee(host, tenant, query) {
-        var _ref2, observable;
-
-        return regeneratorRuntime.wrap(function _callee$(_context) {
-            while (1) {
-                switch (_context.prev = _context.next) {
-                    case 0:
-                        _context.prev = 0;
-                        _context.next = 3;
-                        return (0, _valo_sdk_js.runSingleQuery)(host, tenant, query);
-
-                    case 3:
-                        _ref2 = _context.sent;
-                        observable = _ref2.observable;
-                        return _context.abrupt('return', observable);
-
-                    case 8:
-                        _context.prev = 8;
-                        _context.t0 = _context['catch'](0);
-
-                        console.error(_context.t0);
-
-                    case 11:
-                    case 'end':
-                        return _context.stop();
-                }
-            }
-        }, _callee, this, [[0, 8]]);
-    }));
-
-    return function runQuery(_x, _x2, _x3) {
-        return _ref.apply(this, arguments);
-    };
-}();
-
-/**
-*
-* @param {*} google
-* @param {*} container
-* @param {*} coordinates
-*/
-
-
 exports.getIcon = getIcon;
 exports.plotPoint = plotPoint;
 exports.createMap = createMap;
@@ -3694,8 +3648,6 @@ exports.createMap = createMap;
 var _valo_sdk_js = __webpack_require__(147);
 
 var _settings = __webpack_require__(149);
-
-function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
 
 var iconStore = new Map();
 
@@ -3711,6 +3663,12 @@ function plotPoint(context, point, projection) {
     context.drawImage(getIcon(point.icon), projection.fromLatLngToContainerPixel(point.geo).x, projection.fromLatLngToContainerPixel(point.geo).y, point.iconSize || 32, point.iconSize || 32);
 }
 
+/**
+*
+* @param {*} google
+* @param {*} container
+* @param {*} coordinates
+*/
 function createMap(container, coordinates, options) {
     options.center = new window.google.maps.LatLng(coordinates.lat, coordinates.lon);
     var map = new window.google.maps.Map(container, options);
@@ -4505,45 +4463,45 @@ if(new $WeakMap().set((Object.freeze || Object)(tmp), 7).get(tmp) != 7){
  */
 
 var initMap = function () {
-  var _ref = _asyncToGenerator(regeneratorRuntime.mark(function _callee() {
-    var map;
-    return regeneratorRuntime.wrap(function _callee$(_context) {
-      while (1) {
-        switch (_context.prev = _context.next) {
-          case 0:
+    var _ref = _asyncToGenerator(regeneratorRuntime.mark(function _callee() {
+        var map;
+        return regeneratorRuntime.wrap(function _callee$(_context) {
+            while (1) {
+                switch (_context.prev = _context.next) {
+                    case 0:
 
-            try {
-              map = (0, _map2.default)(document.querySelector(_settings.MAP_CONTAINER_CSS_SELECTOR), _settings.LA_TERMICA_COORDINATES, _settings.MAP_OPTIONS);
+                        try {
+                            map = (0, _map2.default)(document.querySelector(_settings.MAP_CONTAINER_CSS_SELECTOR), _settings.LA_TERMICA_COORDINATES, _settings.MAP_OPTIONS);
 
-              // read events from Valo mob_happiness stream
+                            // read events from Valo mob_happiness stream
 
-              valoDao.readMobileHappinesEvents(function (valoPayload) {
+                            valoDao.readMobileHappinesEvents(function (valoPayload) {
 
-                // convert Valo event to MapPoint, add it to the map
-                map.addPoints((0, _valo_vo.createHappinessMapPoint)(valoPayload));
-              });
+                                // convert Valo event to MapPoint, add it to the map
+                                map.addPoints((0, _vos.createHappinessMapPoint)(valoPayload));
+                            });
 
-              // read events from Valo mob_location stream
-              valoDao.readMobileLocationEvents(function (valoPayload) {
+                            // read events from Valo mob_location stream
+                            valoDao.readMobileLocationEvents(function (valoPayload) {
 
-                // convert Valo event to MapPoint, add it to the map
-                map.addPoints((0, _valo_vo.createLocationMapPoint)(valoPayload));
-              });
-            } catch (e) {
-              console.error(e);
+                                // convert Valo event to MapPoint, add it to the map
+                                map.addPoints((0, _vos.createLocationMapPoint)(valoPayload));
+                            });
+                        } catch (e) {
+                            console.error(e);
+                        }
+
+                    case 1:
+                    case 'end':
+                        return _context.stop();
+                }
             }
+        }, _callee, this);
+    }));
 
-          case 1:
-          case 'end':
-            return _context.stop();
-        }
-      }
-    }, _callee, this);
-  }));
-
-  return function initMap() {
-    return _ref.apply(this, arguments);
-  };
+    return function initMap() {
+        return _ref.apply(this, arguments);
+    };
 }();
 
 var _map = __webpack_require__(148);
@@ -4552,13 +4510,11 @@ var _map2 = _interopRequireDefault(_map);
 
 var _settings = __webpack_require__(149);
 
-var _utils = __webpack_require__(97);
+var _dao = __webpack_require__(337);
 
-var _valo_dao = __webpack_require__(335);
+var valoDao = _interopRequireWildcard(_dao);
 
-var valoDao = _interopRequireWildcard(_valo_dao);
-
-var _valo_vo = __webpack_require__(336);
+var _vos = __webpack_require__(338);
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
@@ -4567,7 +4523,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
 
 (function init() {
-  window.initMap = initMap;
+    window.initMap = initMap;
 })();
 
 /***/ }),
@@ -18392,7 +18348,9 @@ module.exports = __webpack_require__(126);
 
 
 /***/ }),
-/* 335 */
+/* 335 */,
+/* 336 */,
+/* 337 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -18504,7 +18462,7 @@ var _settings = __webpack_require__(149);
 function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
 
 /***/ }),
-/* 336 */
+/* 338 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
