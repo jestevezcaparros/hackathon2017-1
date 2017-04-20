@@ -30,18 +30,6 @@ export function plotPoint(context, point, projection) {
       point.iconSize || 32);
 }
 
-export async function runQuery(host, tenant, query){
-  try {
-    const {observable} = await runSingleQuery(
-        host,
-        tenant,
-        query
-    );
-    return observable;
-  } catch (e) {
-    console.error(e);
-  }
-}
 
  /**
  *

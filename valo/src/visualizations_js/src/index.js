@@ -13,16 +13,15 @@ import Map from './map';
 import {
   MAP_CONTAINER_CSS_SELECTOR,
   LA_TERMICA_COORDINATES,
-  MAP_OPTIONS,
-  ICON_URL
+  MAP_OPTIONS
 } from './settings'
 
-import * as valoDao from './valo/valo_dao'
+import * as valoDao from './valo/dao'
 
 import {
   createHappinessMapPoint,
   createLocationMapPoint
-} from './valo/valo_vo'
+} from './valo/vos'
 
 async function initMap(){
 

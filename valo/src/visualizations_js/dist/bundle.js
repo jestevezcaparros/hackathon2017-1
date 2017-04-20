@@ -4509,15 +4509,23 @@ var initMap = function () {
           case 0:
 
             try {
+
+              // create google maps visualisation
               map = (0, _map2.default)(document.querySelector(_settings.MAP_CONTAINER_CSS_SELECTOR), _settings.LA_TERMICA_COORDINATES, _settings.MAP_OPTIONS);
 
+              // read events from Valo mob_happiness stream
 
               valoDao.readMobileHappinesEvents(function (valoPayload) {
-                map.addPoints((0, _valo_vo.createHappinessMapPoint)(valoPayload));
+
+                // convert Valo event to MapPoint, add it to the map
+                map.addPoints((0, _vos.createHappinessMapPoint)(valoPayload));
               });
 
+              // read events from Valo mob_location stream
               valoDao.readMobileLocationEvents(function (valoPayload) {
-                map.addPoints((0, _valo_vo.createLocationMapPoint)(valoPayload));
+
+                // convert Valo event to MapPoint, add it to the map
+                map.addPoints((0, _vos.createLocationMapPoint)(valoPayload));
               });
             } catch (e) {
               console.error(e);
@@ -4542,11 +4550,11 @@ var _map2 = _interopRequireDefault(_map);
 
 var _settings = __webpack_require__(63);
 
-var _valo_dao = __webpack_require__(150);
+var _dao = __webpack_require__(150);
 
-var valoDao = _interopRequireWildcard(_valo_dao);
+var valoDao = _interopRequireWildcard(_dao);
 
-var _valo_vo = __webpack_require__(151);
+var _vos = __webpack_require__(151);
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
@@ -6321,45 +6329,25 @@ exports.default = function () {
  */
 
 Object.defineProperty(exports, "__esModule", {
-  value: true
+    value: true
 });
-exports.runQuery = undefined;
+exports.getIcon = getIcon;
+exports.plotPoint = plotPoint;
+exports.createMap = createMap;
 
-var runQuery = exports.runQuery = function () {
-  var _ref = _asyncToGenerator(regeneratorRuntime.mark(function _callee(host, tenant, query) {
-    var _ref2, observable;
+var _valo_sdk_js = __webpack_require__(98);
 
-    return regeneratorRuntime.wrap(function _callee$(_context) {
-      while (1) {
-        switch (_context.prev = _context.next) {
-          case 0:
-            _context.prev = 0;
-            _context.next = 3;
-            return (0, _valo_sdk_js.runSingleQuery)(host, tenant, query);
+var iconStore = new Map();function getIcon(src) {
+    if (iconStore.has(src)) return iconStore.get(src);
+    var iconImg = new Image();
+    iconImg.src = src;
+    iconStore.set(src, iconImg);
+    return iconImg;
+}
 
-          case 3:
-            _ref2 = _context.sent;
-            observable = _ref2.observable;
-            return _context.abrupt("return", observable);
-
-          case 8:
-            _context.prev = 8;
-            _context.t0 = _context["catch"](0);
-
-            console.error(_context.t0);
-
-          case 11:
-          case "end":
-            return _context.stop();
-        }
-      }
-    }, _callee, this, [[0, 8]]);
-  }));
-
-  return function runQuery(_x, _x2, _x3) {
-    return _ref.apply(this, arguments);
-  };
-}();
+function plotPoint(context, point, projection) {
+    context.drawImage(getIcon(point.icon), projection.fromLatLngToContainerPixel(point.geo).x, projection.fromLatLngToContainerPixel(point.geo).y, point.iconSize || 32, point.iconSize || 32);
+}
 
 /**
 *
@@ -6367,33 +6355,9 @@ var runQuery = exports.runQuery = function () {
 * @param {*} container
 * @param {*} coordinates
 */
-
-
-exports.getIcon = getIcon;
-exports.plotPoint = plotPoint;
-exports.createMap = createMap;
-
-var _valo_sdk_js = __webpack_require__(98);
-
-function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
-
-var iconStore = new Map();
-
-function getIcon(src) {
-  if (iconStore.has(src)) return iconStore.get(src);
-  var iconImg = new Image();
-  iconImg.src = src;
-  iconStore.set(src, iconImg);
-  return iconImg;
-}
-
-function plotPoint(context, point, projection) {
-  context.drawImage(getIcon(point.icon), projection.fromLatLngToContainerPixel(point.geo).x, projection.fromLatLngToContainerPixel(point.geo).y, point.iconSize || 32, point.iconSize || 32);
-}
-
 function createMap(container, coordinates, options) {
-  options.center = new window.google.maps.LatLng(coordinates.lat, coordinates.lon);
-  return new window.google.maps.Map(container, options);
+    options.center = new window.google.maps.LatLng(coordinates.lat, coordinates.lon);
+    return new window.google.maps.Map(container, options);
 }
 
 /***/ }),
@@ -6434,6 +6398,7 @@ var readMobileHappinesEvents = exports.readMobileHappinesEvents = function () {
               console.log('status', payload);
               payload && callback(payload);
             });
+            // TODO on error?
             _context.next = 12;
             break;
 
@@ -6477,6 +6442,7 @@ var readMobileLocationEvents = exports.readMobileLocationEvents = function () {
               console.log('status', payload);
               payload && callback(payload);
             });
+            // TODO on error?
             _context2.next = 12;
             break;
 
