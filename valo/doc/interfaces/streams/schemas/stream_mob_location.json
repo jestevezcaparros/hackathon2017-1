@@ -1,0 +1,29 @@
+{
+   "schema":{
+      "version": "1.0",
+      "config": {},
+      "topDef": {
+         "type": "record",
+         "properties": {
+            "contributor": {
+               "type":"contributor", "definition":"mobile_user"
+            },
+            "timestamp": {
+               "type": "datetime",
+               "annotations": ["urn:itrs:default-timestamp"]
+            },
+            "position": {
+                "type": "record",
+                "properties": {
+                    "latitude" : {"type": "double"},
+                    "longitude" : {"type": "double"},
+                    "altitude" : {"type": "double"},
+                    "accuracy" : {"type": "double"},
+                    "speed" : {"type": "double"},
+                    "heading" : {"type": "double"}
+                }
+            }
+         }
+      }
+   }
+}
