@@ -25,7 +25,8 @@ import {
   PITUFO_POLYGON,
   ENTRANCE_POLYGON,
   POLYGON_BATHROOM_STYLE,
-  BATHROOM_POLYGON
+  BATHROOM_POLYGON,
+  ITRS_COORDINATES
 } from './settings'
 
 import {createMap} from './utils';
@@ -40,7 +41,7 @@ async function initMap(){
 
     const map = createMap(
         mapContainer.node(),
-        LA_TERMICA_COORDINATES,
+        ITRS_COORDINATES,
         MAP_OPTIONS
     );
 
@@ -55,7 +56,7 @@ async function initMap(){
 
     // Add Icons
     addMarker(map,
-        `${ICON_URL}campero.png`, {
+        `${ICON_URL}plano.svg`, {
         latitude: 36.689226,
         longitude: -4.443997
     })
@@ -79,7 +80,7 @@ async function initMap(){
       overlay.addPoints({
         latitude: payload.position.latitude,
         longitude: payload.position.longitude,
-        icon:`${ICON_URL}footprints.png`
+        icon:`${ICON_URL}huella3.svg`
       });
     });
 

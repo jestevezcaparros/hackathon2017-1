@@ -4476,7 +4476,7 @@ var initMap = function () {
                     case 0:
                         _context.prev = 0;
                         mapContainer = d3.select('body').append('div').attr('class', 'map');
-                        map = (0, _utils.createMap)(mapContainer.node(), _settings.LA_TERMICA_COORDINATES, _settings.MAP_OPTIONS);
+                        map = (0, _utils.createMap)(mapContainer.node(), _settings.ITRS_COORDINATES, _settings.MAP_OPTIONS);
                         overlay = (0, _map2.default)(map);
 
                         // CREATE LA TERMICA ROOMS POLYGON
@@ -4488,7 +4488,7 @@ var initMap = function () {
                         addPolygon(map, _settings.BATHROOM_POLYGON, _settings.POLYGON_BATHROOM_STYLE);
 
                         // Add Icons
-                        addMarker(map, _settings.ICON_URL + 'campero.png', {
+                        addMarker(map, _settings.ICON_URL + 'plano.svg', {
                             latitude: 36.689226,
                             longitude: -4.443997
                         });
@@ -4521,7 +4521,7 @@ var initMap = function () {
                             overlay.addPoints({
                                 latitude: payload.position.latitude,
                                 longitude: payload.position.longitude,
-                                icon: _settings.ICON_URL + 'footprints.png'
+                                icon: _settings.ICON_URL + 'huella3.svg'
                             });
                         });
 
@@ -6403,11 +6403,11 @@ exports.default = function (map) {
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-var HOST = exports.HOST = { valoHost: "localhost", valoPort: 8888 };
+var HOST = exports.HOST = { valoHost: "192.168.35.19", valoPort: 8888 };
 var TENANT = exports.TENANT = 'demo';
 var QUERY = exports.QUERY = 'from /streams/demo/jotb/attenders';
 var QUERY_POSITION = exports.QUERY_POSITION = 'from /streams/demo/jotb/position';
-var ICON_URL = exports.ICON_URL = 'http://localhost:8080/';
+var ICON_URL = exports.ICON_URL = 'http://localhost:8080/icons/';
 //export const LA_TERMICA_COORDINATES = {
 //     lat: 36.7347359,
 //     lon: -4.557628
@@ -6415,6 +6415,11 @@ var ICON_URL = exports.ICON_URL = 'http://localhost:8080/';
 var LA_TERMICA_COORDINATES = exports.LA_TERMICA_COORDINATES = {
     lat: 36.689150,
     lon: -4.445000
+};
+
+var ITRS_COORDINATES = exports.ITRS_COORDINATES = {
+    lat: 36.734684,
+    lon: -4.557648
 };
 var MAP_OPTIONS = exports.MAP_OPTIONS = {
     zoom: 20,
@@ -6459,10 +6464,10 @@ var ENTRANCE_POLYGON = exports.ENTRANCE_POLYGON = [{ lat: 36.689497, lng: -4.445
 var BATHROOM_POLYGON = exports.BATHROOM_POLYGON = [{ lat: 36.689141, lng: -4.445064 }, { lat: 36.689114, lng: -4.444961 }, { lat: 36.689060, lng: -4.444985 }, { lat: 36.689084, lng: -4.445088 }];
 
 var POLYGON_ROOM_STYLE = exports.POLYGON_ROOM_STYLE = {
-    strokeColor: '#1BD9DD',
+    strokeColor: 'rgba(27, 217, 221, 1)',
     strokeOpacity: 1,
     strokeWeight: 2,
-    fillColor: '#1BD9DD',
+    fillColor: 'rgba(27, 217, 221, 1)',
     fillOpacity: 1
 };
 

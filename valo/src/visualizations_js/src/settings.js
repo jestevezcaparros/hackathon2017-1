@@ -7,11 +7,11 @@
  * @author (Each contributor append a line here)
  */
 
-export const HOST = {valoHost: "localhost", valoPort: 8888};
+export const HOST = {valoHost: "192.168.35.19", valoPort: 8888};
 export const TENANT = 'demo';
 export const QUERY = 'from /streams/demo/jotb/attenders';
 export const QUERY_POSITION = 'from /streams/demo/jotb/position';
-export const ICON_URL = 'http://localhost:8080/'
+export const ICON_URL = 'http://localhost:8080/icons/'
 //export const LA_TERMICA_COORDINATES = {
 //     lat: 36.7347359,
 //     lon: -4.557628
@@ -20,6 +20,11 @@ export const LA_TERMICA_COORDINATES = {
     lat: 36.689150,
     lon: -4.445000
 };
+
+export const ITRS_COORDINATES = {
+    lat: 36.734684,
+    lon: -4.557648
+}
 export const MAP_OPTIONS = {
     zoom: 20,
     disableDefaultUI: true,
@@ -104,10 +109,10 @@ export const BATHROOM_POLYGON = [
 
 
 export const POLYGON_ROOM_STYLE = {
-    strokeColor: '#1BD9DD',
+    strokeColor: 'rgba(27, 217, 221, 1)',
     strokeOpacity: 1,
     strokeWeight: 2,
-    fillColor: '#1BD9DD',
+    fillColor: 'rgba(27, 217, 221, 1)',
     fillOpacity: 1
 }
 
