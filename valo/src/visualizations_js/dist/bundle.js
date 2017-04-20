@@ -3630,6 +3630,13 @@ exports.default = WrapError;
 
 "use strict";
 
+/**
+ * Utils module
+ * @license MIT
+ * @author Andres Ramirez <aramirez@itrsgroup.com>
+ * @author Zuri Pabón <zpabon@itrsgroup.com>
+ * @author (Each contributor append a line here)
+ */
 
 Object.defineProperty(exports, "__esModule", {
   value: true
@@ -3651,16 +3658,16 @@ var runQuery = exports.runQuery = function () {
           case 3:
             _ref2 = _context.sent;
             observable = _ref2.observable;
-            return _context.abrupt('return', observable);
+            return _context.abrupt("return", observable);
 
           case 8:
             _context.prev = 8;
-            _context.t0 = _context['catch'](0);
+            _context.t0 = _context["catch"](0);
 
             console.error(_context.t0);
 
           case 11:
-          case 'end':
+          case "end":
             return _context.stop();
         }
       }
@@ -4452,69 +4459,92 @@ if(new $WeakMap().set((Object.freeze || Object)(tmp), 7).get(tmp) != 7){
 
 "use strict";
 
+/**
+ * Main module
+ * @license MIT
+ * @author Andres Ramirez <aramirez@itrsgroup.com>
+ * @author Zuri Pabón <zpabon@itrsgroup.com>
+ * @author (Each contributor append a line here)
+ */
 
 var initMap = function () {
-  var _ref = _asyncToGenerator(regeneratorRuntime.mark(function _callee() {
-    var mapContainer, map, statusObservable, positionObservable;
-    return regeneratorRuntime.wrap(function _callee$(_context) {
-      while (1) {
-        switch (_context.prev = _context.next) {
-          case 0:
-            _context.prev = 0;
-            mapContainer = d3.select('body').append('div').attr('class', 'map');
-            map = (0, _map2.default)(mapContainer.node(), _settings.LA_TERMICA_COORDINATES, _settings.MAP_OPTIONS);
-            _context.next = 5;
-            return (0, _utils.runQuery)(_settings.HOST, _settings.TENANT, _settings.QUERY);
+    var _ref = _asyncToGenerator(regeneratorRuntime.mark(function _callee() {
+        var mapContainer, map, overlay, statusObservable, positionObservable;
+        return regeneratorRuntime.wrap(function _callee$(_context) {
+            while (1) {
+                switch (_context.prev = _context.next) {
+                    case 0:
+                        _context.prev = 0;
+                        mapContainer = d3.select('body').append('div').attr('class', 'map');
+                        map = (0, _utils.createMap)(mapContainer.node(), _settings.LA_TERMICA_COORDINATES, _settings.MAP_OPTIONS);
+                        overlay = (0, _map2.default)(map);
 
-          case 5:
-            statusObservable = _context.sent;
+                        // CREATE LA TERMICA ROOMS POLYGON
 
-            statusObservable.subscribe(function (payload) {
-              console.log('status', payload);
-              if (!payload) return;
-              map.addPoints({
-                latitude: payload.position.latitude,
-                longitude: payload.position.longitude,
-                icon: '' + _settings.ICON_URL + payload.status + '.png'
-              });
-            });
+                        addPolygon(map, _settings.AUDITORIO_POLYGON, _settings.POLYGON_ROOM_STYLE);
+                        addPolygon(map, _settings.MOLLETE_POLYGON, _settings.POLYGON_ROOM_STYLE);
+                        addPolygon(map, _settings.PITUFO_POLYGON, _settings.POLYGON_ROOM_STYLE);
+                        addPolygon(map, _settings.ENTRANCE_POLYGON, _settings.POLYGON_ROOM_STYLE);
+                        addPolygon(map, _settings.BATHROOM_POLYGON, _settings.POLYGON_BATHROOM_STYLE);
 
-            _context.next = 9;
-            return (0, _utils.runQuery)(_settings.HOST, _settings.TENANT, _settings.QUERY_POSITION);
+                        // Add Icons
+                        addMarker(map, _settings.ICON_URL + 'campero.png', {
+                            latitude: 36.689226,
+                            longitude: -4.443997
+                        });
 
-          case 9:
-            positionObservable = _context.sent;
+                        _context.next = 12;
+                        return (0, _utils.runQuery)(_settings.HOST, _settings.TENANT, _settings.QUERY);
 
-            positionObservable.subscribe(function (payload) {
-              console.log('position', payload);
-              if (!payload) return;
-              map.addPoints({
-                latitude: payload.position.latitude,
-                longitude: payload.position.longitude,
-                icon: _settings.ICON_URL + 'footprints.png'
-              });
-            });
+                    case 12:
+                        statusObservable = _context.sent;
 
-            _context.next = 16;
-            break;
+                        statusObservable.subscribe(function (payload) {
+                            console.log('status', payload);
+                            if (!payload) return;
+                            overlay.addPoints({
+                                latitude: payload.position.latitude,
+                                longitude: payload.position.longitude,
+                                icon: '' + _settings.ICON_URL + payload.status + '.png'
+                            });
+                        });
 
-          case 13:
-            _context.prev = 13;
-            _context.t0 = _context['catch'](0);
+                        _context.next = 16;
+                        return (0, _utils.runQuery)(_settings.HOST, _settings.TENANT, _settings.QUERY_POSITION);
 
-            console.error(_context.t0);
+                    case 16:
+                        positionObservable = _context.sent;
 
-          case 16:
-          case 'end':
-            return _context.stop();
-        }
-      }
-    }, _callee, this, [[0, 13]]);
-  }));
+                        positionObservable.subscribe(function (payload) {
+                            console.log('position', payload);
+                            if (!payload) return;
+                            overlay.addPoints({
+                                latitude: payload.position.latitude,
+                                longitude: payload.position.longitude,
+                                icon: _settings.ICON_URL + 'footprints.png'
+                            });
+                        });
 
-  return function initMap() {
-    return _ref.apply(this, arguments);
-  };
+                        _context.next = 23;
+                        break;
+
+                    case 20:
+                        _context.prev = 20;
+                        _context.t0 = _context['catch'](0);
+
+                        console.error(_context.t0);
+
+                    case 23:
+                    case 'end':
+                        return _context.stop();
+                }
+            }
+        }, _callee, this, [[0, 20]]);
+    }));
+
+    return function initMap() {
+        return _ref.apply(this, arguments);
+    };
 }();
 
 var _map = __webpack_require__(148);
@@ -4529,8 +4559,27 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
 
+function addPolygon(map, coords) {
+    var options = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
+
+    var opt = Object.assign(options, { path: coords });
+    var polygon = new google.maps.Polygon(opt);
+    polygon.setMap(map);
+}
+
+function addMarker(map, icon, position) {
+
+    var LatLng = new google.maps.LatLng(position.latitude, position.longitude);
+
+    var marker = new google.maps.Marker({
+        position: LatLng,
+        icon: icon,
+        map: map
+    });
+}
+
 (function init() {
-  window.initMap = initMap;
+    window.initMap = initMap;
 })();
 
 /***/ }),
@@ -6256,6 +6305,13 @@ Object.defineProperty(exports, 'retryOnConflict', {
 
 "use strict";
 
+/**
+ * Map module
+ * @license MIT
+ * @author Andres Ramirez <aramirez@itrsgroup.com>
+ * @author Zuri Pabón <zpabon@itrsgroup.com>
+ * @author (Each contributor append a line here)
+ */
 
 Object.defineProperty(exports, "__esModule", {
       value: true
@@ -6325,10 +6381,9 @@ function initCanvasOverlay() {
 
       return CanvasOverlay;
 }
-
-exports.default = function () {
+exports.default = function (map) {
       var CanvasOverlay = initCanvasOverlay();
-      return new CanvasOverlay(_utils.createMap.apply(undefined, arguments));
+      return new CanvasOverlay(map);
 };
 
 /***/ }),
@@ -6337,6 +6392,13 @@ exports.default = function () {
 
 "use strict";
 
+/**
+ * Settings module
+ * @license MIT
+ * @author Andres Ramirez <aramirez@itrsgroup.com>
+ * @author Zuri Pabón <zpabon@itrsgroup.com>
+ * @author (Each contributor append a line here)
+ */
 
 Object.defineProperty(exports, "__esModule", {
     value: true
@@ -6385,6 +6447,31 @@ var MAP_OPTIONS = exports.MAP_OPTIONS = {
             "gamma": 0.8
         }]
     }]
+};
+var AUDITORIO_POLYGON = exports.AUDITORIO_POLYGON = [{ lat: 36.689026, lng: -4.444346 }, { lat: 36.688893, lng: -4.443849 }, { lat: 36.689431, lng: -4.443629 }, { lat: 36.689561, lng: -4.444127 }];
+
+var MOLLETE_POLYGON = exports.MOLLETE_POLYGON = [{ lat: 36.689386, lng: -4.445099 }, { lat: 36.689362, lng: -4.445013 }, { lat: 36.689093, lng: -4.445118 }, { lat: 36.689121, lng: -4.445215 }];
+
+var PITUFO_POLYGON = exports.PITUFO_POLYGON = [{ lat: 36.689041, lng: -4.445392 }, { lat: 36.689020, lng: -4.445292 }, { lat: 36.688786, lng: -4.445391 }, { lat: 36.688804, lng: -4.445473 }];
+
+var ENTRANCE_POLYGON = exports.ENTRANCE_POLYGON = [{ lat: 36.689497, lng: -4.445576 }, { lat: 36.689401, lng: -4.445177 }, { lat: 36.689353, lng: -4.445199 }, { lat: 36.689451, lng: -4.445598 }];
+
+var BATHROOM_POLYGON = exports.BATHROOM_POLYGON = [{ lat: 36.689141, lng: -4.445064 }, { lat: 36.689114, lng: -4.444961 }, { lat: 36.689060, lng: -4.444985 }, { lat: 36.689084, lng: -4.445088 }];
+
+var POLYGON_ROOM_STYLE = exports.POLYGON_ROOM_STYLE = {
+    strokeColor: '#1BD9DD',
+    strokeOpacity: 1,
+    strokeWeight: 2,
+    fillColor: '#1BD9DD',
+    fillOpacity: 1
+};
+
+var POLYGON_BATHROOM_STYLE = exports.POLYGON_BATHROOM_STYLE = {
+    strokeColor: '#009933',
+    strokeOpacity: 1,
+    strokeWeight: 2,
+    fillColor: '#009933',
+    fillOpacity: 1
 };
 
 /***/ }),

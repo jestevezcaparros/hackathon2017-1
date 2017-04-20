@@ -7,7 +7,7 @@
  * @author (Each contributor append a line here)
  */
 
-import Map from './map';
+import createCanvas from './map';
 import {
   runQuery
 } from './utils';
@@ -18,8 +18,17 @@ import {
   QUERY_POSITION,
   LA_TERMICA_COORDINATES,
   MAP_OPTIONS,
-  ICON_URL
+  ICON_URL,
+  AUDITORIO_POLYGON,
+  POLYGON_ROOM_STYLE,
+  MOLLETE_POLYGON,
+  PITUFO_POLYGON,
+  ENTRANCE_POLYGON,
+  POLYGON_BATHROOM_STYLE,
+  BATHROOM_POLYGON
 } from './settings'
+
+import {createMap} from './utils';
 
 async function initMap(){
 
@@ -29,17 +38,34 @@ async function initMap(){
         .append('div')
         .attr('class', 'map');
 
-    const map = Map(
+    const map = createMap(
         mapContainer.node(),
         LA_TERMICA_COORDINATES,
         MAP_OPTIONS
     );
 
+    const overlay = createCanvas(map);
+
+    // CREATE LA TERMICA ROOMS POLYGON
+    addPolygon(map, AUDITORIO_POLYGON, POLYGON_ROOM_STYLE);
+    addPolygon(map, MOLLETE_POLYGON, POLYGON_ROOM_STYLE);
+    addPolygon(map, PITUFO_POLYGON, POLYGON_ROOM_STYLE);
+    addPolygon(map, ENTRANCE_POLYGON, POLYGON_ROOM_STYLE);
+    addPolygon(map, BATHROOM_POLYGON, POLYGON_BATHROOM_STYLE);
+
+    // Add Icons
+    addMarker(map,
+        `${ICON_URL}campero.png`, {
+        latitude: 36.689226,
+        longitude: -4.443997
+    })
+
+
     const statusObservable =  await runQuery(HOST, TENANT, QUERY);
     statusObservable.subscribe(payload => {
       console.log('status', payload);
       if(!payload) return;
-      map.addPoints({
+      overlay.addPoints({
         latitude: payload.position.latitude,
         longitude: payload.position.longitude,
         icon: `${ICON_URL}${payload.status}.png`
@@ -50,7 +76,7 @@ async function initMap(){
     positionObservable.subscribe(payload => {
       console.log('position', payload);
       if(!payload) return;
-      map.addPoints({
+      overlay.addPoints({
         latitude: payload.position.latitude,
         longitude: payload.position.longitude,
         icon:`${ICON_URL}footprints.png`
@@ -61,6 +87,29 @@ async function initMap(){
     console.error(e);
   }
 }
+
+function addPolygon(map, coords, options = {}) {
+    const opt = Object.assign(options, {path: coords});
+    const polygon = new google.maps.Polygon(opt);
+    polygon.setMap(map);
+}
+
+function addMarker(map, icon, position) {
+
+    const LatLng = new google.maps.LatLng(
+        position.latitude,
+        position.longitude
+    );
+
+    const marker = new google.maps.Marker({
+        position: LatLng,
+        icon: icon,
+        map: map
+    })
+}
+
+
+
 
 (function init(){
   window.initMap = initMap;

@@ -83,7 +83,7 @@ function initCanvasOverlay(){
 
 }
 
-export default (...args) => {
+export default (map) => {
   const CanvasOverlay = initCanvasOverlay();
-  return new CanvasOverlay(createMap(...args));
+  return new CanvasOverlay(map);
 }
