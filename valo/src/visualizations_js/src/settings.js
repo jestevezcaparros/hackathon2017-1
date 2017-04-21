@@ -7,69 +7,66 @@
  * @author Danilo Rossi <drossi@itrsgroup.com>
  * @author (Each contributor append a line here)
  */
-
+export const DEBUG = true;
 export const HOST = {valoHost: "192.168.35.19", valoPort: 8888};
 export const TENANT = 'demo';
-
 export const QUERY_MOB_HAPPINESS = 'from /streams/demo/jotb/mob_happiness';
 export const QUERY_MOB_LOCATION = 'from /streams/demo/jotb/mob_location';
 export const ICON_URL = 'http://localhost:8080/icons/'
 export const MAP_CONTAINER_CSS_SELECTOR = '.map-container';
-
-
 export const LA_TERMICA_COORDINATES = {
-    lat: 36.689150,
-    lon: -4.445000
+  lat: 36.689150,
+  lon: -4.445000,
+  radius: 80
 };
-
-export const ITRS_COORDINATES = {
-    lat: 36.734684,
-    lon: -4.557648
-}
+// export const ITRS_COORDINATES = {
+//     lat: 36.734684,
+//     lon: -4.557648
+// }
 export const MAP_OPTIONS = {
     zoom: 20,
     disableDefaultUI: true,
     backgroundColor: "#bbb",
+    scrollwheel: true,
+    navigationControl: false,
+    mapTypeControl: false,
+    scaleControl: false,
+    minZoom: 18,
+    maxZoom: 20,
+    center: LA_TERMICA_COORDINATES,
     styles: [
-        {
-            "featureType": "all",
-            "elementType": "labels.text.fill",
-            "stylers": [
-                {
-                    "visibility": "off"
-                }
-            ]
-        },
-        {
-            "featureType": "all",
-            "elementType": "labels.text.stroke",
-            "stylers": [
-                {
-                    "visibility": "off"
-                }
-            ]
-        },
-        {
-            "featureType": "all",
-            "elementType": "labels.icon",
-            "stylers": [
-                {
-                    "visibility": "off"
-                }
-            ]
-        },
-        {
-            "featureType": "all",
-            "elementType": "all",
-            "stylers": [
-                {
-                    "saturation": -80,
-                    "hue": "#bbb",
-                    "gamma": 0.8
-                }
-            ]
-        }
-  ]
+    {
+        "elementType": "labels",
+        "stylers": [
+            {
+                "visibility": "off"
+            }
+        ]
+    },
+    {
+        "featureType": "all",
+        "elementType": "all",
+
+        "stylers": [
+            {
+                "invert_lightness": true
+            },
+            {
+                "saturation": -80
+            },
+            {
+                "lightness": 30
+            },
+            {
+                "gamma": 0.5
+            },
+            {
+                "hue": "#3d433a"
+            }
+
+        ]
+    }
+]
 };
 export const AUDITORIO_POLYGON = [
     {lat: 36.689026, lng: -4.444346},
@@ -106,21 +103,18 @@ export const BATHROOM_POLYGON = [
     {lat: 36.689084, lng: -4.445088}
 ]
 
-
-
-
 export const POLYGON_ROOM_STYLE = {
-    strokeColor: 'rgba(27, 217, 221, 1)',
+    strokeColor: 'rgba(27, 217, 221, 0)',
     strokeOpacity: 1,
     strokeWeight: 2,
-    fillColor: 'rgba(27, 217, 221, 1)',
+    fillColor: 'rgba(27, 217, 221, .3)',
     fillOpacity: 1
 }
 
 export const POLYGON_BATHROOM_STYLE = {
-    strokeColor: '#009933',
+    strokeColor: '#343c30',
     strokeOpacity: 1,
     strokeWeight: 2,
-    fillColor: '#009933',
+    fillColor: '#343c30',
     fillOpacity: 1
 }

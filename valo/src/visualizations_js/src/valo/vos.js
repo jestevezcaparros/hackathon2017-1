@@ -1,9 +1,11 @@
 "use strict";
 /**
- * Utils module
+ * VOS (Value ObjectS) file
+ * Path: valo/src/visualizations_js/src/valo/vos.js
  * @license MIT
  * @author Danilo Rossi <drossi@itrsgroup.com>
- * @author (Each contributor append a line here)
+ * @author Andres Ramirez <aramirez@itrsgroup.com>
+ * @author Zuri Pabón <zpabon@itrsgroup.com>
  */
 
 // icons base folder
@@ -18,7 +20,7 @@ class MapPoint {
   constructor(latitude, longitude, icon) {
     this.latitude = latitude;
     this.longitude = longitude;
-    this.icon = icon;
+    this.icon = `${ICON_URL}${icon}.svg`;
   }
 }
 
@@ -40,7 +42,8 @@ export function createHappinessMapPoint(valoPayload){
   return new MapPoint(
     valoPayload.position.latitude,
     valoPayload.position.longitude,
-    `${ICON_URL}${valoPayload.status}.png`
+    // `${ICON_URL}${valoPayload.status}.png`
+    valoPayload.happiness
   );
 }
 
@@ -54,7 +57,8 @@ export function createLocationMapPoint(valoPayload){
   return new MapPoint(
     valoPayload.position.latitude,
     valoPayload.position.longitude,
-    `${ICON_URL}footprints.png`
+  //  `${ICON_URL}footprints.png`
+    'footprints'
   );
 }
 

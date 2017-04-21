@@ -1,0 +1,12 @@
+{
+    "schema": {
+        "type": "record",
+        "properties": {
+            "id": {
+                "type": "contributor"
+            },
+            "model" : {"type" : "string"},
+            "version" : {"type" : "string"}
+        }
+    }
+}

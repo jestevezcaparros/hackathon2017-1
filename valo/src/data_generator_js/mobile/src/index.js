@@ -11,8 +11,13 @@ import {
 } from '../../../lib_js/valo_sdk_js/index';
 
 import {
-  getRandomInteger
-} from '../../utils'
+  getLocationWithinRadius,
+  getInteger
+} from './random_data_generator';
+
+import {
+  LA_TERMICA_COORDINATES
+} from '../../../visualizations_js/src/settings';
 
 (function() {
 
@@ -59,27 +64,24 @@ import {
 
   function createRandomLocationEvent() {
     return {
-      "contributor" : CONTRIB_INSTANCES[ getRandomInteger(0, CONTRIB_INSTANCES.length - 1) ],
+      "contributor" : CONTRIB_INSTANCES[ getInteger(0, CONTRIB_INSTANCES.length - 1) ],
       "timestamp" : new Date().toISOString(), // TODO generate the right format "2017-04-20T10:52:28.638Z",
-      "position" : {
-          "latitude" : -4.55763255, // TODO generate random
-          "longitude" : 36.73469121 // TODO generate random
-      }
+      "position" : getLocationWithinRadius(LA_TERMICA_COORDINATES.lat, LA_TERMICA_COORDINATES.lon, LA_TERMICA_COORDINATES.radius)
     }
   }
 
   function createRandomHappinessEvent(locationEvt) {
-    return Object.assign({}, locationEvt, { "happiness" : getRandomInteger(-1, 1) })
+    return Object.assign({}, locationEvt, { "happiness" : getInteger(-1, 1) })
   }
 
   function shallWeSendHappinessEvent() {
-    return getRandomInteger(0, 100) > 50
+    return getInteger(0, 100) > 50
   }
 
   function publishEvent(streamName, event) {
     return publishEventToStream(VALO_DEFAULTS, [TENANT, COLLECTION, streamName], event)
   }
 
-  eventStep()
+  eventStep();
 
 })()

@@ -12,71 +12,50 @@ import {getIcon, plotPoint, createMap} from './utils';
 function initCanvasOverlay(){
 
   function CanvasOverlay(map) {
+      const {width, height} = document.body.getBoundingClientRect();
+      const initCanvas = label => {
+        this[label] = document.createElement("canvas");
+        this[label].className = "overlay";
+        this[label].height = height;
+        this[label].width = width;
+      }
+      initCanvas('canvas');
+      initCanvas('virtualCanvas');
+      this.points = [];
+      this.mapsize = {width, height};
       this.map = map;
-      this.canvas = null;
-      this.context = null;
       this.setMap(map);
   }
 
   CanvasOverlay.prototype = new window.google.maps.OverlayView();
   CanvasOverlay.prototype.onAdd = function() {
-
-      const {
-          width,
-          height
-      } = document.body.getBoundingClientRect();
-
-      this.projection = this.getProjection();
-
-      this.canvas = d3.select('body')
-          .append('canvas')
-          .attr('width', width)
-          .attr('height', height)
-          .style('position', 'fixed')
-          .style('top', '0')
-          .style('left', '0');
-
-      this.context = this.canvas
-          .node()
-          .getContext('2d');
-
-      this.virtualCanvas = document.createElement('canvas');
-
-      d3.select(this.virtualCanvas)
-          .attr('width', width)
-          .attr('height', height)
-
+      this.getPanes().overlayLayer.appendChild(this.canvas);
+      this.getPanes().overlayLayer.appendChild(this.virtualCanvas);
+      this.context = this.canvas.getContext("2d");
       this.virtualContext = this.virtualCanvas.getContext('2d');
-
   }
   CanvasOverlay.prototype.draw = function() {
-      console.log("Overlay added")
-  }
-
-  CanvasOverlay.prototype.addPoints = function(points) {
-
-      if(!this.context) {
-          return;
-      }
-
-      const data = Array.isArray(points) ? points : [points];
-
-      const _data = data.map(d => ({geo: new window.google.maps.LatLng(d.latitude, d.longitude), icon:d.icon}));
-
+      if(!this.context || !this.virtualContext) return;
+      const projection = this.getProjection();
       this.context.save();
-      this.context.clearRect(0, 0, this.context.canvas.width, this.context.canvas.height);
-      this.context.globalAlpha = 0.9;
+      this.context.clearRect(0, 0, this.mapsize.width, this.mapsize.height);
+      this.context.globalAlpha = 0.6;
       this.context.drawImage(this.virtualCanvas, 0, 0);
       this.context.globalAlpha = 1;
       this.context.fillStyle = 'blue';
-      _data.forEach(point => {
-          plotPoint(this.context, point, this.projection)
-      })
-
+      this.points.forEach(point => plotPoint(this.context, point, projection, this.map.getZoom()))
       this.context.restore();
+      this.virtualContext.clearRect(0, 0, this.mapsize.width, this.mapsize.height);
+      this.virtualContext.drawImage(this.canvas, 0, 0);
+  }
 
-      this.virtualContext.clearRect(0, 0, this.context.canvas.width, this.context.canvas.height);
-      this.virtualContext.drawImage(this.canvas.node(), 0, 0);
+  CanvasOverlay.prototype.addPoints = function(points) {
+      this.points = (Array.isArray(points) ? points : [points])
+        .map(d => ({
+          geo: new window.google.maps.LatLng(d.latitude, d.longitude),
+          icon:d.icon
+        }));
+      this.draw();
   }
 
   return CanvasOverlay;
