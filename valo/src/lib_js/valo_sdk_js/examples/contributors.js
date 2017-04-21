@@ -67,6 +67,24 @@ async function main() {
         );
         console.log(JSON.stringify(response2, null, 4));
 
+        //
+        // Get contributor type
+        // 
+        const response3 = await contributors.getContributorType(
+            LOCAL_VALO,
+            [TENANT, CONTRIBUTOR_TYPE]
+        );
+        console.log(JSON.stringify(response3, null, 4));
+
+        //
+        // Get contributor instance
+        // 
+        const response4 = await contributors.getContributorInstance(
+            LOCAL_VALO,
+            [TENANT, CONTRIBUTOR_TYPE, CONTRIBUTOR_ID]
+        );
+        console.log(JSON.stringify(response4, null, 4));
+
     } catch(e)  {
         console.error(e);
         throw e;
