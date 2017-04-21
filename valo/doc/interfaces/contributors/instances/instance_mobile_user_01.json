@@ -1,0 +1,10 @@
+{
+    "id" : "mobile-user-00001",
+    "user" : {
+        "name" : "Álvaro Santamaría",
+        "typeOfParticipant" : "ORGANIZER",
+        "company" : "VALO",
+        "country" : "Spain",
+        "role" : "Data Scientist"
+    }
+}
