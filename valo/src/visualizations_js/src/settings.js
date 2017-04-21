@@ -16,7 +16,8 @@ export const ICON_URL = 'http://localhost:8080/icons/'
 export const MAP_CONTAINER_CSS_SELECTOR = '.map-container';
 export const LA_TERMICA_COORDINATES = {
   lat: 36.689150,
-  lon: -4.445000
+  lon: -4.445000,
+  radius: 80
 };
 // export const ITRS_COORDINATES = {
 //     lat: 36.734684,

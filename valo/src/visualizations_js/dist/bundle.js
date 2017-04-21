@@ -1696,7 +1696,8 @@ var ICON_URL = exports.ICON_URL = 'http://localhost:8080/icons/';
 var MAP_CONTAINER_CSS_SELECTOR = exports.MAP_CONTAINER_CSS_SELECTOR = '.map-container';
 var LA_TERMICA_COORDINATES = exports.LA_TERMICA_COORDINATES = {
     lat: 36.689150,
-    lon: -4.445000
+    lon: -4.445000,
+    radius: 80
 };
 // export const ITRS_COORDINATES = {
 //     lat: 36.734684,
@@ -13702,39 +13703,9 @@ var _rxLite2 = _interopRequireDefault(_rxLite);
 
 var _settings = __webpack_require__(46);
 
+var _random_data_generator = __webpack_require__(340);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-/**
-* Gets a random coords into a circle of raidus r
-* taken x0 and y0 as initial point
-* @param {Number} x0 Start latitude
-* @param {Number} y0 Start longitude
-* @param {Number} r Radius
-* @return {Object} A coord containing {latitude, longitude} within the radius given
-*/
-function _getRandomCoord(x0, y0, r) {
-  var u = Math.random();
-  var v = Math.random();
-  var radiusInDegrees = r / 111300;
-  var w = radiusInDegrees * Math.sqrt(u);
-  var t = 2 * Math.PI * v;
-  var x = w * Math.cos(t);
-  var y = w * Math.sin(t);
-  var xi = x / Math.cos(y0);
-  return {
-    latitude: xi + x0,
-    longitude: y + y0
-  };
-}
-
-/**
-* Returns a possible value of -1, 0 and 1
-* @return {Number} Either of [-1, 0, 1]
-*/
-function _getRandomHapiness() {
-  var values = [-1, 0, 1];
-  return values[~~(Math.random() * values.length)];
-}
 
 /**
 * Generates a mock payload for a query
@@ -13746,10 +13717,10 @@ function _getRandomHapiness() {
 */
 function getPayload(lat, lon, radius, happiness) {
   var payload = {
-    position: _getRandomCoord(lat, lon, radius)
+    position: (0, _random_data_generator.getLocationWithinRadius)(lat, lon, radius)
   };
   if (happiness) {
-    payload.happiness = _getRandomHapiness();
+    payload.happiness = (0, _random_data_generator.getInteger)(-1, 1);
   }
   return payload;
 }
@@ -13790,11 +13761,11 @@ function runSingleQueryMocked(query) {
   switch (query) {
     case _settings.QUERY_MOB_HAPPINESS:
       return {
-        observable: _getMockObservable(5000, 36.689053, -4.445253, 30, true)
+        observable: _getMockObservable(5000, _settings.LA_TERMICA_COORDINATES.lat, _settings.LA_TERMICA_COORDINATES.lon, _settings.LA_TERMICA_COORDINATES.radius, true)
       };
     case _settings.QUERY_MOB_LOCATION:
       return {
-        observable: _getMockObservable(1000, 36.689053, -4.445253, 30)
+        observable: _getMockObservable(1000, _settings.LA_TERMICA_COORDINATES.lat, _settings.LA_TERMICA_COORDINATES.lon, _settings.LA_TERMICA_COORDINATES.radius)
       };
     default:
       throw Error('NO_QUERY_ARGUMENT_PROVIDED_ERROR');
@@ -35786,6 +35757,59 @@ module.exports = __webpack_require__(25);
 __webpack_require__(131);
 module.exports = __webpack_require__(130);
 
+
+/***/ }),
+/* 339 */,
+/* 340 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+/**
+ * Data generator file
+ * Path: valo/src/data_generator/mobile/src/random_data_generator.js
+ * @license MIT
+ * @author Danilo Rossi <drossi@itrsgroup.com>
+ * @author Andres Ramirez <aramirez@itrsgroup.com>
+ * @author Zuri Pabón <zpabon@itrsgroup.com>
+ */
+
+/**
+* Gets a random coords into a circle of raidus r
+* taken x0 and y0 as initial point
+* @param {Number} x0 Start latitude
+* @param {Number} y0 Start longitude
+* @param {Number} r Radius
+* @return {Object} A coord containing {latitude, longitude} within the radius given
+*/
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.getLocationWithinRadius = getLocationWithinRadius;
+exports.getInteger = getInteger;
+function getLocationWithinRadius(x0, y0, r) {
+  var u = Math.random();
+  var v = Math.random();
+  var radiusInDegrees = r / 111300;
+  var w = radiusInDegrees * Math.sqrt(u);
+  var t = 2 * Math.PI * v;
+  var x = w * Math.cos(t);
+  var y = w * Math.sin(t);
+  var xi = x / Math.cos(y0 * Math.PI / 180);
+  return Object.freeze({ latitude: xi + x0, longitude: y + y0 });
+}
+
+/**
+ * Returns a possible integer value in the range [from, to]
+ * @method getInteger
+ * @param  {Number} from
+ * @param  {Number} to
+ * @return {Number}
+ */
+function getInteger(from, to) {
+  return Math.floor(Math.random() * (to - from + 1) + from);
+}
 
 /***/ })
 /******/ ]);

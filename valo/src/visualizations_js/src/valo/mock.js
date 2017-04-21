@@ -11,40 +11,13 @@
  import Rx from 'rx-lite';
  import {
    QUERY_MOB_HAPPINESS,
-   QUERY_MOB_LOCATION
+   QUERY_MOB_LOCATION,
+   LA_TERMICA_COORDINATES
  } from '../settings';
-
- /**
- * Gets a random coords into a circle of raidus r
- * taken x0 and y0 as initial point
- * @param {Number} x0 Start latitude
- * @param {Number} y0 Start longitude
- * @param {Number} r Radius
- * @return {Object} A coord containing {latitude, longitude} within the radius given
- */
- function _getRandomCoord(x0, y0, r) {
-   const u = Math.random();
-   const v = Math.random();
-   const radiusInDegrees= r/111300;
-   const w = radiusInDegrees * Math.sqrt(u);
-   const t = 2 * Math.PI * v;
-   const x = w * Math.cos(t);
-   const y = w * Math.sin(t);
-   const xi = x / Math.cos(y0);
-   return {
-     latitude: xi+x0,
-     longitude: y+y0
-   };
-  }
-
-  /**
-  * Returns a possible value of -1, 0 and 1
-  * @return {Number} Either of [-1, 0, 1]
-  */
- function _getRandomHapiness() {
-   const values = [-1, 0, 1];
-   return values[~~(Math.random()*values.length)];
- }
+import {
+  getLocationWithinRadius,
+  getInteger
+} from '../../../data_generator_js/mobile/src/random_data_generator';
 
  /**
  * Generates a mock payload for a query
@@ -56,10 +29,10 @@
  */
  function getPayload(lat, lon, radius, happiness){
    const payload = {
-     position: _getRandomCoord(lat, lon, radius)
+     position: getLocationWithinRadius(lat, lon, radius)
    };
    if(happiness){
-     payload.happiness = _getRandomHapiness()
+     payload.happiness = getInteger(-1, 1);
    }
    return payload;
  }
@@ -94,11 +67,11 @@
    switch(query){
      case QUERY_MOB_HAPPINESS:
         return {
-          observable: _getMockObservable(5000, 36.689053, -4.445253, 30, true)
+          observable: _getMockObservable(5000, LA_TERMICA_COORDINATES.lat, LA_TERMICA_COORDINATES.lon, LA_TERMICA_COORDINATES.radius, true)
         };
      case QUERY_MOB_LOCATION:
        return {
-         observable: _getMockObservable(1000, 36.689053, -4.445253, 30)
+         observable: _getMockObservable(1000, LA_TERMICA_COORDINATES.lat, LA_TERMICA_COORDINATES.lon, LA_TERMICA_COORDINATES.radius)
        };
      default:
       throw Error('NO_QUERY_ARGUMENT_PROVIDED_ERROR');
