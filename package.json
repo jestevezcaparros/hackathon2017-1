@@ -5,18 +5,30 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "main": "./node_modules/.bin/babel-node ./src/bin/main.js"
+    "main": "./node_modules/.bin/babel-node ./src/bin/main.js",
+    "premake:viz": "npm install",
+    "make:viz": "webpack --config valo/src/visualizations_js/webpack.config.js",
+    "prelaunch:viz": "npm install",
+    "launch:viz": "http-server valo/src/visualizations_js -s -o -c-1"
   },
   "author": "",
   "license": "",
   "dependencies": {
     "axios": "^0.15.3",
     "eventsource": "^0.2.2",
+    "lodash": "^4.17.4",
     "mqtt": "^2.5.0",
     "rx-lite": "^4.0.8"
   },
   "devDependencies": {
     "babel-cli": "^6.24.0",
-    "babel-preset-env": "^1.2.2"
+    "babel-core": "^6.24.1",
+    "babel-loader": "^6.4.1",
+    "babel-polyfill": "^6.23.0",
+    "babel-preset-env": "^1.2.2",
+    "babel-preset-latest": "^6.24.1",
+    "d3": "^4.8.0",
+    "http-server": "^0.9.0",
+    "webpack": "^2.4.1"
   }
 }
