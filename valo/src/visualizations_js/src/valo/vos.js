@@ -22,6 +22,14 @@ class MapPoint {
   }
 }
 
+class GroupAverage {
+  constructor(average, group) {
+    this.scale = d3.scaleLinear().domain([-1,1]).range([0,100]);
+    this.average = this.scale(average || -1);
+    this.group = group;
+  }
+}
+
 /**
  * Create a valid MapPoint given an event from Valo mobile happiness stream
  * @method createHappinessMapPoint
@@ -30,9 +38,9 @@ class MapPoint {
  */
 export function createHappinessMapPoint(valoPayload){
   return new MapPoint(
-    payload.position.latitude,
-    payload.position.longitude,
-    `${ICON_URL}${payload.status}.png`
+    valoPayload.position.latitude,
+    valoPayload.position.longitude,
+    `${ICON_URL}${valoPayload.status}.png`
   );
 }
 
@@ -44,8 +52,15 @@ export function createHappinessMapPoint(valoPayload){
  */
 export function createLocationMapPoint(valoPayload){
   return new MapPoint(
-    payload.position.latitude,
-    payload.position.longitude,
+    valoPayload.position.latitude,
+    valoPayload.position.longitude,
     `${ICON_URL}footprints.png`
+  );
+}
+
+export function createGroupAverage(valoPayload){
+  return new GroupAverage(
+    valoPayload.avg,
+    valoPayload.participant
   );
 }

@@ -157,7 +157,7 @@ module.exports = function(it){
 /* 5 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var store      = __webpack_require__(58)('wks')
+var store      = __webpack_require__(59)('wks')
   , uid        = __webpack_require__(40)
   , Symbol     = __webpack_require__(2).Symbol
   , USE_SYMBOL = typeof Symbol == 'function';
@@ -819,7 +819,7 @@ module.exports = function(fn, that, length){
 
 var Map     = __webpack_require__(123)
   , $export = __webpack_require__(0)
-  , shared  = __webpack_require__(58)('metadata')
+  , shared  = __webpack_require__(59)('metadata')
   , store   = shared.store || (shared.store = new (__webpack_require__(126)));
 
 var getOrCreateMetadataMap = function(target, targetKey, create){
@@ -880,7 +880,7 @@ if(__webpack_require__(6)){
     , global              = __webpack_require__(2)
     , fails               = __webpack_require__(3)
     , $export             = __webpack_require__(0)
-    , $typed              = __webpack_require__(59)
+    , $typed              = __webpack_require__(60)
     , $buffer             = __webpack_require__(86)
     , ctx                 = __webpack_require__(26)
     , anInstance          = __webpack_require__(32)
@@ -904,11 +904,11 @@ if(__webpack_require__(6)){
     , uid                 = __webpack_require__(40)
     , wks                 = __webpack_require__(5)
     , createArrayMethod   = __webpack_require__(22)
-    , createArrayIncludes = __webpack_require__(49)
+    , createArrayIncludes = __webpack_require__(50)
     , speciesConstructor  = __webpack_require__(80)
     , ArrayIterators      = __webpack_require__(89)
     , Iterators           = __webpack_require__(43)
-    , $iterDetect         = __webpack_require__(55)
+    , $iterDetect         = __webpack_require__(56)
     , setSpecies          = __webpack_require__(38)
     , arrayFill           = __webpack_require__(64)
     , arrayCopyWithin     = __webpack_require__(100)
@@ -1717,6 +1717,99 @@ exports.f = {}.propertyIsEnumerable;
 /* 49 */
 /***/ (function(module, exports, __webpack_require__) {
 
+"use strict";
+
+/**
+ * Settings module
+ * @license MIT
+ * @author Andres Ramirez <aramirez@itrsgroup.com>
+ * @author Zuri Pabón <zpabon@itrsgroup.com>
+ * @author Danilo Rossi <drossi@itrsgroup.com>
+ * @author (Each contributor append a line here)
+ */
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+var HOST = exports.HOST = { valoHost: "192.168.35.19", valoPort: 8888 };
+var TENANT = exports.TENANT = 'demo';
+
+var QUERY_MOB_HAPPINESS = exports.QUERY_MOB_HAPPINESS = 'from /streams/demo/jotb/mob_happiness';
+var QUERY_MOB_LOCATION = exports.QUERY_MOB_LOCATION = 'from /streams/demo/jotb/mob_location';
+var ICON_URL = exports.ICON_URL = 'http://localhost:8080/icons/';
+var MAP_CONTAINER_CSS_SELECTOR = exports.MAP_CONTAINER_CSS_SELECTOR = '.map-container';
+
+var LA_TERMICA_COORDINATES = exports.LA_TERMICA_COORDINATES = {
+    lat: 36.689150,
+    lon: -4.445000
+};
+
+var ITRS_COORDINATES = exports.ITRS_COORDINATES = {
+    lat: 36.734684,
+    lon: -4.557648
+};
+var MAP_OPTIONS = exports.MAP_OPTIONS = {
+    zoom: 20,
+    disableDefaultUI: true,
+    backgroundColor: "#bbb",
+    styles: [{
+        "featureType": "all",
+        "elementType": "labels.text.fill",
+        "stylers": [{
+            "visibility": "off"
+        }]
+    }, {
+        "featureType": "all",
+        "elementType": "labels.text.stroke",
+        "stylers": [{
+            "visibility": "off"
+        }]
+    }, {
+        "featureType": "all",
+        "elementType": "labels.icon",
+        "stylers": [{
+            "visibility": "off"
+        }]
+    }, {
+        "featureType": "all",
+        "elementType": "all",
+        "stylers": [{
+            "saturation": -80,
+            "hue": "#bbb",
+            "gamma": 0.8
+        }]
+    }]
+};
+var AUDITORIO_POLYGON = exports.AUDITORIO_POLYGON = [{ lat: 36.689026, lng: -4.444346 }, { lat: 36.688893, lng: -4.443849 }, { lat: 36.689431, lng: -4.443629 }, { lat: 36.689561, lng: -4.444127 }];
+
+var MOLLETE_POLYGON = exports.MOLLETE_POLYGON = [{ lat: 36.689386, lng: -4.445099 }, { lat: 36.689362, lng: -4.445013 }, { lat: 36.689093, lng: -4.445118 }, { lat: 36.689121, lng: -4.445215 }];
+
+var PITUFO_POLYGON = exports.PITUFO_POLYGON = [{ lat: 36.689041, lng: -4.445392 }, { lat: 36.689020, lng: -4.445292 }, { lat: 36.688786, lng: -4.445391 }, { lat: 36.688804, lng: -4.445473 }];
+
+var ENTRANCE_POLYGON = exports.ENTRANCE_POLYGON = [{ lat: 36.689497, lng: -4.445576 }, { lat: 36.689401, lng: -4.445177 }, { lat: 36.689353, lng: -4.445199 }, { lat: 36.689451, lng: -4.445598 }];
+
+var BATHROOM_POLYGON = exports.BATHROOM_POLYGON = [{ lat: 36.689141, lng: -4.445064 }, { lat: 36.689114, lng: -4.444961 }, { lat: 36.689060, lng: -4.444985 }, { lat: 36.689084, lng: -4.445088 }];
+
+var POLYGON_ROOM_STYLE = exports.POLYGON_ROOM_STYLE = {
+    strokeColor: 'rgba(27, 217, 221, 1)',
+    strokeOpacity: 1,
+    strokeWeight: 2,
+    fillColor: 'rgba(27, 217, 221, 1)',
+    fillOpacity: 1
+};
+
+var POLYGON_BATHROOM_STYLE = exports.POLYGON_BATHROOM_STYLE = {
+    strokeColor: '#009933',
+    strokeOpacity: 1,
+    strokeWeight: 2,
+    fillColor: '#009933',
+    fillOpacity: 1
+};
+
+/***/ }),
+/* 50 */
+/***/ (function(module, exports, __webpack_require__) {
+
 // false -> Array#indexOf
 // true  -> Array#includes
 var toIObject = __webpack_require__(15)
@@ -1740,7 +1833,7 @@ module.exports = function(IS_INCLUDES){
 };
 
 /***/ }),
-/* 50 */
+/* 51 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1754,7 +1847,7 @@ var global            = __webpack_require__(2)
   , anInstance        = __webpack_require__(32)
   , isObject          = __webpack_require__(4)
   , fails             = __webpack_require__(3)
-  , $iterDetect       = __webpack_require__(55)
+  , $iterDetect       = __webpack_require__(56)
   , setToStringTag    = __webpack_require__(44)
   , inheritIfRequired = __webpack_require__(70);
 
@@ -1831,7 +1924,7 @@ module.exports = function(NAME, wrapper, methods, common, IS_MAP, IS_WEAK){
 };
 
 /***/ }),
-/* 51 */
+/* 52 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1865,7 +1958,7 @@ module.exports = function(KEY, length, exec){
 };
 
 /***/ }),
-/* 52 */
+/* 53 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1884,7 +1977,7 @@ module.exports = function(){
 };
 
 /***/ }),
-/* 53 */
+/* 54 */
 /***/ (function(module, exports) {
 
 // fast apply, http://jsperf.lnkit.com/fast-apply/5
@@ -1905,7 +1998,7 @@ module.exports = function(fn, args, that){
 };
 
 /***/ }),
-/* 54 */
+/* 55 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // 7.2.8 IsRegExp(argument)
@@ -1918,7 +2011,7 @@ module.exports = function(it){
 };
 
 /***/ }),
-/* 55 */
+/* 56 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var ITERATOR     = __webpack_require__(5)('iterator')
@@ -1944,7 +2037,7 @@ module.exports = function(exec, skipClosing){
 };
 
 /***/ }),
-/* 56 */
+/* 57 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // Forced replacement prototype accessors methods
@@ -1956,13 +2049,13 @@ module.exports = __webpack_require__(33)|| !__webpack_require__(3)(function(){
 });
 
 /***/ }),
-/* 57 */
+/* 58 */
 /***/ (function(module, exports) {
 
 exports.f = Object.getOwnPropertySymbols;
 
 /***/ }),
-/* 58 */
+/* 59 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var global = __webpack_require__(2)
@@ -1973,7 +2066,7 @@ module.exports = function(key){
 };
 
 /***/ }),
-/* 59 */
+/* 60 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var global = __webpack_require__(2)
@@ -2004,7 +2097,7 @@ module.exports = {
 };
 
 /***/ }),
-/* 60 */
+/* 61 */
 /***/ (function(module, exports) {
 
 // shim for using process in browser
@@ -2190,7 +2283,7 @@ process.umask = function() { return 0; };
 
 
 /***/ }),
-/* 61 */
+/* 62 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2288,10 +2381,10 @@ utils.forEach(['post', 'put', 'patch'], function forEachMethodWithData(method) {
 
 module.exports = defaults;
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(60)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(61)))
 
 /***/ }),
-/* 62 */
+/* 63 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2449,99 +2542,6 @@ function retryOnConflict(f) {
         };
     }();
 }
-
-/***/ }),
-/* 63 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-/**
- * Settings module
- * @license MIT
- * @author Andres Ramirez <aramirez@itrsgroup.com>
- * @author Zuri Pabón <zpabon@itrsgroup.com>
- * @author Danilo Rossi <drossi@itrsgroup.com>
- * @author (Each contributor append a line here)
- */
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-var HOST = exports.HOST = { valoHost: "192.168.35.19", valoPort: 8888 };
-var TENANT = exports.TENANT = 'demo';
-
-var QUERY_MOB_HAPPINESS = exports.QUERY_MOB_HAPPINESS = 'from /streams/demo/jotb/mob_happiness';
-var QUERY_MOB_LOCATION = exports.QUERY_MOB_LOCATION = 'from /streams/demo/jotb/mob_location';
-var ICON_URL = exports.ICON_URL = 'http://localhost:8080/icons/';
-var MAP_CONTAINER_CSS_SELECTOR = exports.MAP_CONTAINER_CSS_SELECTOR = '.map-container';
-
-var LA_TERMICA_COORDINATES = exports.LA_TERMICA_COORDINATES = {
-    lat: 36.689150,
-    lon: -4.445000
-};
-
-var ITRS_COORDINATES = exports.ITRS_COORDINATES = {
-    lat: 36.734684,
-    lon: -4.557648
-};
-var MAP_OPTIONS = exports.MAP_OPTIONS = {
-    zoom: 20,
-    disableDefaultUI: true,
-    backgroundColor: "#bbb",
-    styles: [{
-        "featureType": "all",
-        "elementType": "labels.text.fill",
-        "stylers": [{
-            "visibility": "off"
-        }]
-    }, {
-        "featureType": "all",
-        "elementType": "labels.text.stroke",
-        "stylers": [{
-            "visibility": "off"
-        }]
-    }, {
-        "featureType": "all",
-        "elementType": "labels.icon",
-        "stylers": [{
-            "visibility": "off"
-        }]
-    }, {
-        "featureType": "all",
-        "elementType": "all",
-        "stylers": [{
-            "saturation": -80,
-            "hue": "#bbb",
-            "gamma": 0.8
-        }]
-    }]
-};
-var AUDITORIO_POLYGON = exports.AUDITORIO_POLYGON = [{ lat: 36.689026, lng: -4.444346 }, { lat: 36.688893, lng: -4.443849 }, { lat: 36.689431, lng: -4.443629 }, { lat: 36.689561, lng: -4.444127 }];
-
-var MOLLETE_POLYGON = exports.MOLLETE_POLYGON = [{ lat: 36.689386, lng: -4.445099 }, { lat: 36.689362, lng: -4.445013 }, { lat: 36.689093, lng: -4.445118 }, { lat: 36.689121, lng: -4.445215 }];
-
-var PITUFO_POLYGON = exports.PITUFO_POLYGON = [{ lat: 36.689041, lng: -4.445392 }, { lat: 36.689020, lng: -4.445292 }, { lat: 36.688786, lng: -4.445391 }, { lat: 36.688804, lng: -4.445473 }];
-
-var ENTRANCE_POLYGON = exports.ENTRANCE_POLYGON = [{ lat: 36.689497, lng: -4.445576 }, { lat: 36.689401, lng: -4.445177 }, { lat: 36.689353, lng: -4.445199 }, { lat: 36.689451, lng: -4.445598 }];
-
-var BATHROOM_POLYGON = exports.BATHROOM_POLYGON = [{ lat: 36.689141, lng: -4.445064 }, { lat: 36.689114, lng: -4.444961 }, { lat: 36.689060, lng: -4.444985 }, { lat: 36.689084, lng: -4.445088 }];
-
-var POLYGON_ROOM_STYLE = exports.POLYGON_ROOM_STYLE = {
-    strokeColor: 'rgba(27, 217, 221, 1)',
-    strokeOpacity: 1,
-    strokeWeight: 2,
-    fillColor: 'rgba(27, 217, 221, 1)',
-    fillOpacity: 1
-};
-
-var POLYGON_BATHROOM_STYLE = exports.POLYGON_BATHROOM_STYLE = {
-    strokeColor: '#009933',
-    strokeOpacity: 1,
-    strokeWeight: 2,
-    fillColor: '#009933',
-    fillOpacity: 1
-};
 
 /***/ }),
 /* 64 */
@@ -2884,7 +2884,7 @@ module.exports = {
 /* 79 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var shared = __webpack_require__(58)('keys')
+var shared = __webpack_require__(59)('keys')
   , uid    = __webpack_require__(40);
 module.exports = function(key){
   return shared[key] || (shared[key] = uid(key));
@@ -2930,7 +2930,7 @@ module.exports = function(TO_STRING){
 /***/ (function(module, exports, __webpack_require__) {
 
 // helper for String#{startsWith, endsWith, includes}
-var isRegExp = __webpack_require__(54)
+var isRegExp = __webpack_require__(55)
   , defined  = __webpack_require__(20);
 
 module.exports = function(that, searchString, NAME){
@@ -2968,7 +2968,7 @@ module.exports = '\x09\x0A\x0B\x0C\x0D\x20\xA0\u1680\u180E\u2000\u2001\u2002\u20
 /***/ (function(module, exports, __webpack_require__) {
 
 var ctx                = __webpack_require__(26)
-  , invoke             = __webpack_require__(53)
+  , invoke             = __webpack_require__(54)
   , html               = __webpack_require__(69)
   , cel                = __webpack_require__(66)
   , global             = __webpack_require__(2)
@@ -3052,7 +3052,7 @@ module.exports = {
 var global         = __webpack_require__(2)
   , DESCRIPTORS    = __webpack_require__(6)
   , LIBRARY        = __webpack_require__(33)
-  , $typed         = __webpack_require__(59)
+  , $typed         = __webpack_require__(60)
   , hide           = __webpack_require__(12)
   , redefineAll    = __webpack_require__(37)
   , fails          = __webpack_require__(3)
@@ -3605,7 +3605,7 @@ module.exports = function xhrAdapter(config) {
   });
 };
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(60)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(61)))
 
 /***/ }),
 /* 93 */
@@ -3764,7 +3764,7 @@ Object.defineProperty(exports, 'runSingleQuery', {
     }
 });
 
-var _util = __webpack_require__(62);
+var _util = __webpack_require__(63);
 
 Object.defineProperty(exports, 'retryOnConflict', {
     enumerable: true,
@@ -3869,7 +3869,7 @@ module.exports = function(that, callbackfn, aLen, memo, isRight){
 
 var aFunction  = __webpack_require__(11)
   , isObject   = __webpack_require__(4)
-  , invoke     = __webpack_require__(53)
+  , invoke     = __webpack_require__(54)
   , arraySlice = [].slice
   , factories  = {};
 
@@ -4203,7 +4203,7 @@ module.exports = Math.log1p || function log1p(x){
 
 // 19.1.2.1 Object.assign(target, source, ...)
 var getKeys  = __webpack_require__(36)
-  , gOPS     = __webpack_require__(57)
+  , gOPS     = __webpack_require__(58)
   , pIE      = __webpack_require__(48)
   , toObject = __webpack_require__(9)
   , IObject  = __webpack_require__(47)
@@ -4283,7 +4283,7 @@ module.exports.f = function getOwnPropertyNames(it){
 
 var has          = __webpack_require__(10)
   , toIObject    = __webpack_require__(15)
-  , arrayIndexOf = __webpack_require__(49)(false)
+  , arrayIndexOf = __webpack_require__(50)(false)
   , IE_PROTO     = __webpack_require__(79)('IE_PROTO');
 
 module.exports = function(object, names){
@@ -4326,7 +4326,7 @@ module.exports = function(isEntries){
 
 // all object keys, includes non-enumerable and symbols
 var gOPN     = __webpack_require__(35)
-  , gOPS     = __webpack_require__(57)
+  , gOPS     = __webpack_require__(58)
   , anObject = __webpack_require__(1)
   , Reflect  = __webpack_require__(2).Reflect;
 module.exports = Reflect && Reflect.ownKeys || function ownKeys(it){
@@ -4408,7 +4408,7 @@ exports.f = __webpack_require__(5);
 var strong = __webpack_require__(104);
 
 // 23.1 Map Objects
-module.exports = __webpack_require__(50)('Map', function(get){
+module.exports = __webpack_require__(51)('Map', function(get){
   return function Map(){ return get(this, arguments.length > 0 ? arguments[0] : undefined); };
 }, {
   // 23.1.3.6 Map.prototype.get(key)
@@ -4429,7 +4429,7 @@ module.exports = __webpack_require__(50)('Map', function(get){
 // 21.2.5.3 get RegExp.prototype.flags()
 if(__webpack_require__(6) && /./g.flags != 'g')__webpack_require__(7).f(RegExp.prototype, 'flags', {
   configurable: true,
-  get: __webpack_require__(52)
+  get: __webpack_require__(53)
 });
 
 /***/ }),
@@ -4441,7 +4441,7 @@ if(__webpack_require__(6) && /./g.flags != 'g')__webpack_require__(7).f(RegExp.p
 var strong = __webpack_require__(104);
 
 // 23.2 Set Objects
-module.exports = __webpack_require__(50)('Set', function(get){
+module.exports = __webpack_require__(51)('Set', function(get){
   return function Set(){ return get(this, arguments.length > 0 ? arguments[0] : undefined); };
 }, {
   // 23.2.3.1 Set.prototype.add(value)
@@ -4490,7 +4490,7 @@ var methods = {
 };
 
 // 23.3 WeakMap Objects
-var $WeakMap = module.exports = __webpack_require__(50)('WeakMap', wrapper, methods, weak, true, true);
+var $WeakMap = module.exports = __webpack_require__(51)('WeakMap', wrapper, methods, weak, true, true);
 
 // IE11 WeakMap frozen keys fix
 if(new $WeakMap().set((Object.freeze || Object)(tmp), 7).get(tmp) != 7){
@@ -4529,11 +4529,13 @@ if(new $WeakMap().set((Object.freeze || Object)(tmp), 7).get(tmp) != 7){
 
 var initMap = function () {
   var _ref = _asyncToGenerator(regeneratorRuntime.mark(function _callee() {
-    var map;
+    var averageBars, map;
     return regeneratorRuntime.wrap(function _callee$(_context) {
       while (1) {
         switch (_context.prev = _context.next) {
           case 0:
+            averageBars = new Map();
+
 
             try {
               map = (0, _map2.default)(document.querySelector(_settings.MAP_CONTAINER_CSS_SELECTOR), _settings.LA_TERMICA_COORDINATES, _settings.MAP_OPTIONS);
@@ -4552,11 +4554,32 @@ var initMap = function () {
                 // convert Valo event to MapPoint, add it to the map
                 map.addPoints((0, _vos.createLocationMapPoint)(valoPayload));
               });
+
+              // read average by contributor
+              valoDao.readGroupsAvg(function (valoPayload) {
+
+                // create a GroupAverage element
+                var groupAverage = (0, _vos.createGroupAverage)(valoPayload);
+
+                // no bar chart for this group, create a new one
+                if (!averageBars.has(groupAverage.group)) {
+
+                  // create a bar chart
+                  var chart = (0, _avg_bar2.default)(getNextBarChartContainer()).init(groupAverage);
+
+                  // store it
+                  averageBars.set(groupAverage.group, chart);
+                } else {
+
+                  // update existing bar chart for current event participant
+                  averageBars.get(groupAverage.group).updateAvg(groupAverage.average);
+                }
+              });
             } catch (e) {
               console.error(e);
             }
 
-          case 1:
+          case 2:
           case 'end':
             return _context.stop();
         }
@@ -4573,7 +4596,7 @@ var _map = __webpack_require__(148);
 
 var _map2 = _interopRequireDefault(_map);
 
-var _settings = __webpack_require__(63);
+var _settings = __webpack_require__(49);
 
 var _dao = __webpack_require__(150);
 
@@ -4581,13 +4604,30 @@ var valoDao = _interopRequireWildcard(_dao);
 
 var _vos = __webpack_require__(151);
 
+var _avg_bar = __webpack_require__(337);
+
+var _avg_bar2 = _interopRequireDefault(_avg_bar);
+
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
 
+function getNextBarChartContainer() {
+  var chartContainer = document.createElement('div');
+  chartContainer.classList.add('avg-chart-container');
+  document.querySelector('.avg-container').appendChild(chartContainer);
+  return chartContainer;
+}
+
+
 (function init() {
+
+  // document.querySelector('#top-menu-about').addEventListener('click', function(event) {
+  //   $('.ui.basic.modal.about').modal('show');
+  // });
+
   window.initMap = initMap;
 })();
 
@@ -4636,7 +4676,7 @@ define(String.prototype, "padRight", "".padEnd);
 var utils = __webpack_require__(16);
 var bind = __webpack_require__(96);
 var Axios = __webpack_require__(131);
-var defaults = __webpack_require__(61);
+var defaults = __webpack_require__(62);
 
 /**
  * Create an instance of Axios
@@ -4756,7 +4796,7 @@ module.exports = CancelToken;
 "use strict";
 
 
-var defaults = __webpack_require__(61);
+var defaults = __webpack_require__(62);
 var utils = __webpack_require__(16);
 var InterceptorManager = __webpack_require__(132);
 var dispatchRequest = __webpack_require__(133);
@@ -4910,7 +4950,7 @@ module.exports = InterceptorManager;
 var utils = __webpack_require__(16);
 var transformData = __webpack_require__(136);
 var isCancel = __webpack_require__(94);
-var defaults = __webpack_require__(61);
+var defaults = __webpack_require__(62);
 
 /**
  * Throws a `Cancel` if cancellation has been requested.
@@ -5995,7 +6035,7 @@ var _rxLite = __webpack_require__(334);
 
 var _rxLite2 = _interopRequireDefault(_rxLite);
 
-var _util = __webpack_require__(62);
+var _util = __webpack_require__(63);
 
 var _error = __webpack_require__(97);
 
@@ -6239,7 +6279,7 @@ var _axios = __webpack_require__(91);
 
 var _axios2 = _interopRequireDefault(_axios);
 
-var _util = __webpack_require__(62);
+var _util = __webpack_require__(63);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -6362,7 +6402,7 @@ exports.createMap = createMap;
 
 var _valo_sdk_js = __webpack_require__(98);
 
-var _settings = __webpack_require__(63);
+var _settings = __webpack_require__(49);
 
 var iconStore = new Map();
 
@@ -6439,7 +6479,7 @@ function addMarker(map, icon, position) {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.readMobileLocationEvents = exports.readMobileHappinesEvents = undefined;
+exports.readGroupsAvg = exports.readMobileLocationEvents = exports.readMobileHappinesEvents = undefined;
 
 var readMobileHappinesEvents = exports.readMobileHappinesEvents = function () {
   var _ref = _asyncToGenerator(regeneratorRuntime.mark(function _callee(callback) {
@@ -6486,7 +6526,7 @@ var readMobileHappinesEvents = exports.readMobileHappinesEvents = function () {
 }();
 
 var readMobileLocationEvents = exports.readMobileLocationEvents = function () {
-  var _ref3 = _asyncToGenerator(regeneratorRuntime.mark(function _callee2() {
+  var _ref3 = _asyncToGenerator(regeneratorRuntime.mark(function _callee2(callback) {
     var _ref4, observable;
 
     return regeneratorRuntime.wrap(function _callee2$(_context2) {
@@ -6524,14 +6564,66 @@ var readMobileLocationEvents = exports.readMobileLocationEvents = function () {
     }, _callee2, this, [[0, 8]]);
   }));
 
-  return function readMobileLocationEvents() {
+  return function readMobileLocationEvents(_x2) {
     return _ref3.apply(this, arguments);
+  };
+}();
+
+/* TODO mocked up data from Valo
+* should be a query like:
+
+  from /streams/demo/jotb/mob_happiness
+  select contributor.user.typeOfParticipant as participant, happiness, timestamp
+  group by participant
+  select avg(happiness), participant
+
+*
+*/
+
+
+var readGroupsAvg = exports.readGroupsAvg = function () {
+  var _ref5 = _asyncToGenerator(regeneratorRuntime.mark(function _callee3(callback) {
+    var getRandomInteger, getRandomHappiness, groups;
+    return regeneratorRuntime.wrap(function _callee3$(_context3) {
+      while (1) {
+        switch (_context3.prev = _context3.next) {
+          case 0:
+            getRandomHappiness = function getRandomHappiness(low, high) {
+              return (Math.random() * (high - low) + low).toFixed(4);
+            };
+
+            getRandomInteger = function getRandomInteger(low, high) {
+              return Math.floor(Math.random() * (high - low + 1) + low);
+            };
+
+            groups = ['Group 1', 'Group 2', 'Group 3', 'Group 4'];
+
+
+            setInterval(function () {
+              var payload = {
+                "avg": getRandomHappiness(-1, 1),
+                "participant": groups[getRandomInteger(0, groups.length - 1)]
+              };
+              console.log('payload', payload);
+              payload && callback(payload);
+            }, 1000);
+
+          case 4:
+          case 'end':
+            return _context3.stop();
+        }
+      }
+    }, _callee3, this);
+  }));
+
+  return function readGroupsAvg(_x3) {
+    return _ref5.apply(this, arguments);
   };
 }();
 
 var _valo_sdk_js = __webpack_require__(98);
 
-var _settings = __webpack_require__(63);
+var _settings = __webpack_require__(49);
 
 function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
 
@@ -6555,8 +6647,9 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.createHappinessMapPoint = createHappinessMapPoint;
 exports.createLocationMapPoint = createLocationMapPoint;
+exports.createGroupAverage = createGroupAverage;
 
-var _settings = __webpack_require__(63);
+var _settings = __webpack_require__(49);
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -6571,6 +6664,14 @@ var MapPoint = function MapPoint(latitude, longitude, icon) {
   this.icon = icon;
 };
 
+var GroupAverage = function GroupAverage(average, group) {
+  _classCallCheck(this, GroupAverage);
+
+  this.scale = d3.scaleLinear().domain([-1, 1]).range([0, 100]);
+  this.average = this.scale(average || -1);
+  this.group = group;
+};
+
 /**
  * Create a valid MapPoint given an event from Valo mobile happiness stream
  * @method createHappinessMapPoint
@@ -6580,7 +6681,7 @@ var MapPoint = function MapPoint(latitude, longitude, icon) {
 
 
 function createHappinessMapPoint(valoPayload) {
-  return new MapPoint(payload.position.latitude, payload.position.longitude, "" + _settings.ICON_URL + payload.status + ".png");
+  return new MapPoint(valoPayload.position.latitude, valoPayload.position.longitude, "" + _settings.ICON_URL + valoPayload.status + ".png");
 }
 
 /**
@@ -6590,7 +6691,11 @@ function createHappinessMapPoint(valoPayload) {
  * @return {MapPoint}                            A valid MapPoint
  */
 function createLocationMapPoint(valoPayload) {
-  return new MapPoint(payload.position.latitude, payload.position.longitude, _settings.ICON_URL + "footprints.png");
+  return new MapPoint(valoPayload.position.latitude, valoPayload.position.longitude, _settings.ICON_URL + "footprints.png");
+}
+
+function createGroupAverage(valoPayload) {
+  return new GroupAverage(valoPayload.avg, valoPayload.participant);
 }
 
 /***/ }),
@@ -6653,7 +6758,7 @@ module.exports = function(hint){
 
 // all enumerable object keys, includes symbols
 var getKeys = __webpack_require__(36)
-  , gOPS    = __webpack_require__(57)
+  , gOPS    = __webpack_require__(58)
   , pIE     = __webpack_require__(48);
 module.exports = function(it){
   var result     = getKeys(it)
@@ -6689,7 +6794,7 @@ module.exports = function(object, el){
 "use strict";
 
 var path      = __webpack_require__(159)
-  , invoke    = __webpack_require__(53)
+  , invoke    = __webpack_require__(54)
   , aFunction = __webpack_require__(11);
 module.exports = function(/* ...pargs */){
   var fn     = aFunction(this)
@@ -6867,7 +6972,7 @@ var ctx            = __webpack_require__(26)
   , createProperty = __webpack_require__(65)
   , getIterFn      = __webpack_require__(88);
 
-$export($export.S + $export.F * !__webpack_require__(55)(function(iter){ Array.from(iter); }), 'Array', {
+$export($export.S + $export.F * !__webpack_require__(56)(function(iter){ Array.from(iter); }), 'Array', {
   // 22.1.2.1 Array.from(arrayLike, mapfn = undefined, thisArg = undefined)
   from: function from(arrayLike/*, mapfn = undefined, thisArg = undefined*/){
     var O       = toObject(arrayLike)
@@ -6903,7 +7008,7 @@ $export($export.S + $export.F * !__webpack_require__(55)(function(iter){ Array.f
 "use strict";
 
 var $export       = __webpack_require__(0)
-  , $indexOf      = __webpack_require__(49)(false)
+  , $indexOf      = __webpack_require__(50)(false)
   , $native       = [].indexOf
   , NEGATIVE_ZERO = !!$native && 1 / [1].indexOf(1, -0) < 0;
 
@@ -8346,7 +8451,7 @@ $export($export.S + $export.F * (LIBRARY || !USE_NATIVE), PROMISE, {
     return capability.promise;
   }
 });
-$export($export.S + $export.F * !(USE_NATIVE && __webpack_require__(55)(function(iter){
+$export($export.S + $export.F * !(USE_NATIVE && __webpack_require__(56)(function(iter){
   $Promise.all(iter)['catch'](empty);
 })), PROMISE, {
   // 25.4.4.1 Promise.all(iterable)
@@ -8718,8 +8823,8 @@ var global            = __webpack_require__(2)
   , inheritIfRequired = __webpack_require__(70)
   , dP                = __webpack_require__(7).f
   , gOPN              = __webpack_require__(35).f
-  , isRegExp          = __webpack_require__(54)
-  , $flags            = __webpack_require__(52)
+  , isRegExp          = __webpack_require__(55)
+  , $flags            = __webpack_require__(53)
   , $RegExp           = global.RegExp
   , Base              = $RegExp
   , proto             = $RegExp.prototype
@@ -8763,7 +8868,7 @@ __webpack_require__(38)('RegExp');
 /***/ (function(module, exports, __webpack_require__) {
 
 // @@match logic
-__webpack_require__(51)('match', 1, function(defined, MATCH, $match){
+__webpack_require__(52)('match', 1, function(defined, MATCH, $match){
   // 21.1.3.11 String.prototype.match(regexp)
   return [function match(regexp){
     'use strict';
@@ -8778,7 +8883,7 @@ __webpack_require__(51)('match', 1, function(defined, MATCH, $match){
 /***/ (function(module, exports, __webpack_require__) {
 
 // @@replace logic
-__webpack_require__(51)('replace', 2, function(defined, REPLACE, $replace){
+__webpack_require__(52)('replace', 2, function(defined, REPLACE, $replace){
   // 21.1.3.14 String.prototype.replace(searchValue, replaceValue)
   return [function replace(searchValue, replaceValue){
     'use strict';
@@ -8795,7 +8900,7 @@ __webpack_require__(51)('replace', 2, function(defined, REPLACE, $replace){
 /***/ (function(module, exports, __webpack_require__) {
 
 // @@search logic
-__webpack_require__(51)('search', 1, function(defined, SEARCH, $search){
+__webpack_require__(52)('search', 1, function(defined, SEARCH, $search){
   // 21.1.3.15 String.prototype.search(regexp)
   return [function search(regexp){
     'use strict';
@@ -8810,9 +8915,9 @@ __webpack_require__(51)('search', 1, function(defined, SEARCH, $search){
 /***/ (function(module, exports, __webpack_require__) {
 
 // @@split logic
-__webpack_require__(51)('split', 2, function(defined, SPLIT, $split){
+__webpack_require__(52)('split', 2, function(defined, SPLIT, $split){
   'use strict';
-  var isRegExp   = __webpack_require__(54)
+  var isRegExp   = __webpack_require__(55)
     , _split     = $split
     , $push      = [].push
     , $SPLIT     = 'split'
@@ -8888,7 +8993,7 @@ __webpack_require__(51)('split', 2, function(defined, SPLIT, $split){
 
 __webpack_require__(124);
 var anObject    = __webpack_require__(1)
-  , $flags      = __webpack_require__(52)
+  , $flags      = __webpack_require__(53)
   , DESCRIPTORS = __webpack_require__(6)
   , TO_STRING   = 'toString'
   , $toString   = /./[TO_STRING];
@@ -9275,7 +9380,7 @@ var global         = __webpack_require__(2)
   , redefine       = __webpack_require__(13)
   , META           = __webpack_require__(29).KEY
   , $fails         = __webpack_require__(3)
-  , shared         = __webpack_require__(58)
+  , shared         = __webpack_require__(59)
   , setToStringTag = __webpack_require__(44)
   , uid            = __webpack_require__(40)
   , wks            = __webpack_require__(5)
@@ -9417,7 +9522,7 @@ if(!USE_NATIVE){
   $DP.f   = $defineProperty;
   __webpack_require__(35).f = gOPNExt.f = $getOwnPropertyNames;
   __webpack_require__(48).f  = $propertyIsEnumerable;
-  __webpack_require__(57).f = $getOwnPropertySymbols;
+  __webpack_require__(58).f = $getOwnPropertySymbols;
 
   if(DESCRIPTORS && !__webpack_require__(33)){
     redefine(ObjectProto, 'propertyIsEnumerable', $propertyIsEnumerable, true);
@@ -9509,7 +9614,7 @@ setToStringTag(global.JSON, 'JSON', true);
 "use strict";
 
 var $export      = __webpack_require__(0)
-  , $typed       = __webpack_require__(59)
+  , $typed       = __webpack_require__(60)
   , buffer       = __webpack_require__(86)
   , anObject     = __webpack_require__(1)
   , toIndex      = __webpack_require__(39)
@@ -9559,7 +9664,7 @@ __webpack_require__(38)(ARRAY_BUFFER);
 /***/ (function(module, exports, __webpack_require__) {
 
 var $export = __webpack_require__(0);
-$export($export.G + $export.W + $export.F * !__webpack_require__(59).ABV, {
+$export($export.G + $export.W + $export.F * !__webpack_require__(60).ABV, {
   DataView: __webpack_require__(86).DataView
 });
 
@@ -9662,7 +9767,7 @@ __webpack_require__(28)('Uint8', 1, function(init){
 var weak = __webpack_require__(106);
 
 // 23.4 WeakSet Objects
-__webpack_require__(50)('WeakSet', function(get){
+__webpack_require__(51)('WeakSet', function(get){
   return function WeakSet(){ return get(this, arguments.length > 0 ? arguments[0] : undefined); };
 }, {
   // 23.4.3.1 WeakSet.prototype.add(value)
@@ -9679,7 +9784,7 @@ __webpack_require__(50)('WeakSet', function(get){
 
 // https://github.com/tc39/Array.prototype.includes
 var $export   = __webpack_require__(0)
-  , $includes = __webpack_require__(49)(true);
+  , $includes = __webpack_require__(50)(true);
 
 $export($export.P, 'Array', {
   includes: function includes(el /*, fromIndex = 0 */){
@@ -9815,7 +9920,7 @@ var $export         = __webpack_require__(0)
   , $defineProperty = __webpack_require__(7);
 
 // B.2.2.2 Object.prototype.__defineGetter__(P, getter)
-__webpack_require__(6) && $export($export.P + __webpack_require__(56), 'Object', {
+__webpack_require__(6) && $export($export.P + __webpack_require__(57), 'Object', {
   __defineGetter__: function __defineGetter__(P, getter){
     $defineProperty.f(toObject(this), P, {get: aFunction(getter), enumerable: true, configurable: true});
   }
@@ -9833,7 +9938,7 @@ var $export         = __webpack_require__(0)
   , $defineProperty = __webpack_require__(7);
 
 // B.2.2.3 Object.prototype.__defineSetter__(P, setter)
-__webpack_require__(6) && $export($export.P + __webpack_require__(56), 'Object', {
+__webpack_require__(6) && $export($export.P + __webpack_require__(57), 'Object', {
   __defineSetter__: function __defineSetter__(P, setter){
     $defineProperty.f(toObject(this), P, {set: aFunction(setter), enumerable: true, configurable: true});
   }
@@ -9890,7 +9995,7 @@ var $export                  = __webpack_require__(0)
   , getOwnPropertyDescriptor = __webpack_require__(17).f;
 
 // B.2.2.4 Object.prototype.__lookupGetter__(P)
-__webpack_require__(6) && $export($export.P + __webpack_require__(56), 'Object', {
+__webpack_require__(6) && $export($export.P + __webpack_require__(57), 'Object', {
   __lookupGetter__: function __lookupGetter__(P){
     var O = toObject(this)
       , K = toPrimitive(P, true)
@@ -9914,7 +10019,7 @@ var $export                  = __webpack_require__(0)
   , getOwnPropertyDescriptor = __webpack_require__(17).f;
 
 // B.2.2.5 Object.prototype.__lookupSetter__(P)
-__webpack_require__(6) && $export($export.P + __webpack_require__(56), 'Object', {
+__webpack_require__(6) && $export($export.P + __webpack_require__(57), 'Object', {
   __lookupSetter__: function __lookupSetter__(P){
     var O = toObject(this)
       , K = toPrimitive(P, true)
@@ -10340,8 +10445,8 @@ $export($export.P, 'String', {
 var $export     = __webpack_require__(0)
   , defined     = __webpack_require__(20)
   , toLength    = __webpack_require__(8)
-  , isRegExp    = __webpack_require__(54)
-  , getFlags    = __webpack_require__(52)
+  , isRegExp    = __webpack_require__(55)
+  , getFlags    = __webpack_require__(53)
   , RegExpProto = RegExp.prototype;
 
 var $RegExpStringIterator = function(regexp, string){
@@ -10490,7 +10595,7 @@ $export($export.G + $export.B, {
 // ie9- setTimeout & setInterval additional parameters fix
 var global     = __webpack_require__(2)
   , $export    = __webpack_require__(0)
-  , invoke     = __webpack_require__(53)
+  , invoke     = __webpack_require__(54)
   , partial    = __webpack_require__(158)
   , navigator  = global.navigator
   , MSIE       = !!navigator && /MSIE .\./.test(navigator.userAgent); // <- dirty ie9- check
@@ -11417,7 +11522,7 @@ module.exports = __webpack_require__(25);
   typeof self === "object" ? self : this
 );
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(90), __webpack_require__(60)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(90), __webpack_require__(61)))
 
 /***/ }),
 /* 334 */
@@ -18479,7 +18584,7 @@ Observable.fromNodeCallback = function (fn, ctx, selector) {
 
 }.call(this));
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(335)(module), __webpack_require__(90), __webpack_require__(60)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(335)(module), __webpack_require__(90), __webpack_require__(61)))
 
 /***/ }),
 /* 335 */
@@ -18516,6 +18621,74 @@ module.exports = function(module) {
 __webpack_require__(128);
 module.exports = __webpack_require__(127);
 
+
+/***/ }),
+/* 337 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+/**
+ * Utils module
+ * @license MIT
+ * @author Danilo Rossi <drossi@itrsgroup.com>
+ * @author (Each contributor append a line here)
+ */
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+exports.default = function (domElement) {
+  // <div class="ui indicating progress">
+  //   <div class="bar"></div>
+  //   <div class="label">Funding</div>
+  // </div>
+  //
+
+  var progressContainer = document.createElement('div');
+  progressContainer.classList.add('ui');
+  progressContainer.classList.add('indicating');
+  progressContainer.classList.add('progress');
+
+  var bar = document.createElement('div');
+  bar.classList.add('bar');
+
+  var label = document.createElement('div');
+  label.classList.add('label');
+
+  progressContainer.appendChild(bar);
+  progressContainer.appendChild(label);
+
+  domElement.appendChild(progressContainer);
+
+  $(progressContainer).progress({
+    percent: 0
+  });
+
+  return {
+    currentAvg: null,
+    group: null,
+    init: function init(groupAverage) {
+      this.currentAverage = groupAverage.average;
+      this.group = groupAverage.group;
+
+      label.textContent = this.group;
+      //domElement.textContent = `Group: ${this.group} > ${this.currentAverage}`;
+      $(progressContainer).progress({
+        percent: this.currentAverage
+      });
+      return this;
+    },
+    updateAvg: function updateAvg(avg) {
+      this.currentAverage = avg;
+      $(progressContainer).progress({
+        percent: this.currentAverage
+      });
+      return this;
+    }
+  };
+};
 
 /***/ })
 /******/ ]);

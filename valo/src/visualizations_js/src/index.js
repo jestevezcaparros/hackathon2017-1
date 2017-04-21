@@ -9,7 +9,7 @@
  */
 
 
-import Map from './map';
+import JotbMap from './map';
 
 import {
   MAP_CONTAINER_CSS_SELECTOR,
@@ -21,15 +21,26 @@ import * as valoDao from './valo/dao'
 
 import {
   createHappinessMapPoint,
-  createLocationMapPoint
+  createLocationMapPoint,
+  createGroupAverage
 } from './valo/vos'
 
+import avgBar from './components/avg_bar'
 
+
+function getNextBarChartContainer() {
+  var chartContainer = document.createElement('div');
+  chartContainer.classList.add('avg-chart-container');
+  document.querySelector('.avg-container').appendChild(chartContainer);
+  return chartContainer;
+}
 async function initMap(){
+
+  let averageBars = new Map();
 
   try {
 
-    const map = Map(
+    const map = JotbMap(
         document.querySelector(MAP_CONTAINER_CSS_SELECTOR),
         LA_TERMICA_COORDINATES,
         MAP_OPTIONS
@@ -51,6 +62,30 @@ async function initMap(){
 
     });
 
+    // read average by contributor
+    valoDao.readGroupsAvg(valoPayload => {
+
+      // create a GroupAverage element
+      const groupAverage = createGroupAverage(valoPayload);
+
+      // no bar chart for this group, create a new one
+      if(!averageBars.has(groupAverage.group)) {
+
+        // create a bar chart
+        const chart =
+          avgBar(getNextBarChartContainer())
+          .init(groupAverage);
+
+        // store it
+        averageBars.set(groupAverage.group, chart);
+
+      } else {
+
+        // update existing bar chart for current event participant
+        averageBars.get(groupAverage.group).updateAvg(groupAverage.average);
+      }
+    })
+
   } catch (e) {
     console.error(e);
   }
@@ -58,5 +93,10 @@ async function initMap(){
 }
 
 (function init(){
+
+  // document.querySelector('#top-menu-about').addEventListener('click', function(event) {
+  //   $('.ui.basic.modal.about').modal('show');
+  // });
+
   window.initMap = initMap;
 })();
