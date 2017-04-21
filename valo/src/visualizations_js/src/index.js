@@ -13,7 +13,8 @@ import Map from './map';
 import {
   MAP_CONTAINER_CSS_SELECTOR,
   LA_TERMICA_COORDINATES,
-  MAP_OPTIONS
+  MAP_OPTIONS,
+  PEOPLE
 } from './settings'
 
 import {
@@ -58,13 +59,15 @@ async function initMap(){
       map.addPoints(createHappinessMapPoint(valoPayload));
     });
 
-    // read events from Valo mob_location stream
-    readMobileLocationEvents((error, valoPayload) => {
-      // Manage your error
-      if(error) return printError(error);
-      // convert Valo event to MapPoint, add it to the map
-      map.addPoints(createLocationMapPoint(valoPayload));
-    });
+    for(let i=0; i<PEOPLE; i++){
+      // read events from Valo mob_location stream
+      readMobileLocationEvents((error, valoPayload) => {
+        // Manage your error
+        if(error) return printError(error);
+        // convert Valo event to MapPoint, add it to the map
+        map.addPoints(createLocationMapPoint(valoPayload));
+      });
+    }
 
   } catch (error) {
     printError(error);

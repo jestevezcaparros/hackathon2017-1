@@ -29,6 +29,74 @@
   }
 
  /**
+ * Gets a random coords into a circle of raidus r
+ * taken x0 and y0 as initial point
+ * @param {Number} x0 Start latitude
+ * @param {Number} y0 Start longitude
+ * @param {Number} r Radius
+ * @return {Object} A coord containing {latitude, longitude} within the radius given
+ */
+ export function getRandomWalk(startPoint) {
+
+   const randomDir = () => ['u', 'd', 'l', 'r'][getInteger(0,3)];
+   const increment = 30 * .000001;
+   const latestPoint = startPoint;
+   latestPoint.direction = randomDir();
+   latestPoint.steps = getInteger(4, 10);
+   return function(){
+
+     switch(latestPoint.direction){
+
+       case 'u':
+        if(latestPoint.latitude <= 36.68993099999992){
+         latestPoint.latitude += increment;
+        }
+        else {
+         latestPoint.direction = 'd';
+         latestPoint.latitude -= increment;
+        }
+        break;
+
+       case 'd':
+        if(latestPoint.latitude >= 36.6883310000001){
+          latestPoint.latitude -= increment;
+        }
+        else{
+          latestPoint.direction = 'u';
+          latestPoint.latitude += increment;
+        }
+        break;
+
+       case 'l':
+        if(latestPoint.longitude >= -4.4457909999999945){
+          latestPoint.longitude -= increment;
+        }
+        else {
+          latestPoint.direction = 'r';
+          latestPoint.longitude += increment;
+        }
+        break;
+
+       case 'r':
+        if(latestPoint.longitude <= -4.443831000000019){
+          latestPoint.longitude += increment;
+        }
+        else{
+          latestPoint.direction = 'l';
+          latestPoint.longitude -= increment;
+        }
+        break;
+     }
+     latestPoint.steps--;
+     if(latestPoint.steps<=0){
+       latestPoint.direction = randomDir();
+       latestPoint.steps = getInteger(4, 10);
+     }
+     return latestPoint;
+   }
+  }
+
+ /**
   * Returns a possible integer value in the range [from, to]
   * @method getInteger
   * @param  {Number} from

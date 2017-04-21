@@ -74,7 +74,7 @@ export async function readMobileHappinesEvents(callback){
 export async function readMobileLocationEvents(callback){
   try {
      const { observable } = await (DEBUG ?
-       runSingleQueryMocked(QUERY_MOB_LOCATION) : runSingleQuery(HOST, TENANT, QUERY_MOB_LOCATION));
+       runSingleQueryMocked(QUERY_MOB_LOCATION, {people: 5}) : runSingleQuery(HOST, TENANT, QUERY_MOB_LOCATION));
      observable.subscribe(
        payload => payload && callback(null, payload),
        error => callback(error),
