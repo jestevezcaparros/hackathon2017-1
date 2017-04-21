@@ -24,10 +24,49 @@ export const LA_TERMICA_COORDINATES = {
 //     lon: -4.557648
 // }
 export const MAP_OPTIONS = {
-    zoom: 19,
+    zoom: 20,
     disableDefaultUI: true,
     backgroundColor: "#bbb",
-    center: LA_TERMICA_COORDINATES
+    scrollwheel: true,
+    navigationControl: false,
+    mapTypeControl: false,
+    scaleControl: false,
+    minZoom: 18,
+    maxZoom: 20,
+    center: LA_TERMICA_COORDINATES,
+    styles: [
+    {
+        "elementType": "labels",
+        "stylers": [
+            {
+                "visibility": "off"
+            }
+        ]
+    },
+    {
+        "featureType": "all",
+        "elementType": "all",
+
+        "stylers": [
+            {
+                "invert_lightness": true
+            },
+            {
+                "saturation": -80
+            },
+            {
+                "lightness": 30
+            },
+            {
+                "gamma": 0.5
+            },
+            {
+                "hue": "#3d433a"
+            }
+
+        ]
+    }
+]
 };
 export const AUDITORIO_POLYGON = [
     {lat: 36.689026, lng: -4.444346},
@@ -65,17 +104,17 @@ export const BATHROOM_POLYGON = [
 ]
 
 export const POLYGON_ROOM_STYLE = {
-    strokeColor: 'rgba(27, 217, 221, 1)',
+    strokeColor: 'rgba(27, 217, 221, 0)',
     strokeOpacity: 1,
     strokeWeight: 2,
-    fillColor: 'rgba(27, 217, 221, 1)',
+    fillColor: 'rgba(27, 217, 221, .3)',
     fillOpacity: 1
 }
 
 export const POLYGON_BATHROOM_STYLE = {
-    strokeColor: '#009933',
+    strokeColor: '#343c30',
     strokeOpacity: 1,
     strokeWeight: 2,
-    fillColor: '#009933',
+    fillColor: '#343c30',
     fillOpacity: 1
 }

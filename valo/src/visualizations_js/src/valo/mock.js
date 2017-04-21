@@ -67,7 +67,7 @@ import {
    switch(query){
      case QUERY_MOB_HAPPINESS:
         return {
-          observable: _getMockObservable(5000, LA_TERMICA_COORDINATES.lat, LA_TERMICA_COORDINATES.lon, LA_TERMICA_COORDINATES.radius, true)
+          observable: _getMockObservable(1000, LA_TERMICA_COORDINATES.lat, LA_TERMICA_COORDINATES.lon, LA_TERMICA_COORDINATES.radius, true)
         };
      case QUERY_MOB_LOCATION:
        return {

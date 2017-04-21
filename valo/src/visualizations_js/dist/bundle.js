@@ -1704,10 +1704,37 @@ var LA_TERMICA_COORDINATES = exports.LA_TERMICA_COORDINATES = {
 //     lon: -4.557648
 // }
 var MAP_OPTIONS = exports.MAP_OPTIONS = {
-    zoom: 19,
+    zoom: 20,
     disableDefaultUI: true,
     backgroundColor: "#bbb",
-    center: LA_TERMICA_COORDINATES
+    scrollwheel: true,
+    navigationControl: false,
+    mapTypeControl: false,
+    scaleControl: false,
+    minZoom: 18,
+    maxZoom: 20,
+    center: LA_TERMICA_COORDINATES,
+    styles: [{
+        "elementType": "labels",
+        "stylers": [{
+            "visibility": "off"
+        }]
+    }, {
+        "featureType": "all",
+        "elementType": "all",
+
+        "stylers": [{
+            "invert_lightness": true
+        }, {
+            "saturation": -80
+        }, {
+            "lightness": 30
+        }, {
+            "gamma": 0.5
+        }, {
+            "hue": "#3d433a"
+        }]
+    }]
 };
 var AUDITORIO_POLYGON = exports.AUDITORIO_POLYGON = [{ lat: 36.689026, lng: -4.444346 }, { lat: 36.688893, lng: -4.443849 }, { lat: 36.689431, lng: -4.443629 }, { lat: 36.689561, lng: -4.444127 }];
 
@@ -1720,18 +1747,18 @@ var ENTRANCE_POLYGON = exports.ENTRANCE_POLYGON = [{ lat: 36.689497, lng: -4.445
 var BATHROOM_POLYGON = exports.BATHROOM_POLYGON = [{ lat: 36.689141, lng: -4.445064 }, { lat: 36.689114, lng: -4.444961 }, { lat: 36.689060, lng: -4.444985 }, { lat: 36.689084, lng: -4.445088 }];
 
 var POLYGON_ROOM_STYLE = exports.POLYGON_ROOM_STYLE = {
-    strokeColor: 'rgba(27, 217, 221, 1)',
+    strokeColor: 'rgba(27, 217, 221, 0)',
     strokeOpacity: 1,
     strokeWeight: 2,
-    fillColor: 'rgba(27, 217, 221, 1)',
+    fillColor: 'rgba(27, 217, 221, .3)',
     fillOpacity: 1
 };
 
 var POLYGON_BATHROOM_STYLE = exports.POLYGON_BATHROOM_STYLE = {
-    strokeColor: '#009933',
+    strokeColor: '#343c30',
     strokeOpacity: 1,
     strokeWeight: 2,
-    fillColor: '#009933',
+    fillColor: '#343c30',
     fillOpacity: 1
 };
 
@@ -2558,7 +2585,7 @@ function retryOnConflict(f) {
  */
 
 Object.defineProperty(exports, "__esModule", {
-    value: true
+  value: true
 });
 exports.getIcon = getIcon;
 exports.printError = printError;
@@ -2571,29 +2598,46 @@ var _valo_sdk_js = __webpack_require__(99);
 var _settings = __webpack_require__(46);
 
 var iconStore = new Map();
+var polygonStore = new Array();
+var markerStore = new Array();
 
 function getIcon(src) {
-    if (iconStore.has(src)) return iconStore.get(src);
-    var iconImg = new Image();
-    iconImg.src = src;
-    iconStore.set(src, iconImg);
-    return iconImg;
+  if (iconStore.has(src)) return iconStore.get(src);
+  var iconImg = new Image();
+  iconImg.src = src;
+  iconStore.set(src, iconImg);
+  return iconImg;
 }
 
 function printError() {
-    var _console;
+  var _console;
 
-    (_console = console).error.apply(_console, arguments);
+  (_console = console).error.apply(_console, arguments);
 }
 
 function printLog() {
-    var _console2;
+  var _console2;
 
-    (_console2 = console).log.apply(_console2, arguments);
+  (_console2 = console).log.apply(_console2, arguments);
+}
+
+function iconSizeFromZoomLevel(zoomLevel) {
+  switch (zoomLevel) {
+    case 18:
+      return 8;
+    case 19:
+      return 18;
+    case 20:
+      return 24;
+    default:
+      return 24;
+  }
 }
 
 function plotPoint(context, point, projection) {
-    context.drawImage(getIcon(point.icon), projection.fromLatLngToContainerPixel(point.geo).x, projection.fromLatLngToContainerPixel(point.geo).y, point.iconSize || 32, point.iconSize || 32);
+  var zoomLevel = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : 20;
+
+  context.drawImage(getIcon(point.icon), projection.fromLatLngToDivPixel(point.geo).x, projection.fromLatLngToDivPixel(point.geo).y, iconSizeFromZoomLevel(zoomLevel), iconSizeFromZoomLevel(zoomLevel));
 }
 
 /**
@@ -2603,45 +2647,107 @@ function plotPoint(context, point, projection) {
 * @param {*} coordinates
 */
 function createMap(_ref) {
-    var domElement = _ref.domElement,
-        options = _ref.options;
+  var domElement = _ref.domElement,
+      options = _ref.options;
 
-    options.center = new window.google.maps.LatLng(options.center.lat, options.center.lon);
-    var map = new window.google.maps.Map(domElement, options);
+  options.center = new window.google.maps.LatLng(options.center.lat, options.center.lon);
+  var map = new window.google.maps.Map(domElement, options);
+  var bounds = new window.google.maps.LatLngBounds(new window.google.maps.LatLng(36.688845, -4.445961), new window.google.maps.LatLng(36.689417, -4.443649));
+  window.google.maps.event.addListener(map, "dragend", function () {
+    return updateMap(map);
+  });
+  window.google.maps.event.addListener(map, "zoom_changed", function () {
+    return updateMap(map);
+  });
+  window.google.maps.event.addListener(map, "resize", function () {
+    return updateMap(map);
+  });
+  window.google.maps.event.addListener(map, "bounds_changed", function () {
+    return updateMap(map);
+  });
+  window.google.maps.event.addListener(map, "tilesloaded", function () {
+    return updateMap(map);
+  });
+  window.google.maps.event.addListener(map, "projection_changed", function () {
+    return updateMap(map);
+  });
+  window.addEventListener('resize', function () {
+    return map.fitBounds(bounds);
+  });
+  drawRooms(map);
+  map.fitBounds(bounds);
+  return map;
+}
 
-    // CREATE LA TERMICA ROOMS POLYGON
-    addPolygon(map, _settings.AUDITORIO_POLYGON, _settings.POLYGON_ROOM_STYLE);
-    addPolygon(map, _settings.MOLLETE_POLYGON, _settings.POLYGON_ROOM_STYLE);
-    addPolygon(map, _settings.PITUFO_POLYGON, _settings.POLYGON_ROOM_STYLE);
-    addPolygon(map, _settings.ENTRANCE_POLYGON, _settings.POLYGON_ROOM_STYLE);
-    addPolygon(map, _settings.BATHROOM_POLYGON, _settings.POLYGON_BATHROOM_STYLE);
+function updateMap(map) {
+  var zoom = map.getZoom();
+  resetPolygons();
+  resetMarkers();
+  drawRooms(map);
+  if (zoom == 20) {
+    drawMarkers(map);
+  }
+  map.setCenter(map.getCenter());
+};
 
-    // Add Icons
-    addMarker(map, _settings.ICON_URL + 'huella3.svg', {
-        latitude: 36.689226,
-        longitude: -4.443997
-    });
+function drawRooms(map) {
+  // CREATE LA TERMICA ROOMS POLYGON
+  addPolygon(map, _settings.AUDITORIO_POLYGON, _settings.POLYGON_ROOM_STYLE);
+  addPolygon(map, _settings.MOLLETE_POLYGON, _settings.POLYGON_ROOM_STYLE);
+  addPolygon(map, _settings.PITUFO_POLYGON, _settings.POLYGON_ROOM_STYLE);
+  addPolygon(map, _settings.ENTRANCE_POLYGON, _settings.POLYGON_ROOM_STYLE);
+  addPolygon(map, _settings.BATHROOM_POLYGON, _settings.POLYGON_BATHROOM_STYLE);
+}
 
-    return map;
+function drawMarkers(map) {
+  // Add Icons
+  addMarker(map, _settings.ICON_URL + 'campero.svg', {
+    latitude: 36.689040,
+    longitude: -4.444238
+  });
+  addMarker(map, _settings.ICON_URL + 'pitufo.svg', {
+    latitude: 36.688839,
+    longitude: -4.445384
+  });
+  addMarker(map, _settings.ICON_URL + 'mollete.svg', {
+    latitude: 36.689175,
+    longitude: -4.445105
+  });
+}
+
+function resetPolygons() {
+  polygonStore.forEach(function (polygon) {
+    return polygon.setMap(null);
+  });
+  polygonStore = [];
+  return true;
+}
+
+function resetMarkers() {
+  markerStore.forEach(function (marker) {
+    return marker.setMap(null);
+  });
+  markerStore = [];
+  return true;
 }
 
 function addPolygon(map, coords) {
-    var options = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
+  var options = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
 
-    var opt = Object.assign(options, { path: coords });
-    var polygon = new google.maps.Polygon(opt);
-    polygon.setMap(map);
+  var opt = Object.assign(options, { path: coords });
+  var polygon = new google.maps.Polygon(opt);
+  polygon.setMap(map);
+  polygonStore.push(polygon);
 }
 
 function addMarker(map, icon, position) {
-
-    var LatLng = new google.maps.LatLng(position.latitude, position.longitude);
-
-    var marker = new google.maps.Marker({
-        position: LatLng,
-        icon: icon,
-        map: map
-    });
+  var LatLng = new google.maps.LatLng(position.latitude, position.longitude);
+  var marker = new google.maps.Marker({
+    position: LatLng,
+    icon: icon,
+    map: map
+  });
+  markerStore.push(marker);
 }
 
 /***/ }),
@@ -13445,76 +13551,75 @@ var DEFAULT_HEADERS = { "Content-Type": "application/json" };
  */
 
 Object.defineProperty(exports, "__esModule", {
-      value: true
+  value: true
 });
 
 var _utils = __webpack_require__(65);
 
 function initCanvasOverlay() {
 
-      function CanvasOverlay(map) {
-            this.map = map;
-            this.canvas = null;
-            this.context = null;
-            this.setMap(map);
-      }
+  function CanvasOverlay(map) {
+    var _this = this;
 
-      CanvasOverlay.prototype = new window.google.maps.OverlayView();
-      CanvasOverlay.prototype.onAdd = function () {
-            var _document$body$getBou = document.body.getBoundingClientRect(),
-                width = _document$body$getBou.width,
-                height = _document$body$getBou.height;
+    var _document$body$getBou = document.body.getBoundingClientRect(),
+        width = _document$body$getBou.width,
+        height = _document$body$getBou.height;
 
-            this.projection = this.getProjection();
+    var initCanvas = function initCanvas(label) {
+      _this[label] = document.createElement("canvas");
+      _this[label].className = "overlay";
+      _this[label].height = height;
+      _this[label].width = width;
+    };
+    initCanvas('canvas');
+    initCanvas('virtualCanvas');
+    this.points = [];
+    this.mapsize = { width: width, height: height };
+    this.map = map;
+    this.setMap(map);
+  }
 
-            this.canvas = d3.select('body').append('canvas').attr('width', width).attr('height', height).style('position', 'fixed').style('top', '0').style('left', '0');
+  CanvasOverlay.prototype = new window.google.maps.OverlayView();
+  CanvasOverlay.prototype.onAdd = function () {
+    this.getPanes().overlayLayer.appendChild(this.canvas);
+    this.getPanes().overlayLayer.appendChild(this.virtualCanvas);
+    this.context = this.canvas.getContext("2d");
+    this.virtualContext = this.virtualCanvas.getContext('2d');
+  };
+  CanvasOverlay.prototype.draw = function () {
+    var _this2 = this;
 
-            this.context = this.canvas.node().getContext('2d');
+    if (!this.context || !this.virtualContext) return;
+    var projection = this.getProjection();
+    this.context.save();
+    this.context.clearRect(0, 0, this.mapsize.width, this.mapsize.height);
+    this.context.globalAlpha = 0.6;
+    this.context.drawImage(this.virtualCanvas, 0, 0);
+    this.context.globalAlpha = 1;
+    this.context.fillStyle = 'blue';
+    this.points.forEach(function (point) {
+      return (0, _utils.plotPoint)(_this2.context, point, projection, _this2.map.getZoom());
+    });
+    this.context.restore();
+    this.virtualContext.clearRect(0, 0, this.mapsize.width, this.mapsize.height);
+    this.virtualContext.drawImage(this.canvas, 0, 0);
+  };
 
-            this.virtualCanvas = document.createElement('canvas');
-
-            d3.select(this.virtualCanvas).attr('width', width).attr('height', height);
-
-            this.virtualContext = this.virtualCanvas.getContext('2d');
+  CanvasOverlay.prototype.addPoints = function (points) {
+    this.points = (Array.isArray(points) ? points : [points]).map(function (d) {
+      return {
+        geo: new window.google.maps.LatLng(d.latitude, d.longitude),
+        icon: d.icon
       };
-      CanvasOverlay.prototype.draw = function () {
-            console.log("Overlay added");
-      };
+    });
+    this.draw();
+  };
 
-      CanvasOverlay.prototype.addPoints = function (points) {
-            var _this = this;
-
-            if (!this.context) {
-                  return;
-            }
-
-            var data = Array.isArray(points) ? points : [points];
-
-            var _data = data.map(function (d) {
-                  return { geo: new window.google.maps.LatLng(d.latitude, d.longitude), icon: d.icon };
-            });
-
-            this.context.save();
-            this.context.clearRect(0, 0, this.context.canvas.width, this.context.canvas.height);
-            this.context.globalAlpha = 0.9;
-            this.context.drawImage(this.virtualCanvas, 0, 0);
-            this.context.globalAlpha = 1;
-            this.context.fillStyle = 'blue';
-            _data.forEach(function (point) {
-                  (0, _utils.plotPoint)(_this.context, point, _this.projection);
-            });
-
-            this.context.restore();
-
-            this.virtualContext.clearRect(0, 0, this.context.canvas.width, this.context.canvas.height);
-            this.virtualContext.drawImage(this.canvas.node(), 0, 0);
-      };
-
-      return CanvasOverlay;
+  return CanvasOverlay;
 }
 exports.default = function () {
-      var CanvasOverlay = initCanvasOverlay();
-      return new CanvasOverlay(_utils.createMap.apply(undefined, arguments));
+  var CanvasOverlay = initCanvasOverlay();
+  return new CanvasOverlay(_utils.createMap.apply(undefined, arguments));
 };
 
 /***/ }),
@@ -13761,7 +13866,7 @@ function runSingleQueryMocked(query) {
   switch (query) {
     case _settings.QUERY_MOB_HAPPINESS:
       return {
-        observable: _getMockObservable(5000, _settings.LA_TERMICA_COORDINATES.lat, _settings.LA_TERMICA_COORDINATES.lon, _settings.LA_TERMICA_COORDINATES.radius, true)
+        observable: _getMockObservable(1000, _settings.LA_TERMICA_COORDINATES.lat, _settings.LA_TERMICA_COORDINATES.lon, _settings.LA_TERMICA_COORDINATES.radius, true)
       };
     case _settings.QUERY_MOB_LOCATION:
       return {
@@ -13807,7 +13912,7 @@ var MapPoint = function MapPoint(latitude, longitude, icon) {
 
   this.latitude = latitude;
   this.longitude = longitude;
-  this.icon = '' + _settings.ICON_URL + icon + '.png';
+  this.icon = '' + _settings.ICON_URL + icon + '.svg';
 };
 
 /**

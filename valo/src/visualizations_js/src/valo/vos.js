@@ -20,7 +20,7 @@ class MapPoint {
   constructor(latitude, longitude, icon) {
     this.latitude = latitude;
     this.longitude = longitude;
-    this.icon = `${ICON_URL}${icon}.png`;
+    this.icon = `${ICON_URL}${icon}.svg`;
   }
 }
 
