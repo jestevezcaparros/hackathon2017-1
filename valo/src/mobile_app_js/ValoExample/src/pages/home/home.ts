@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 
-import { NavController } from 'ionic-angular';
+import { NavController, ToastController } from 'ionic-angular';
 import { Storage } from '@ionic/storage';
 import { Geolocation } from '@ionic-native/geolocation';
 
@@ -102,13 +102,10 @@ export class HomePage {
   }
 
   REPO_CONF_SSR = {
-    "name": "ssr",
-    "config": {
-      "defaultStringAnalyzer": "StandardAnalyzer"
-    }
+    "name": "ssr"
   };
 
-  constructor(public navCtrl: NavController, private storage: Storage, private geolocation: Geolocation) {
+  constructor(public navCtrl: NavController, private storage: Storage, private geolocation: Geolocation, public toastCtrl: ToastController) {
 
   }
 
@@ -117,8 +114,8 @@ export class HomePage {
       data => {
         if (data) {
           this.userDetails = JSON.parse(data);
-          // this.createStream(this.HAPPINESS_SCHEMA, this.userDetails.valoDetails.happiness);
-          // this.createStream(this.LOCATION_SCHEMA, this.userDetails.valoDetails.location);
+          this.createStream(this.HAPPINESS_SCHEMA, this.userDetails.valoDetails.happiness);
+          this.createStream(this.LOCATION_SCHEMA, this.userDetails.valoDetails.location);
           this.publishLocation();
           this.setupGeolocationWatch();
         } else {
@@ -141,6 +138,17 @@ export class HomePage {
         this.publishLocationEvent(this.userDetails.valoDetails.location, resp);
       }
     ).catch((error) => {
+      let dummyResp = {
+        coords: {
+          latitude: 0,
+          longitude: 0,
+          altitude: 0,
+          accuracy: 0,
+          speed: 0,
+          heading: 0
+        }
+      };
+      this.publishLocationEvent(this.userDetails.valoDetails.location, dummyResp);
       console.log(error);
     });
   }
@@ -190,6 +198,11 @@ export class HomePage {
           }
         }
       );
+      this.toastCtrl.create({
+        message: "Location sent to Valo: [" + resp.coords.latitude + "," + resp.coords.longitude + "]",
+        duration: 5000,
+        position: 'bottom'
+      });
     } catch (error) {
       console.log(error);
     }
