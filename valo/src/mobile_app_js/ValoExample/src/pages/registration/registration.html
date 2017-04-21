@@ -12,12 +12,12 @@
 
       <ion-item>
         <ion-label floating>Name</ion-label>
-        <ion-input type="text" [(ngModel)]="user.name" name="name"></ion-input>
+        <ion-input type="text" [(ngModel)]="userDetails.user.name" name="name"></ion-input>
       </ion-item>
 
       <ion-item>
         <ion-label floating>Gender</ion-label>
-        <ion-select [(ngModel)]="user.gender" name="gender">
+        <ion-select [(ngModel)]="userDetails.user.gender" name="gender">
           <ion-option value="male">Male</ion-option>
           <ion-option value="female">Female</ion-option>
         </ion-select>
@@ -25,7 +25,7 @@
 
       <ion-item>
         <ion-label floating>Type of Participant</ion-label>
-        <ion-select [(ngModel)]="user.type" name="type">
+        <ion-select [(ngModel)]="userDetails.user.type" name="type">
           <ion-option value="attendee">Attendee</ion-option>
           <ion-option value="speaker">Speaker</ion-option>
           <ion-option value="sponsor">Sponsor</ion-option>
@@ -36,17 +36,17 @@
 
       <ion-item>
         <ion-label floating>Company</ion-label>
-        <ion-input type="text" [(ngModel)]="user.company" name="company"></ion-input>
+        <ion-input type="text" [(ngModel)]="userDetails.user.company" name="company"></ion-input>
       </ion-item>
 
       <ion-item>
         <ion-label floating>Country</ion-label>
-        <ion-input type="text" [(ngModel)]="user.country" name="country"></ion-input>
+        <ion-input type="text" [(ngModel)]="userDetails.user.country" name="country"></ion-input>
       </ion-item>
 
       <ion-item>
         <ion-label floating>Profile/Job Title</ion-label>
-        <ion-input type="text" [(ngModel)]="user.role" name="role"></ion-input>
+        <ion-input type="text" [(ngModel)]="userDetails.user.role" name="role"></ion-input>
       </ion-item>
 
       <ion-item>
@@ -54,32 +54,32 @@
 
       <ion-item>
         <ion-label floating>Valo Host</ion-label>
-        <ion-input type="text" [(ngModel)]="valoDetails.host" name="host"></ion-input>
+        <ion-input type="text" [(ngModel)]="userDetails.valoDetails.host" name="host"></ion-input>
       </ion-item>
 
       <ion-item>
         <ion-label floating>Valo Port</ion-label>
-        <ion-input type="text" [(ngModel)]="valoDetails.port" name="port"></ion-input>
+        <ion-input type="text" [(ngModel)]="userDetails.valoDetails.port" name="port"></ion-input>
       </ion-item>
 
       <ion-item>
         <ion-label floating>Valo Tenant</ion-label>
-        <ion-input type="text" [(ngModel)]="valoDetails.tenant" name="tenant"></ion-input>
+        <ion-input type="text" [(ngModel)]="userDetails.valoDetails.tenant" name="tenant"></ion-input>
       </ion-item>
 
       <ion-item>
         <ion-label floating>Stream Collection</ion-label>
-        <ion-input type="text" [(ngModel)]="valoDetails.collection" name="collection"></ion-input>
+        <ion-input type="text" [(ngModel)]="userDetails.valoDetails.collection" name="collection"></ion-input>
       </ion-item>
 
       <ion-item>
         <ion-label floating>Location Stream</ion-label>
-        <ion-input type="text" [(ngModel)]="valoDetails.location" name="location"></ion-input>
+        <ion-input type="text" [(ngModel)]="userDetails.valoDetails.location" name="location"></ion-input>
       </ion-item>
 
       <ion-item>
         <ion-label floating>Happiness Stream</ion-label>
-        <ion-input type="text" [(ngModel)]="valoDetails.happiness" name="happiness"></ion-input>
+        <ion-input type="text" [(ngModel)]="userDetails.valoDetails.happiness" name="happiness"></ion-input>
       </ion-item>
 
     </ion-list>

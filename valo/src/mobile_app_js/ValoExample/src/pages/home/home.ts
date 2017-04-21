@@ -5,7 +5,6 @@ import { Storage } from '@ionic/storage';
 import { Geolocation } from '@ionic-native/geolocation';
 
 import * as streams from '../../../../../lib_js/valo_sdk_js/api/streams';
-import * as contributors from '../../../../../lib_js/valo_sdk_js/api/contributors';
 import { retryOnConflict } from '../../../../../lib_js/valo_sdk_js/index';
 
 @Component({
@@ -41,6 +40,74 @@ export class HomePage {
     enableHighAccuracy: true
   }
 
+  HAPPINESS_SCHEMA = {
+    "schema": {
+      "version": "1.0",
+      "config": {},
+      "topDef": {
+        "type": "record",
+        "properties": {
+          "contributor": {
+            "type": "contributor", "definition": "mobile_user"
+          },
+          "timestamp": {
+            "type": "datetime",
+            "annotations": ["urn:itrs:default-timestamp"]
+          },
+          "position": {
+            "type": "record",
+            "properties": {
+              "latitude": { "type": "double" },
+              "longitude": { "type": "double" },
+              "altitude": { "type": "double" },
+              "accuracy": { "type": "double" },
+              "speed": { "type": "double" },
+              "heading": { "type": "double" }
+            }
+          },
+          "happiness": { "type": "int" }
+        }
+      }
+    }
+  }
+
+  LOCATION_SCHEMA = {
+    "schema": {
+      "version": "1.0",
+      "config": {},
+      "topDef": {
+        "type": "record",
+        "properties": {
+          "contributor": {
+            "type": "contributor", "definition": "mobile_user"
+          },
+          "timestamp": {
+            "type": "datetime",
+            "annotations": ["urn:itrs:default-timestamp"]
+          },
+          "position": {
+            "type": "record",
+            "properties": {
+              "latitude": { "type": "double" },
+              "longitude": { "type": "double" },
+              "altitude": { "type": "double" },
+              "accuracy": { "type": "double" },
+              "speed": { "type": "double" },
+              "heading": { "type": "double" }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  REPO_CONF_SSR = {
+    "name": "ssr",
+    "config": {
+      "defaultStringAnalyzer": "StandardAnalyzer"
+    }
+  };
+
   constructor(public navCtrl: NavController, private storage: Storage, private geolocation: Geolocation) {
 
   }
@@ -48,12 +115,14 @@ export class HomePage {
   ionViewWillEnter() {
     this.storage.get('userDetails').then(
       data => {
-        if (!data) {
-          this.navCtrl.parent.select(1);
-        } else {
+        if (data) {
           this.userDetails = JSON.parse(data);
-          this.registerContributor();
+          // this.createStream(this.HAPPINESS_SCHEMA, this.userDetails.valoDetails.happiness);
+          // this.createStream(this.LOCATION_SCHEMA, this.userDetails.valoDetails.location);
+          this.publishLocation();
           this.setupGeolocationWatch();
+        } else {
+          this.navCtrl.parent.select(1);
         }
       },
       error => {
@@ -62,54 +131,47 @@ export class HomePage {
     );
   }
 
-  async registerContributor() {
-    const response = await retryOnConflict(contributors.registerContributorInstance)(
-      {
-        valoHost: this.userDetails.valoDetails.host,
-        valoPort: this.userDetails.valoDetails.port
-      },
-      [this.userDetails.valoDetails.tenant, "mobile_user", this.userDetails.id],
-      {
-        id: this.userDetails.id,
-        user: {
-          name: this.userDetails.user.name,
-          typeOfParticipant: this.userDetails.user.type,
-          company: this.userDetails.user.company,
-          role: this.userDetails.user.role,
-          country: this.userDetails.user.country,
-          gender: this.userDetails.user.gender
-        }
-      }
-    );
-    return response;
-  }
-
   setupGeolocationWatch() {
-    setInterval(
-      () => {
-        this.geolocation.getCurrentPosition(this.geolocationOptions).then(
-          (resp) => {
-            this.publishEvent(this.userDetails.valoDetails.location, resp);
-          }
-        ).catch((error) => {
-          let resp = {
-            coords: {
-              latitude: 0,
-              longitude: 0,
-              altitude: 0,
-              accuracy: 0,
-              speed: 0,
-              heading: 0
-            }
-          };
-          this.publishEvent(this.userDetails.valoDetails.location, resp);
-        });
-      }, 30000);
+    setInterval(() => { this.publishLocation() }, 300000);
   }
 
-  async publishEvent(stream, resp) {
+  publishLocation() {
+    this.geolocation.getCurrentPosition(this.geolocationOptions).then(
+      (resp) => {
+        this.publishLocationEvent(this.userDetails.valoDetails.location, resp);
+      }
+    ).catch((error) => {
+      console.log(error);
+    });
+  }
+
+  async createStream(schema, stream) {
     try {
-      const response = await streams.publishEventToStream(
+      await retryOnConflict(streams.createStream)(
+        {
+          valoHost: this.userDetails.valoDetails.host,
+          valoPort: this.userDetails.valoDetails.port
+        },
+        [this.userDetails.valoDetails.tenant, this.userDetails.valoDetails.collection, stream],
+        schema
+      );
+
+      await retryOnConflict(streams.setStreamRepository)(
+        {
+          valoHost: this.userDetails.valoDetails.host,
+          valoPort: this.userDetails.valoDetails.port
+        },
+        [this.userDetails.valoDetails.tenant, this.userDetails.valoDetails.collection, stream],
+        this.REPO_CONF_SSR
+      );
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  async publishLocationEvent(stream, resp) {
+    try {
+      await streams.publishEventToStream(
         {
           valoHost: this.userDetails.valoDetails.host,
           valoPort: this.userDetails.valoDetails.port
@@ -128,8 +190,8 @@ export class HomePage {
           }
         }
       );
-      return response;
-    } catch (e) {
+    } catch (error) {
+      console.log(error);
     }
   }
 
