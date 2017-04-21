@@ -116,8 +116,8 @@ export class HomePage {
       data => {
         if (data) {
           this.userDetails = JSON.parse(data);
-          this.createStream(this.HAPPINESS_SCHEMA, this.userDetails.valoDetails.happiness);
-          this.createStream(this.LOCATION_SCHEMA, this.userDetails.valoDetails.location);
+          //this.createStream(this.HAPPINESS_SCHEMA, this.userDetails.valoDetails.happiness);
+          //this.createStream(this.LOCATION_SCHEMA, this.userDetails.valoDetails.location);
           this.publishLocation();
           this.setupGeolocationWatch();
         } else {

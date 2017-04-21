@@ -110,7 +110,7 @@ export class RegistrationPage {
   saveDetails() {
     this.storage.set('userDetails', JSON.stringify(this.userDetails)).then(
       () => {
-        this.createContributor(this.MOBILE_USER_CONTRIBUTOR);
+        //this.createContributor(this.MOBILE_USER_CONTRIBUTOR);
         this.registerContributor();
       },
       error => {
