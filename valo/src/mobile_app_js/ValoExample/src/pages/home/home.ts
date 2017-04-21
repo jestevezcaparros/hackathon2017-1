@@ -105,6 +105,8 @@ export class HomePage {
     "name": "ssr"
   };
 
+  locationWatch = null;
+
   constructor(public navCtrl: NavController, private storage: Storage, private geolocation: Geolocation, public toastCtrl: ToastController) {
 
   }
@@ -128,8 +130,12 @@ export class HomePage {
     );
   }
 
+  ionViewWillLeave() {
+    clearInterval(this.locationWatch);
+  }
+
   setupGeolocationWatch() {
-    setInterval(() => { this.publishLocation() }, 300000);
+    this.locationWatch = setInterval(() => { this.publishLocation() }, 300000);
   }
 
   publishLocation() {
@@ -202,7 +208,7 @@ export class HomePage {
         message: "Location sent to Valo: [" + resp.coords.latitude + "," + resp.coords.longitude + "]",
         duration: 5000,
         position: 'bottom'
-      });
+      }).present();
     } catch (error) {
       console.log(error);
     }
