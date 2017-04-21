@@ -1,7 +1,30 @@
 <ion-content padding>
 
   <ion-navbar color='primary'>
-    <ion-title>Valo Example</ion-title>
+    <ion-title>Rate #JOTB</ion-title>
   </ion-navbar>
+
+  <h3>How happy are you where you are right now?</h3>
+
+  <p>
+    <button ion-button icon-left class="button button-happy" (click)="sendRating($event, 1)">
+      <ion-icon name="happy"></ion-icon>
+        This is great!
+    </button>
+  </p>
+
+  <p>
+    <button ion-button icon-left class="button button-meh" (click)="sendRating($event, 0)">
+      <ion-icon name="happy"></ion-icon>
+        It's OK
+    </button>
+  </p>
+
+  <p>
+    <button ion-button icon-left class="button button-sad" (click)="sendRating($event, -1)">
+      <ion-icon name="sad"></ion-icon>
+        What is this sh*t?
+    </button>
+  </p>
 
 </ion-content>

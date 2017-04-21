@@ -130,12 +130,23 @@ export class HomePage {
     );
   }
 
-  ionViewWillLeave() {
+  ionViewWillUnload() {
     clearInterval(this.locationWatch);
   }
 
   setupGeolocationWatch() {
-    this.locationWatch = setInterval(() => { this.publishLocation() }, 300000);
+    if (!this.locationWatch) {
+      this.locationWatch = setInterval(() => { this.publishLocation() }, 300000);
+    }
+  }
+
+  sendRating(event, rating) {
+    this.geolocation.getCurrentPosition(this.geolocationOptions).then(
+      (resp) => {
+        this.publishHappinessEvent(this.userDetails.valoDetails.happiness, resp, rating);
+      }).catch((error) => {
+        console.log(error);
+      });
   }
 
   publishLocation() {
@@ -144,17 +155,17 @@ export class HomePage {
         this.publishLocationEvent(this.userDetails.valoDetails.location, resp);
       }
     ).catch((error) => {
-      let dummyResp = {
-        coords: {
-          latitude: 0,
-          longitude: 0,
-          altitude: 0,
-          accuracy: 0,
-          speed: 0,
-          heading: 0
-        }
-      };
-      this.publishLocationEvent(this.userDetails.valoDetails.location, dummyResp);
+      //let dummyResp = {
+      //  coords: {
+      //    latitude: 0,
+      //    longitude: 0,
+      //    altitude: 0,
+      //    accuracy: 0,
+      //    speed: 0,
+      //    heading: 0
+      //  }
+      //};
+      // this.publishLocationEvent(this.userDetails.valoDetails.location, dummyResp);
       console.log(error);
     });
   }
@@ -202,6 +213,38 @@ export class HomePage {
             speed: resp.coords.speed,
             heading: resp.coords.heading
           }
+        }
+      );
+      this.toastCtrl.create({
+        message: "Location sent to Valo: [" + resp.coords.latitude + "," + resp.coords.longitude + "]",
+        duration: 5000,
+        position: 'bottom'
+      }).present();
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  async publishHappinessEvent(stream, resp, happiness) {
+    try {
+      await streams.publishEventToStream(
+        {
+          valoHost: this.userDetails.valoDetails.host,
+          valoPort: this.userDetails.valoDetails.port
+        },
+        [this.userDetails.valoDetails.tenant, this.userDetails.valoDetails.collection, stream],
+        {
+          contributor: this.userDetails.id,
+          timestamp: new Date(),
+          position: {
+            latitude: resp.coords.latitude,
+            longitude: resp.coords.longitude,
+            altitude: resp.coords.altitude,
+            accuracy: resp.coords.accuracy,
+            speed: resp.coords.speed,
+            heading: resp.coords.heading
+          },
+          happiness: happiness
         }
       );
       this.toastCtrl.create({
