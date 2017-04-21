@@ -11,7 +11,7 @@
 /* External dependencies */
 import http from 'axios';
 import rx from 'rx-lite';
-// import EventSource from 'eventsource';
+import EventSource from 'eventsource';
 
 /* Internal services dependencies*/
 import {
