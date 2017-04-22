@@ -1,4 +1,9 @@
 #
+# Create tenant
+#
+curl http://localhost:8888/cluster/tenants/demo -X PUT --data "{}" -H "Content-Type: application/json"
+
+#
 # Create contributor types
 #
 curl http://localhost:8888/contributors/demo/iot_board -X PUT --data @./contributors/types/contribtype_iot_board.json -H "Content-Type: application/json"
@@ -16,11 +21,22 @@ curl http://localhost:8888/contributors/demo/realsense/instances/realsense-00001
 curl http://localhost:8888/contributors/demo/realsense/instances/realsense-00002 -X PUT --data @./contributors/instances/instance_realsense_02.json -H "Content-Type: application/json"
 
 #
-# Create streams
+# Create & persist streams
 #
 curl http://localhost:8888/streams/demo/mobile/happiness -X PUT --data @./streams/schemas/stream_mob_happiness.json -H "Content-Type: application/json"
-curl http://localhost:8888/streams/demo/mobile/location -X PUT --data @./streams/schemas/stream_mob_location -H "Content-Type: application/json"
+curl http://localhost:8888/streams/demo/mobile/happiness/repository -X PUT --data  @./streams/schemas/repo_tsr.json -H "Content-Type: application/json"
+
+curl http://localhost:8888/streams/demo/mobile/location -X PUT --data @./streams/schemas/stream_mob_location.json -H "Content-Type: application/json"
+curl http://localhost:8888/streams/demo/mobile/location/repository -X PUT --data  @./streams/schemas/repo_tsr.json -H "Content-Type: application/json"
+
 curl http://localhost:8888/streams/demo/iot_board/alcohol -X PUT --data @./streams/schemas/stream_iot_alcohol.json -H "Content-Type: application/json"
+curl http://localhost:8888/streams/demo/iot_board/alcohol/repository -X PUT --data  @./streams/schemas/repo_tsr.json -H "Content-Type: application/json"
+
 curl http://localhost:8888/streams/demo/iot_board/humidity -X PUT --data @./streams/schemas/stream_iot_humidity.json -H "Content-Type: application/json"
+curl http://localhost:8888/streams/demo/iot_board/humidity/repository -X PUT --data  @./streams/schemas/repo_tsr.json -H "Content-Type: application/json"
+
 curl http://localhost:8888/streams/demo/iot_board/luminance -X PUT --data @./streams/schemas/stream_iot_luminance.json -H "Content-Type: application/json"
+curl http://localhost:8888/streams/demo/iot_board/luminance/repository -X PUT --data  @./streams/schemas/repo_tsr.json -H "Content-Type: application/json"
+
 curl http://localhost:8888/streams/demo/iot_board/temperature -X PUT --data @./streams/schemas/stream_iot_temperature.json -H "Content-Type: application/json"
+curl http://localhost:8888/streams/demo/iot_board/temperature/repository -X PUT --data  @./streams/schemas/repo_tsr.json -H "Content-Type: application/json"
