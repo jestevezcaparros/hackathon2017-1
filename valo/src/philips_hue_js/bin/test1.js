@@ -32,8 +32,10 @@ async function main() {
     try {
 
         // Switch on the light first
-        const uri =  `${HUE_URI_PREFIX}/api/${HUE_USER}/lights/${BULB2}/state`;
-        const response = await http.put(uri, {"on" : true });
+        const uri1 =  `${HUE_URI_PREFIX}/api/${HUE_USER}/lights/${BULB1}/state`;
+        const uri2 =  `${HUE_URI_PREFIX}/api/${HUE_USER}/lights/${BULB2}/state`;
+        const response1 = await http.put(uri1, {"on" : true });
+        const response2 = await http.put(uri2, {"on" : true, "sat" : 0 });
 
         const {
             observable,
@@ -52,15 +54,18 @@ async function main() {
             async evt => {
                 console.log("Valo event: ", JSON.stringify(evt, null, 4));
         
-                const body = {
+                const body1 = {
                     //"alert" : "select",
                     "hue" : evt.value,
                     "bri" : 240,
                     "sat" : 240 
                 }; 
-                console.log("> Command to Hue: ", uri, body);
-                const response = await http.put(uri, body);
-                //const response = http.put(uri, body);
+                const body2 = {"alert": "select"};
+
+                console.log("> Command to Hue: ", uri1, body1);
+                console.log("> Command to Hue: ", uri2, body2);
+                await http.put(uri1, body1);
+                await http.put(uri2, body2);
             },
             err => {
                 console.error("ERROR in ouput channel's SSE stream", err);
