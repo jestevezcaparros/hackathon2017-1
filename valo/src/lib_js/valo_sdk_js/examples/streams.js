@@ -169,9 +169,9 @@ async function getStream() {
 // These will run in parallel!!! To force them into a sequential
 //      execution, chain the promises the functions return;
 
-/*
 createStream_P();
 createStream_A();
+/*
 */
 
 //
