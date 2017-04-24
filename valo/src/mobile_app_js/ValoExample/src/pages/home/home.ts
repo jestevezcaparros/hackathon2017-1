@@ -79,18 +79,8 @@ export class HomePage {
   setupGeolocationWatch() {
     if (!this.locationWatch) {
       this.publishLocation();
-      this.locationWatch = setInterval(() => { this.publishLocation() }, 300000);
+      this.locationWatch = setInterval(() => { this.publishLocation() }, 60000);
     }
-  }
-
-  sendRating(event, rating) {
-    this.geolocation.getCurrentPosition(this.geolocationOptions).then(
-      (resp) => {
-        this.publishHappinessEvent(this.userDetails.valoDetails.happiness, resp, rating);
-      }).catch((error) => {
-        this.publishHappinessEvent(this.userDetails.valoDetails.happiness, this.dummyLocation, rating);
-        console.log(error);
-      });
   }
 
   publishLocation() {
@@ -102,6 +92,16 @@ export class HomePage {
       this.publishLocationEvent(this.userDetails.valoDetails.location, this.dummyLocation);
       console.log(error);
     });
+  }
+
+  sendRating(event, rating) {
+    this.geolocation.getCurrentPosition(this.geolocationOptions).then(
+      (resp) => {
+        this.publishHappinessEvent(this.userDetails.valoDetails.happiness, resp, rating);
+      }).catch((error) => {
+        this.publishHappinessEvent(this.userDetails.valoDetails.happiness, this.dummyLocation, rating);
+        console.log(error);
+      });
   }
 
   async publishLocationEvent(stream, resp) {
@@ -127,7 +127,7 @@ export class HomePage {
       );
       this.toastCtrl.create({
         message: "Location sent to Valo: [" + resp.coords.latitude + "," + resp.coords.longitude + "]",
-        duration: 5000,
+        duration: 3000,
         position: 'bottom'
       }).present();
     } catch (error) {
@@ -159,7 +159,7 @@ export class HomePage {
       );
       this.toastCtrl.create({
         message: "Location sent to Valo: [" + resp.coords.latitude + "," + resp.coords.longitude + "]",
-        duration: 5000,
+        duration: 3000,
         position: 'bottom'
       }).present();
     } catch (error) {
