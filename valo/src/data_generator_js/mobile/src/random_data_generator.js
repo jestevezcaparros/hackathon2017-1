@@ -30,7 +30,7 @@
 
  /**
  * Gets a random walk from an initial point
- *
+ * @TODO This is a temporal workaround
  * @param {Number} startPoint The point to start off
  * @return {Object} A coord containing {latitude, longitude} within the radius given
  */
