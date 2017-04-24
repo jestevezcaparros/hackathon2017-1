@@ -6,6 +6,7 @@ import { Storage } from '@ionic/storage';
 import { Device } from '@ionic-native/device';
 
 import * as contributors from '../../../../../lib_js/valo_sdk_js/api/contributors';
+import * as streams from '../../../../../lib_js/valo_sdk_js/api/streams';
 import { retryOnConflict } from '../../../../../lib_js/valo_sdk_js/index';
 
 @Component({
@@ -36,6 +37,7 @@ export class RegistrationPage {
   }
 
   DEFAULT_ID = "0000000000000000"
+
   DEFAULT_USER = {
     name: "Jon Snow",
     gender: "male",
@@ -44,6 +46,7 @@ export class RegistrationPage {
     country: "Winterfell",
     role: "King in the North"
   }
+
   DEFAULT_VALODETAILS = {
     host: "119.92.192.242",
     port: "8888",
@@ -74,6 +77,71 @@ export class RegistrationPage {
       }
     }
   }
+
+  HAPPINESS_SCHEMA = {
+    "schema": {
+      "version": "1.0",
+      "config": {},
+      "topDef": {
+        "type": "record",
+        "properties": {
+          "contributor": {
+            "type": "contributor", "definition": "mobile_user"
+          },
+          "timestamp": {
+            "type": "datetime",
+            "annotations": ["urn:itrs:default-timestamp"]
+          },
+          "position": {
+            "type": "record",
+            "properties": {
+              "latitude": { "type": "double" },
+              "longitude": { "type": "double" },
+              "altitude": { "type": "double" },
+              "accuracy": { "type": "double" },
+              "speed": { "type": "double" },
+              "heading": { "type": "double" }
+            }
+          },
+          "happiness": { "type": "int" }
+        }
+      }
+    }
+  }
+
+  LOCATION_SCHEMA = {
+    "schema": {
+      "version": "1.0",
+      "config": {},
+      "topDef": {
+        "type": "record",
+        "properties": {
+          "contributor": {
+            "type": "contributor", "definition": "mobile_user"
+          },
+          "timestamp": {
+            "type": "datetime",
+            "annotations": ["urn:itrs:default-timestamp"]
+          },
+          "position": {
+            "type": "record",
+            "properties": {
+              "latitude": { "type": "double" },
+              "longitude": { "type": "double" },
+              "altitude": { "type": "double" },
+              "accuracy": { "type": "double" },
+              "speed": { "type": "double" },
+              "heading": { "type": "double" }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  REPO_CONF_SSR = {
+    "name": "ssr"
+  };
 
   constructor(public navCtrl: NavController, private storage: Storage, private device: Device) {
 
@@ -110,28 +178,43 @@ export class RegistrationPage {
   saveDetails() {
     this.storage.set('userDetails', JSON.stringify(this.userDetails)).then(
       () => {
-        //this.createContributor(this.MOBILE_USER_CONTRIBUTOR);
+        this.checkAndCreateContributorType(this.MOBILE_USER_CONTRIBUTOR);
         this.registerContributor();
+        this.checkAndCreateStream(this.HAPPINESS_SCHEMA, this.userDetails.valoDetails.happiness);
+        this.checkAndCreateStream(this.LOCATION_SCHEMA, this.userDetails.valoDetails.location);
       },
       error => {
       }
     );
   }
 
-  async createContributor(schema) {
+  async checkAndCreateContributorType(schema) {
+    var VALO_INSTANCE = {
+      valoHost: this.userDetails.valoDetails.host,
+      valoPort: this.userDetails.valoDetails.port
+    };
+
+    var VALO_PARAMS = [this.userDetails.valoDetails.tenant, "mobile_user"];
+
     try {
-      await retryOnConflict(contributors.createContributorType)(
-        {
-          valoHost: this.userDetails.valoDetails.host,
-          valoPort: this.userDetails.valoDetails.port
-        },
-        [this.userDetails.valoDetails.tenant, "mobile_user", this.userDetails.id],
-        schema
-      );
+      await contributors.getContributorType(VALO_INSTANCE, VALO_PARAMS);
+    } catch (error) {
+      if (error.type === "VALO.NotFound") {
+        this.createContributorType(VALO_INSTANCE, VALO_PARAMS, schema);
+      } else {
+        console.log(error);
+      }
+    }
+  }
+
+  async createContributorType(valoInstance, valoParams, schema) {
+    try {
+      await contributors.createContributorType(valoInstance, valoParams, schema);
     } catch (error) {
       console.log(error);
     }
   }
+
 
   async registerContributor() {
     try {
@@ -153,6 +236,34 @@ export class RegistrationPage {
           }
         }
       );
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  async checkAndCreateStream(schema, stream) {
+    var VALO_INSTANCE = {
+      valoHost: this.userDetails.valoDetails.host,
+      valoPort: this.userDetails.valoDetails.port
+    };
+
+    var VALO_PARAMS = [this.userDetails.valoDetails.tenant, this.userDetails.valoDetails.collection, stream];
+
+    try {
+      await streams.getStream(VALO_INSTANCE, VALO_PARAMS);
+    } catch (error) {
+      if (error.type === "VALO.NotFound") {
+        this.createStream(VALO_INSTANCE, VALO_PARAMS, schema);
+      } else {
+        console.log(error);
+      }
+    }
+  }
+
+  async createStream(valoInstance, valoParams, schema) {
+    try {
+      await streams.createStream(valoInstance, valoParams, schema);
+      await streams.setStreamRepository(valoInstance, valoParams, this.REPO_CONF_SSR);
     } catch (error) {
       console.log(error);
     }

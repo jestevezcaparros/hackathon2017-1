@@ -5,7 +5,6 @@ import { Storage } from '@ionic/storage';
 import { Geolocation } from '@ionic-native/geolocation';
 
 import * as streams from '../../../../../lib_js/valo_sdk_js/api/streams';
-import { retryOnConflict } from '../../../../../lib_js/valo_sdk_js/index';
 
 @Component({
   selector: 'page-home',
@@ -40,72 +39,18 @@ export class HomePage {
     enableHighAccuracy: true
   }
 
-  HAPPINESS_SCHEMA = {
-    "schema": {
-      "version": "1.0",
-      "config": {},
-      "topDef": {
-        "type": "record",
-        "properties": {
-          "contributor": {
-            "type": "contributor", "definition": "mobile_user"
-          },
-          "timestamp": {
-            "type": "datetime",
-            "annotations": ["urn:itrs:default-timestamp"]
-          },
-          "position": {
-            "type": "record",
-            "properties": {
-              "latitude": { "type": "double" },
-              "longitude": { "type": "double" },
-              "altitude": { "type": "double" },
-              "accuracy": { "type": "double" },
-              "speed": { "type": "double" },
-              "heading": { "type": "double" }
-            }
-          },
-          "happiness": { "type": "int" }
-        }
-      }
+  locationWatch = null
+
+  dummyLocation = {
+    coords: {
+      latitude: 0,
+      longitude: 0,
+      altitude: 0,
+      accuracy: 0,
+      speed: 0,
+      heading: 0
     }
   }
-
-  LOCATION_SCHEMA = {
-    "schema": {
-      "version": "1.0",
-      "config": {},
-      "topDef": {
-        "type": "record",
-        "properties": {
-          "contributor": {
-            "type": "contributor", "definition": "mobile_user"
-          },
-          "timestamp": {
-            "type": "datetime",
-            "annotations": ["urn:itrs:default-timestamp"]
-          },
-          "position": {
-            "type": "record",
-            "properties": {
-              "latitude": { "type": "double" },
-              "longitude": { "type": "double" },
-              "altitude": { "type": "double" },
-              "accuracy": { "type": "double" },
-              "speed": { "type": "double" },
-              "heading": { "type": "double" }
-            }
-          }
-        }
-      }
-    }
-  }
-
-  REPO_CONF_SSR = {
-    "name": "ssr"
-  };
-
-  locationWatch = null;
 
   constructor(public navCtrl: NavController, private storage: Storage, private geolocation: Geolocation, public toastCtrl: ToastController) {
 
@@ -116,9 +61,6 @@ export class HomePage {
       data => {
         if (data) {
           this.userDetails = JSON.parse(data);
-          //this.createStream(this.HAPPINESS_SCHEMA, this.userDetails.valoDetails.happiness);
-          //this.createStream(this.LOCATION_SCHEMA, this.userDetails.valoDetails.location);
-          this.publishLocation();
           this.setupGeolocationWatch();
         } else {
           this.navCtrl.parent.select(1);
@@ -136,6 +78,7 @@ export class HomePage {
 
   setupGeolocationWatch() {
     if (!this.locationWatch) {
+      this.publishLocation();
       this.locationWatch = setInterval(() => { this.publishLocation() }, 300000);
     }
   }
@@ -145,6 +88,7 @@ export class HomePage {
       (resp) => {
         this.publishHappinessEvent(this.userDetails.valoDetails.happiness, resp, rating);
       }).catch((error) => {
+        this.publishHappinessEvent(this.userDetails.valoDetails.happiness, this.dummyLocation, rating);
         console.log(error);
       });
   }
@@ -155,43 +99,9 @@ export class HomePage {
         this.publishLocationEvent(this.userDetails.valoDetails.location, resp);
       }
     ).catch((error) => {
-      //let dummyResp = {
-      //  coords: {
-      //    latitude: 0,
-      //    longitude: 0,
-      //    altitude: 0,
-      //    accuracy: 0,
-      //    speed: 0,
-      //    heading: 0
-      //  }
-      //};
-      // this.publishLocationEvent(this.userDetails.valoDetails.location, dummyResp);
+      this.publishLocationEvent(this.userDetails.valoDetails.location, this.dummyLocation);
       console.log(error);
     });
-  }
-
-  async createStream(schema, stream) {
-    try {
-      await retryOnConflict(streams.createStream)(
-        {
-          valoHost: this.userDetails.valoDetails.host,
-          valoPort: this.userDetails.valoDetails.port
-        },
-        [this.userDetails.valoDetails.tenant, this.userDetails.valoDetails.collection, stream],
-        schema
-      );
-
-      await retryOnConflict(streams.setStreamRepository)(
-        {
-          valoHost: this.userDetails.valoDetails.host,
-          valoPort: this.userDetails.valoDetails.port
-        },
-        [this.userDetails.valoDetails.tenant, this.userDetails.valoDetails.collection, stream],
-        this.REPO_CONF_SSR
-      );
-    } catch (error) {
-      console.log(error);
-    }
   }
 
   async publishLocationEvent(stream, resp) {
