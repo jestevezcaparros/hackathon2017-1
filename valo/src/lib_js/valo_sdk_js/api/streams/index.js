@@ -114,7 +114,7 @@ export async function setStreamRepository(
  *
  * @async
  * @returns null
- * @throws {VALO.NoResponseFromVal | VALO.NotFound | VALO.InternalServerError}
+ * @throws {VALO.NoResponseFromVal | VALO.NotFound | VALO.InternalServerError | VALO.BadGateway }
  */
 export async function publishEventToStream(
     {valoHost = DEFAULT_HOST, valoPort = DEFAULT_PORT},
@@ -133,6 +133,7 @@ export async function publishEventToStream(
             {
                 404 : "NotFound",
                 500 : "InternalServerError",
+                502 : "BadGateway"
             }
         );
     }

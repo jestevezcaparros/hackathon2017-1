@@ -1,0 +1,10 @@
+{
+    "contributor": "board-00001",
+    "timestamp" : "2017-04-20T10:52:28.638Z",
+    "position" : {
+        "latitude" : 40.0,
+        "longitude" : 1.3
+    },
+    "temperature" : 28.0,
+    "units" : "celsius"
+}

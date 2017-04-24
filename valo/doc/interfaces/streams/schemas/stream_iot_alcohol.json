@@ -19,7 +19,8 @@
                     "longitude" : {"type": "double"}
                 }
             },
-            "alcohol" : {"type": "double"}
+            "alcohol" : {"type": "double"},
+            "units" : {"type": "string"}
          }
       }
    }

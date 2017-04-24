@@ -19,7 +19,8 @@
                     "longitude" : {"type": "double"}
                 }
             },
-            "humidity" : {"type": "double"}
+            "humidity" : {"type": "double"},
+            "units" : {"type": "string"}
          }
       }
    }
