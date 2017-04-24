@@ -24,7 +24,7 @@ import {
   createGroupAverage
 } from './valo/vos'
 
-import avgBar from './components/avg_bar'
+import percentBar from './components/percent_bar'
 
 function getNextBarChartContainer() {
   var chartContainer = document.createElement('div');
@@ -90,8 +90,12 @@ async function initMap(){
 
         // create a bar chart
         const chart =
-          avgBar(getNextBarChartContainer())
-          .init(groupAverage);
+          percentBar(getNextBarChartContainer())
+          .init(groupAverage, {
+            leftIcon: 'red frown icon',
+            centerIcon: 'yellow meh icon',
+            rightIcon: 'green smile icon'
+          });
 
         // store it
         averageBars.set(groupAverage.group, chart);
@@ -110,9 +114,9 @@ async function initMap(){
 
 (function init(){
 
-  // document.querySelector('#top-menu-about').addEventListener('click', function(event) {
-  //   $('.ui.basic.modal.about').modal('show');
-  // });
+  document.querySelector('#top-menu-about').addEventListener('click', function(event) {
+    $('.ui.basic.modal.about').modal('show');
+  });
 
   window.initMap = initMap;
 })();

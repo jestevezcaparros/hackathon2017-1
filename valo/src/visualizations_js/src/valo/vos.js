@@ -26,8 +26,7 @@ class MapPoint {
 
 class GroupAverage {
   constructor(average, group) {
-    this.scale = d3.scaleLinear().domain([-1,1]).range([0,100]);
-    this.average = this.scale(average || -1);
+    this.average = average;
     this.group = group;
   }
 }
