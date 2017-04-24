@@ -5,6 +5,9 @@ import { NavController, ToastController } from 'ionic-angular';
 import { Storage } from '@ionic/storage';
 import { Device } from '@ionic-native/device';
 
+// Import Valo SDK libraries
+// In this page, we want to be able to create contributor types and streams.
+// We also want to be able to add and update contributors with user information
 import * as contributors from '../../../../../lib_js/valo_sdk_js/api/contributors';
 import * as streams from '../../../../../lib_js/valo_sdk_js/api/streams';
 import { retryOnConflict } from '../../../../../lib_js/valo_sdk_js/index';
@@ -16,6 +19,11 @@ import { retryOnConflict } from '../../../../../lib_js/valo_sdk_js/index';
 
 export class RegistrationPage {
 
+  // Let's define some default application values
+  // We want to be able to define the following:
+  //  - mobile id
+  //  - details for user
+  //  - details for valo instance (host, port, tenant, collection, stream names)
   userDetails = {
     id: "0000000000000000",
     user: {
@@ -56,6 +64,7 @@ export class RegistrationPage {
     happiness: "happiness"
   }
 
+  // Let's define here a schema for the mobile_user contributor type
   MOBILE_USER_CONTRIBUTOR = {
     "schema": {
       "type": "record",
@@ -78,6 +87,8 @@ export class RegistrationPage {
     }
   }
 
+  // Let's define here a schema storing happiness and location information
+  // We'll be using this stream for capturing user ratings on the event, as well as their current location when they make the rating
   HAPPINESS_SCHEMA = {
     "schema": {
       "version": "1.0",
@@ -109,6 +120,8 @@ export class RegistrationPage {
     }
   }
 
+  // Let's define here a schema storing location information
+  // We'll be using this stream for capturing user locations when the app is open
   LOCATION_SCHEMA = {
     "schema": {
       "version": "1.0",
@@ -139,6 +152,7 @@ export class RegistrationPage {
     }
   }
 
+  // Define a default repository for streams; let's just use an SSR repository
   REPO_CONF_SSR = {
     "name": "ssr"
   };
@@ -147,6 +161,9 @@ export class RegistrationPage {
 
   }
 
+  // The first thing we do when we enter this page is to check if we have stored "userDetails" information in the app
+  // If so, we retrieve them; if we don't have them, we get errors, or we get blank data, we initialize them to default values
+  // Any changes to the userDetails should be reflected in the registration form
   ionViewWillEnter() {
     this.storage.get('userDetails').then(
       data => {
@@ -175,6 +192,13 @@ export class RegistrationPage {
     );
   }
 
+  // This function is called when the registration form is submitted
+  // What we do here are:
+  //  - Try to save the "userDetails" in the app storage - we need to store these as a String, so we stringify the object
+  //  - Check if there is a defined mobile_user contributor type; if there is none, create it
+  //  - Update contributor information ID for the current user
+  //  - Check if there is a defined stream to capture happiness information; if there is none, create it
+  //  - Check if there is a defined stream to capture location information; if there is none, create it
   saveDetails() {
     this.storage.set('userDetails', JSON.stringify(this.userDetails)).then(
       () => {
@@ -193,6 +217,9 @@ export class RegistrationPage {
     );
   }
 
+  // We first set up parameters for the Valo instance and other Valo details (including the contributor type)
+  // When this is done, we check if the mobile_user contributor type is present; if it isn't call the function
+  //  to create the contributor type
   async checkAndCreateContributorType(schema) {
     var VALO_INSTANCE = {
       valoHost: this.userDetails.valoDetails.host,
@@ -212,6 +239,7 @@ export class RegistrationPage {
     }
   }
 
+  // Call the function to create the contributor type
   async createContributorType(valoInstance, valoParams, schema) {
     try {
       await contributors.createContributorType(valoInstance, valoParams, schema);
@@ -220,7 +248,11 @@ export class RegistrationPage {
     }
   }
 
-
+  // We first set up parameters for the Valo instance and other Valo details (including the contributor type and contributor id)
+  // For the contributor id, we use the device's uuid, as previously set
+  // When this is done, we make a call to the function to register the contributor instance
+  // We make use of retryOnConflict, which means we retry with the correct headers if we initially fail - we want to retry
+  //  since we want to overwrite any previous contributor information for the same contributor id
   async registerContributor() {
     try {
       await retryOnConflict(contributors.registerContributorInstance)(
@@ -246,6 +278,8 @@ export class RegistrationPage {
     }
   }
 
+  // We first set up parameters for the Valo instance and other Valo details (including the stream name)
+  // When this is done, we check if the stream is present; if it isn't call the function to create the stream
   async checkAndCreateStream(schema, stream) {
     var VALO_INSTANCE = {
       valoHost: this.userDetails.valoDetails.host,
@@ -265,6 +299,8 @@ export class RegistrationPage {
     }
   }
 
+  // Call the function to create the Valo stream by passing the schema
+  // We also set the stream repository to SSR so we can retain previous data and call historical queries later on
   async createStream(valoInstance, valoParams, schema) {
     try {
       await streams.createStream(valoInstance, valoParams, schema);
