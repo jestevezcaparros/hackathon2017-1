@@ -19,7 +19,8 @@
                     "longitude" : {"type": "double"}
                 }
             },
-            "luminance" : {"type": "double"}
+            "luminance" : {"type": "double"},
+            "units" : {"type": "string"}
          }
       }
    }
