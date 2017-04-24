@@ -140,6 +140,26 @@ async function publishEvent_A() {
     }
 }
 
+//
+// Get stream
+//
+async function getStream() {
+
+    try {
+        const response = await streams.getStream(
+            LOCAL_VALO,
+            [TENANT_1, COLLECTION_1, STREAM_NAME_1]
+        );
+        return response;
+    } catch(e) {
+        if (e.type === "VALO.NotFound") {
+            console.log(">>> STREAM DOES NOT EXIST!!!");            
+        } else {
+            console.error(">>> getStream ", e);
+            throw e;
+        }
+    }
+}
 
 ///////////////////////////////////////////////////////////////////////////////
 // Main
@@ -149,9 +169,9 @@ async function publishEvent_A() {
 // These will run in parallel!!! To force them into a sequential
 //      execution, chain the promises the functions return;
 
-/*
 createStream_P();
 createStream_A();
+/*
 */
 
 //
@@ -165,9 +185,19 @@ createStream_P()
 })
 */
 
+/*
 createOrUpdateStream_A()
 .then(setRepo_A)
 .then(publishEvent_A)
+.catch(e => {
+    console.error("*** Here be errors ***");
+});
+*/
+
+getStream()
+.then( res => {
+    console.log(JSON.stringify(res, null, 4));
+})
 .catch(e => {
     console.error("*** Here be errors ***");
 });

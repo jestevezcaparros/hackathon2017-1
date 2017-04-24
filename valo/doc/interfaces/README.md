@@ -9,7 +9,6 @@
 /streams/demo/iot_board/humidity
 /streams/demo/iot_board/luminance
 /streams/demo/iot_board/temperature
-/streams/demo/iot_board/location
 ```
 
 # Contributor types

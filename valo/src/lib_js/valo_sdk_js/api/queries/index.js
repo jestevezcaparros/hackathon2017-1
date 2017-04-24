@@ -11,7 +11,17 @@
 /* External dependencies */
 import http from 'axios';
 import rx from 'rx-lite';
-// import EventSource from 'eventsource';
+import NodeEventSource from 'eventsource';
+
+// TODO: this is a workaround to make EventSource work both in browser and in node
+let MyEventSource;
+try {
+    // If in browser, EventSource should exist, so this would work
+    MyEventSource = EventSource
+} catch(e) {
+    // If not in browser, EventSource ref does not exist
+    MyEventSource = NodeEventSource    
+}
 
 /* Internal services dependencies*/
 import {
@@ -277,7 +287,7 @@ export async function runSingleQuery(
         ////////////////////////////////////////////////////////////////////////
         const rawObservable = rx.Observable.create( observer => {
 
-            const sseSource = new EventSource(`http://${output}`);
+            const sseSource = new MyEventSource(`http://${output}`);
 
             sseSource.onopen = () => {
                 console.log("> SSE opened");

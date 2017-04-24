@@ -6,10 +6,17 @@
  * @author (Each contributor append a line here)
  */
 export {
+    getStream,
     createStream,
     setStreamRepository,
     publishEventToStream
 } from './api/streams';
+export {
+    getContributorType,
+    createContributorType,
+    getContributorInstance,
+    registerContributorInstance
+} from './api/contributors';
 export {
     runSingleQuery
 } from './api/queries';

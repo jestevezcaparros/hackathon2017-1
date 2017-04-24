@@ -48,6 +48,7 @@ import {
  * @return {Object} An observable
  */
  function _getMockObservable(interval=50, lat=-100, lon=-100, radius=10, happiness=false, options={}){
+   //@TODO set in a setting the start coord point
    const randomWalk = getRandomWalk({latitude:36.689451, longitude: -4.445371});
    return Rx.Observable.create( observer => {
      const emitEvent = () => {

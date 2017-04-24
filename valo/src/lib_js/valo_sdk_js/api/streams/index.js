@@ -20,6 +20,34 @@ const DEFAULT_PORT = 8888;
 const DEFAULT_HEADERS = {"Content-Type" : "application/json"};
 
 /**
+ * Gets stream in Valo - GET /streams/:tenant/:collection/:name
+ * https://valo.io/docs/api_reference/streams_api.html#get-a-stream
+ *
+ * @async
+ * @returns {Object} - Streams's schema
+ * @throws {VALO.NoResponseFromValo | VALO.Unauthorized | VALO.NotFound }
+ */
+export async function getStream(
+    {valoHost = DEFAULT_HOST, valoPort = DEFAULT_PORT},
+    [tenant, collection, name],
+    {headers = DEFAULT_HEADERS} = {}
+) {
+    try {
+        const uri = buildUri(valoHost, valoPort, "streams", tenant, collection, name);
+        console.log("> Getting stream: ", uri);
+        const {data: body} = await http.get(uri, {headers});
+        return body;
+    } catch(e) {
+        throwValoApiError(e,
+            {
+                401 : "Unauthorized",
+                404 : "NotFound"
+            }
+        );
+    }
+}
+
+/**
  * Creates stream in Valo - PUT /streams/:tenant/:collection/:name
  * https://valo.io/docs/api_reference/streams_api.html#put-a-stream
  *
@@ -28,7 +56,7 @@ const DEFAULT_HEADERS = {"Content-Type" : "application/json"};
  * @throws {VALO.NoResponseFromValo | VALO.Unauthorized | VALO.Forbidden | VALO.Conflict | VALO.BadGateway }
  */
 export async function createStream(
-    {valoHost = DEFAULT_PORT, valoPort = DEFAULT_PORT},
+    {valoHost = DEFAULT_HOST, valoPort = DEFAULT_PORT},
     [tenant, collection, name],
     schema,
     {headers = DEFAULT_HEADERS} = {}
@@ -59,7 +87,7 @@ export async function createStream(
  * @throws {VALO.NoResponseFromValo | VALO.Unauthorized | VALO.NotFound| VALO.Conflict}
  */
 export async function setStreamRepository(
-    {valoHost = DEFAULT_PORT, valoPort = DEFAULT_PORT},
+    {valoHost = DEFAULT_HOST, valoPort = DEFAULT_PORT},
     [tenant, collection, name],
     data,
     {headers = DEFAULT_HEADERS} = {}
@@ -89,7 +117,7 @@ export async function setStreamRepository(
  * @throws {VALO.NoResponseFromVal | VALO.NotFound | VALO.InternalServerError}
  */
 export async function publishEventToStream(
-    {valoHost = DEFAULT_PORT, valoPort = DEFAULT_PORT},
+    {valoHost = DEFAULT_HOST, valoPort = DEFAULT_PORT},
     [tenant, collection, name],
     evt,
     {headers = DEFAULT_HEADERS} = {}
