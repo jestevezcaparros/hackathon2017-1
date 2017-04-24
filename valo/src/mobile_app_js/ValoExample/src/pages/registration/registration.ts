@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 
-import { NavController } from 'ionic-angular';
+import { NavController, ToastController } from 'ionic-angular';
 
 import { Storage } from '@ionic/storage';
 import { Device } from '@ionic-native/device';
@@ -143,7 +143,7 @@ export class RegistrationPage {
     "name": "ssr"
   };
 
-  constructor(public navCtrl: NavController, private storage: Storage, private device: Device) {
+  constructor(public navCtrl: NavController, private storage: Storage, private device: Device, public toastCtrl: ToastController) {
 
   }
 
@@ -182,6 +182,11 @@ export class RegistrationPage {
         this.registerContributor();
         this.checkAndCreateStream(this.HAPPINESS_SCHEMA, this.userDetails.valoDetails.happiness);
         this.checkAndCreateStream(this.LOCATION_SCHEMA, this.userDetails.valoDetails.location);
+        this.toastCtrl.create({
+          message: "Details saved",
+          duration: 1000,
+          position: 'middle'
+        }).present();
       },
       error => {
       }

@@ -52,14 +52,21 @@ export class HomePage {
     }
   }
 
+  initialized = false;
+
   constructor(public navCtrl: NavController, private storage: Storage, private geolocation: Geolocation, public toastCtrl: ToastController) {
 
+  }
+
+  isInitialized() {
+    return this.initialized;
   }
 
   ionViewWillEnter() {
     this.storage.get('userDetails').then(
       data => {
         if (data) {
+          this.initialized = true;
           this.userDetails = JSON.parse(data);
           this.setupGeolocationWatch();
         } else {
@@ -127,7 +134,7 @@ export class HomePage {
       );
       this.toastCtrl.create({
         message: "Location sent to Valo: [" + resp.coords.latitude + "," + resp.coords.longitude + "]",
-        duration: 3000,
+        duration: 1000,
         position: 'bottom'
       }).present();
     } catch (error) {
@@ -159,7 +166,7 @@ export class HomePage {
       );
       this.toastCtrl.create({
         message: "Location sent to Valo: [" + resp.coords.latitude + "," + resp.coords.longitude + "]",
-        duration: 3000,
+        duration: 1000,
         position: 'bottom'
       }).present();
     } catch (error) {
