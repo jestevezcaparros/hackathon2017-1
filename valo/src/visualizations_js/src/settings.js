@@ -14,6 +14,7 @@ export const QUERY_MOB_HAPPINESS = 'from /streams/demo/jotb/mob_happiness';
 export const QUERY_MOB_LOCATION = 'from /streams/demo/jotb/mob_location';
 export const ICON_URL = 'http://localhost:8080/icons/'
 export const MAP_CONTAINER_CSS_SELECTOR = '.map-container';
+// Emulates how many people is publishing data to Valo
 export const PEOPLE = 3;
 export const LA_TERMICA_COORDINATES = {
   lat: 36.689150,

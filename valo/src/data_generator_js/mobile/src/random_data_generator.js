@@ -30,7 +30,9 @@
 
  /**
  * Gets a random walk from an initial point
- * @TODO This is a temporal workaround
+ * @TODO This is a temporal workaround.
+ * Currently used by visualizations_js project at
+ * valo\src\visualizations_js\src\valo\mock.js
  * @param {Number} startPoint The point to start off
  * @return {Object} A coord containing {latitude, longitude} within the radius given
  */
