@@ -24,7 +24,7 @@ import {
   createGroupAverage
 } from './valo/vos'
 
-import avgBar from './components/avg_bar'
+import percentBar from './components/percent_bar'
 
 function getNextBarChartContainer() {
   var chartContainer = document.createElement('div');
@@ -90,8 +90,12 @@ async function initMap(){
 
         // create a bar chart
         const chart =
-          avgBar(getNextBarChartContainer())
-          .init(groupAverage);
+          percentBar(getNextBarChartContainer())
+          .init(groupAverage, {
+            leftIcon: 'red frown icon',
+            centerIcon: 'yellow meh icon',
+            rightIcon: 'green smile icon'
+          });
 
         // store it
         averageBars.set(groupAverage.group, chart);
@@ -103,6 +107,13 @@ async function initMap(){
       }
     })
 
+    //@TODO This should be moved to the data_generator, it remains here
+    // just for testing purposes
+    // if(DEBUG){
+    //   Array.from({length: PEOPLE})
+    //     .forEach(() => _readMobileLocationEvents(map));
+    // }
+    
   } catch (error) {
     printError(error);
   }
@@ -110,9 +121,9 @@ async function initMap(){
 
 (function init(){
 
-  // document.querySelector('#top-menu-about').addEventListener('click', function(event) {
-  //   $('.ui.basic.modal.about').modal('show');
-  // });
+  document.querySelector('#top-menu-about').addEventListener('click', function(event) {
+    $('.ui.basic.modal.about').modal('show');
+  });
 
   window.initMap = initMap;
 })();

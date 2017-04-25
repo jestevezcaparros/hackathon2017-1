@@ -26,8 +26,7 @@ class MapPoint {
 
 class GroupAverage {
   constructor(average, group) {
-    this.scale = d3.scaleLinear().domain([-1,1]).range([0,100]);
-    this.average = this.scale(average || -1);
+    this.average = average;
     this.group = group;
   }
 }
@@ -42,7 +41,6 @@ export function createHappinessMapPoint(valoPayload){
   return new MapPoint(
     valoPayload.position.latitude,
     valoPayload.position.longitude,
-    // `${ICON_URL}${valoPayload.status}.png`
     valoPayload.happiness
   );
 }
@@ -57,7 +55,6 @@ export function createLocationMapPoint(valoPayload){
   return new MapPoint(
     valoPayload.position.latitude,
     valoPayload.position.longitude,
-  //  `${ICON_URL}footprints.png`
     'footprints'
   );
 }

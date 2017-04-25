@@ -58,7 +58,7 @@ export async function readMobileHappinesEvents(callback){
    callback(error);
  }
 }
- 
+
 /**
 * It creates a new Valo session and runs the QUERY_MOB_HAPPINESS query
 * Once query is created on Valo it is started and a new SSE connection is opened
@@ -85,13 +85,6 @@ export async function readMobileLocationEvents(callback){
   }
 }
 
-
-
-
-
-
-
-
 /* TODO mocked up data from Valo
 * should be a query like:
 
@@ -110,11 +103,11 @@ export async function readGroupsAvg(callback){
   function getRandomHappiness(low, high) {
     return (Math.random() * (high - low) + low).toFixed(4)
   }
-  const groups = ['Group 1', 'Group 2', 'Group 3', 'Group 4']
+  const groups = ['Group 1 Happiness', 'Group 2 Happiness', 'Group 3 Happiness', 'Group 4 Happiness']
 
    setInterval(() => {
      const payload = {
-       "avg": getRandomHappiness(-1, 1),
+       "avg": getRandomInteger(0, 100), //getRandomHappiness(-1, 1),
        "participant": groups[getRandomInteger(0, groups.length - 1)],
      };
      console.log('payload', payload);

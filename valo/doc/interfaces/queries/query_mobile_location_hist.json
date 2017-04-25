@@ -1,0 +1,26 @@
+{
+    "config": {
+        "key": [
+            "contributor",
+            "timestamp"
+        ]
+    },
+    "topDef": {
+        "type": "record",
+        "properties": {
+            "contributor": {
+                "type": "contributor",
+                "definition": "mobile_user"
+            },
+            "timestamp": {
+                "type": "datetime"
+            },
+            "lat": {
+                "type": "double"
+            },
+            "long": {
+                "type": "double"
+            }
+        }
+    }
+}

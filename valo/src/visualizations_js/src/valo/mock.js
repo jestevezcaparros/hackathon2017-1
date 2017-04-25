@@ -16,6 +16,7 @@
  } from '../settings';
 import {
   getLocationWithinRadius,
+  getRandomWalk,
   getInteger
 } from '../../../data_generator_js/mobile/src/random_data_generator';
 
@@ -27,9 +28,9 @@ import {
  * @param {Boolean} happines if wanna include happiness too
  * @return {Object} The payload generated
  */
- function getPayload(lat, lon, radius, happiness){
+ function getPayload(lat, lon, radius, happiness, randomWalk){
    const payload = {
-     position: getLocationWithinRadius(lat, lon, radius)
+     position: happiness ? getLocationWithinRadius(lat, lon, radius) : randomWalk()
    };
    if(happiness){
      payload.happiness = getInteger(-1, 1);
@@ -46,10 +47,12 @@ import {
  * @param {Boolean} happines if wanna include happiness too
  * @return {Object} An observable
  */
- function _getMockObservable(interval=50, lat=-100, lon=-100, radius=10, happiness=false){
+ function _getMockObservable(interval=50, lat=-100, lon=-100, radius=10, happiness=false, options={}){
+   //@TODO set in a setting the start coord point
+   const randomWalk = getRandomWalk({latitude:36.689451, longitude: -4.445371});
    return Rx.Observable.create( observer => {
      const emitEvent = () => {
-       observer.onNext(getPayload(lat, lon, radius, happiness));
+       observer.onNext(getPayload(lat, lon, radius, happiness, randomWalk));
        setTimeout(emitEvent, interval);
      }
      emitEvent();
@@ -63,15 +66,27 @@ import {
  * @throws NO_QUERY_ARGUMENT_PROVIDED_ERROR
  * @return {Object} An observable
  */
- export function runSingleQueryMocked(query){
+ export function runSingleQueryMocked(query, options){
    switch(query){
      case QUERY_MOB_HAPPINESS:
         return {
-          observable: _getMockObservable(1000, LA_TERMICA_COORDINATES.lat, LA_TERMICA_COORDINATES.lon, LA_TERMICA_COORDINATES.radius, true)
+          observable: _getMockObservable(
+            5000,
+            LA_TERMICA_COORDINATES.lat,
+            LA_TERMICA_COORDINATES.lon,
+            LA_TERMICA_COORDINATES.radius,
+            true,
+            options)
         };
      case QUERY_MOB_LOCATION:
        return {
-         observable: _getMockObservable(1000, LA_TERMICA_COORDINATES.lat, LA_TERMICA_COORDINATES.lon, LA_TERMICA_COORDINATES.radius)
+         observable: _getMockObservable(
+           getInteger(800, 1000),
+           LA_TERMICA_COORDINATES.lat,
+           LA_TERMICA_COORDINATES.lon,
+           LA_TERMICA_COORDINATES.radius,
+           false,
+           options)
        };
      default:
       throw Error('NO_QUERY_ARGUMENT_PROVIDED_ERROR');
