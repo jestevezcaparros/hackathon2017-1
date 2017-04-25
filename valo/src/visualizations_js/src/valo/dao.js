@@ -58,7 +58,7 @@ export async function readMobileHappinesEvents(callback){
    callback(error);
  }
 }
- 
+
 /**
 * It creates a new Valo session and runs the QUERY_MOB_HAPPINESS query
 * Once query is created on Valo it is started and a new SSE connection is opened
@@ -84,13 +84,6 @@ export async function readMobileLocationEvents(callback){
     callback(error);
   }
 }
-
-
-
-
-
-
-
 
 /* TODO mocked up data from Valo
 * should be a query like:
