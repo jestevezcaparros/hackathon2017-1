@@ -41,7 +41,6 @@ export function createHappinessMapPoint(valoPayload){
   return new MapPoint(
     valoPayload.position.latitude,
     valoPayload.position.longitude,
-    // `${ICON_URL}${valoPayload.status}.png`
     valoPayload.happiness
   );
 }
@@ -56,7 +55,6 @@ export function createLocationMapPoint(valoPayload){
   return new MapPoint(
     valoPayload.position.latitude,
     valoPayload.position.longitude,
-  //  `${ICON_URL}footprints.png`
     'footprints'
   );
 }

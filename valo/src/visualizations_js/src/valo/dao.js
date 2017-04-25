@@ -85,13 +85,6 @@ export async function readMobileLocationEvents(callback){
   }
 }
 
-
-
-
-
-
-
-
 /* TODO mocked up data from Valo
 * should be a query like:
 

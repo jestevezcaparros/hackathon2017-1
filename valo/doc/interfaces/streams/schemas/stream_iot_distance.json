@@ -19,7 +19,8 @@
                     "longitude" : {"type": "double"}
                 }
             },
-            "distance" : {"type": "double"}
+            "distance" : {"type": "double"},
+            "units" : {"type": "string"}
          }
       }
    }

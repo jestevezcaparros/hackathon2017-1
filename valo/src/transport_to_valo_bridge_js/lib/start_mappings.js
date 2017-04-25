@@ -154,32 +154,37 @@ async function startMapping(mapping) {
         // Client is ready now to subscribe
         //
         client.subscribe(transportOrigin);
-        client.on('message', async (topic, message) => {
-            console.log("> Message: ", topic, message.toString());
-            //
-            // Prepare event
-            // If event is a primitive value, wrap it in {value: } !
-            //
-            const parsedMessage = JSON.parse(message.toString('utf-8'));
-            const evt = message.constructor !== Object ?
-                { value: parsedMessage, timestamp: new Date() }
-                : parsedMessage ;
-            // While we do not have proper contributors, let's extend
-            //  the event with an "origin" field
-            // TODO: this is temporary
-            Object.assign(evt, {"origin": transportOrigin});
-            console.log(evt);
-            //
-            // Publish event
-            //
-            // TODO: how do we DETECT if event is not reaching VALO!!!
-            await publishEventToStream(
-                valoHost, valoPort,
-                [valoTenant, valoCollection, valoStream],
-                evt
-            );
 
+        client.on('message', async (topic, message) => {
+            try  {
+                console.log("> Message: ", topic, message.toString());
+                //
+                // Prepare event
+                // If event is a primitive value, wrap it in {value: } !
+                //
+                const parsedMessage = JSON.parse(message.toString('utf-8'));
+                const evt = typeof message !== 'object' ?
+                    { value: parsedMessage, timestamp: new Date() }
+                    : parsedMessage ;
+                // TODO: delete this
+                evt.timestamp = new Date();
+                //
+                // Publish event
+                //
+                await publishEventToStream(
+                    {valoHost, valoPort},
+                    [valoTenant, valoCollection, valoStream],
+                    evt
+                );
+            } catch(e) {
+                const err = WrapError(new Error(), {
+                    type: "ErrorSendingEventToValo",
+                    cause: e
+                });
+                console.error(err);
+            }
         });
+
         client.on('error', (e) => {
             console.log("> Transport Error: ", e);
         });

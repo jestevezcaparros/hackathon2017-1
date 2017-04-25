@@ -3814,6 +3814,8 @@ var QUERY_MOB_HAPPINESS = exports.QUERY_MOB_HAPPINESS = 'from /streams/demo/jotb
 var QUERY_MOB_LOCATION = exports.QUERY_MOB_LOCATION = 'from /streams/demo/jotb/mob_location';
 var ICON_URL = exports.ICON_URL = 'http://localhost:8080/icons/';
 var MAP_CONTAINER_CSS_SELECTOR = exports.MAP_CONTAINER_CSS_SELECTOR = '.map-container';
+// Emulates how many people is publishing data to Valo
+var PEOPLE = exports.PEOPLE = 3;
 var LA_TERMICA_COORDINATES = exports.LA_TERMICA_COORDINATES = {
     lat: 36.689150,
     lon: -4.445000,
@@ -17472,6 +17474,13 @@ var initMap = function () {
                   averageBars.get(groupAverage.group).updateAvg(groupAverage.average);
                 }
               });
+
+              //@TODO This should be moved to the data_generator, it remains here
+              // just for testing purposes
+              // if(DEBUG){
+              //   Array.from({length: PEOPLE})
+              //     .forEach(() => _readMobileLocationEvents(map));
+              // }
             } catch (error) {
               (0, _utils.printError)(error);
             }
@@ -17501,7 +17510,7 @@ var Valo = _interopRequireWildcard(_dao);
 
 var _vos = __webpack_require__(175);
 
-var _percent_bar = __webpack_require__(387);
+var _percent_bar = __webpack_require__(171);
 
 var _percent_bar2 = _interopRequireDefault(_percent_bar);
 
@@ -18427,6 +18436,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.getLocationWithinRadius = getLocationWithinRadius;
+exports.getRandomWalk = getRandomWalk;
 exports.getInteger = getInteger;
 function getLocationWithinRadius(x0, y0, r) {
   var u = Math.random();
@@ -18438,6 +18448,86 @@ function getLocationWithinRadius(x0, y0, r) {
   var y = w * Math.sin(t);
   var xi = x / Math.cos(y0 * Math.PI / 180);
   return Object.freeze({ latitude: xi + x0, longitude: y + y0 });
+}
+
+/**
+* Gets a random walk from an initial point
+* @TODO This is a temporal workaround.
+* Currently used by visualizations_js project at
+* valo\src\visualizations_js\src\valo\mock.js
+* @param {Number} startPoint The point to start off
+* @return {Object} A coord containing {latitude, longitude} within the radius given
+*/
+function getRandomWalk(startPoint) {
+
+  // Bound coords
+  var TOP_BOUND = 36.68993099999992;
+  var BOTTOM_BOUND = 36.6883310000001;
+  var LEFT_BOUND = -4.4457909999999945;
+  var RIGHT_BOUND = -4.443831000000019;
+  // Possible directions (up, down, left, right)
+  var randomDir = function randomDir() {
+    return ['u', 'd', 'l', 'r'][getInteger(0, 3)];
+  };
+  // Simulates the speed
+  var increment = 30 * .000001;
+
+  // Track latest coord point to update position according it
+  var latestPoint = startPoint;
+  latestPoint.direction = randomDir();
+  latestPoint.steps = getInteger(4, 10);
+
+  return function () {
+
+    switch (latestPoint.direction) {
+      // going up
+      case 'u':
+        if (latestPoint.latitude <= TOP_BOUND) {
+          latestPoint.latitude += increment;
+        } else {
+          latestPoint.direction = 'd';
+          latestPoint.latitude -= increment;
+        }
+        break;
+      // going down
+      case 'd':
+        if (latestPoint.latitude >= BOTTOM_BOUND) {
+          latestPoint.latitude -= increment;
+        } else {
+          latestPoint.direction = 'u';
+          latestPoint.latitude += increment;
+        }
+        break;
+      // going left
+      case 'l':
+        if (latestPoint.longitude >= LEFT_BOUND) {
+          latestPoint.longitude -= increment;
+        } else {
+          latestPoint.direction = 'r';
+          latestPoint.longitude += increment;
+        }
+        break;
+      // going right
+      case 'r':
+        if (latestPoint.longitude <= RIGHT_BOUND) {
+          latestPoint.longitude += increment;
+        } else {
+          latestPoint.direction = 'l';
+          latestPoint.longitude -= increment;
+        }
+        break;
+      default:
+        throw new Error('NO_DIRECTION_PROVIDED');
+    }
+    latestPoint.steps--;
+    if (latestPoint.steps <= 0) {
+      // Pick a new direction
+      latestPoint.direction = randomDir();
+      // How many steps shall user take before changing direction
+      latestPoint.steps = getInteger(4, 10);
+    }
+    return latestPoint;
+  };
 }
 
 /**
@@ -19581,7 +19671,7 @@ var setStreamRepository = exports.setStreamRepository = function () {
  *
  * @async
  * @returns null
- * @throws {VALO.NoResponseFromVal | VALO.NotFound | VALO.InternalServerError}
+ * @throws {VALO.NoResponseFromVal | VALO.NotFound | VALO.InternalServerError | VALO.BadGateway }
  */
 
 
@@ -19624,7 +19714,8 @@ var publishEventToStream = exports.publishEventToStream = function () {
 
                         (0, _util.throwValoApiError)(_context4.t0, {
                             404: "NotFound",
-                            500: "InternalServerError"
+                            500: "InternalServerError",
+                            502: "BadGateway"
                         });
 
                     case 10:
@@ -19658,7 +19749,124 @@ var DEFAULT_PORT = 8888;
 var DEFAULT_HEADERS = { "Content-Type": "application/json" };
 
 /***/ }),
-/* 171 */,
+/* 171 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+/**
+ * Utils module
+ * @license MIT
+ * @author Danilo Rossi <drossi@itrsgroup.com>
+ * @author (Each contributor append a line here)
+ */
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+exports.default = function (domElement) {
+  // <div class="ui indicating progress">
+  //   <div class="bar"></div>
+  //   <div class="label">Funding</div>
+  // </div>
+  //
+
+  var progressContainer = document.createElement('div');
+  progressContainer.classList.add('ui');
+  progressContainer.classList.add('indicating');
+  progressContainer.classList.add('progress');
+
+  var iconsContainer = document.createElement('div');
+  iconsContainer.style.textAlign = 'center';
+  iconsContainer.style.position = 'absolute';
+  iconsContainer.style.zIndex = '2';
+  // iconsContainer.style.width = '100%';
+  iconsContainer.style.height = '100%';
+  iconsContainer.style.top = '-20px'; //'4px';
+  iconsContainer.style.left = '4px';
+  iconsContainer.style.right = '4px';
+
+  var bar = document.createElement('div');
+  bar.classList.add('bar');
+
+  var label = document.createElement('div');
+  label.classList.add('label');
+
+  progressContainer.appendChild(iconsContainer);
+  progressContainer.appendChild(bar);
+  progressContainer.appendChild(label);
+
+  domElement.appendChild(progressContainer);
+
+  $(progressContainer).progress({
+    percent: 0
+  });
+
+  return {
+    currentAvg: null,
+    group: null,
+    init: function init(groupAverage, _ref) {
+      var _ref$leftIcon = _ref.leftIcon,
+          leftIcon = _ref$leftIcon === undefined ? '' : _ref$leftIcon,
+          _ref$centerIcon = _ref.centerIcon,
+          centerIcon = _ref$centerIcon === undefined ? '' : _ref$centerIcon,
+          _ref$rightIcon = _ref.rightIcon,
+          rightIcon = _ref$rightIcon === undefined ? '' : _ref$rightIcon;
+
+
+      this.currentAverage = groupAverage.average;
+      this.group = groupAverage.group;
+      label.textContent = this.group;
+
+      var icons = {
+        iLeft: leftIcon || '',
+        iCenter: centerIcon || '',
+        iRight: rightIcon || ''
+      };
+
+      if (icons.iLeft) {
+        var left = document.createElement('i');
+        icons.iLeft.split(' ').forEach(function (cssClass) {
+          left.classList.add(cssClass);
+        });
+        left.style.float = 'left';
+        iconsContainer.appendChild(left);
+      }
+
+      if (icons.iCenter) {
+        var center = document.createElement('i');
+        icons.iCenter.split(' ').forEach(function (cssClass) {
+          center.classList.add(cssClass);
+        });
+        iconsContainer.appendChild(center);
+      }
+
+      if (icons.iRight) {
+        var right = document.createElement('i');
+        icons.iRight.split(' ').forEach(function (cssClass) {
+          right.classList.add(cssClass);
+        });
+        right.style.float = 'right';
+        iconsContainer.appendChild(right);
+      }
+
+      $(progressContainer).progress({
+        percent: this.currentAverage
+      });
+      return this;
+    },
+    updateAvg: function updateAvg(avg) {
+      this.currentAverage = avg;
+      $(progressContainer).progress({
+        percent: this.currentAverage
+      });
+      return this;
+    }
+  };
+};
+
+/***/ }),
 /* 172 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -19994,9 +20202,9 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 * @param {Boolean} happines if wanna include happiness too
 * @return {Object} The payload generated
 */
-function getPayload(lat, lon, radius, happiness) {
+function getPayload(lat, lon, radius, happiness, randomWalk) {
   var payload = {
-    position: (0, _random_data_generator.getLocationWithinRadius)(lat, lon, radius)
+    position: happiness ? (0, _random_data_generator.getLocationWithinRadius)(lat, lon, radius) : randomWalk()
   };
   if (happiness) {
     payload.happiness = (0, _random_data_generator.getInteger)(-1, 1);
@@ -20019,10 +20227,13 @@ function _getMockObservable() {
   var lon = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : -100;
   var radius = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : 10;
   var happiness = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : false;
+  var options = arguments.length > 5 && arguments[5] !== undefined ? arguments[5] : {};
 
+  //@TODO set in a setting the start coord point
+  var randomWalk = (0, _random_data_generator.getRandomWalk)({ latitude: 36.689451, longitude: -4.445371 });
   return _rxLite2.default.Observable.create(function (observer) {
     var emitEvent = function emitEvent() {
-      observer.onNext(getPayload(lat, lon, radius, happiness));
+      observer.onNext(getPayload(lat, lon, radius, happiness, randomWalk));
       setTimeout(emitEvent, interval);
     };
     emitEvent();
@@ -20036,15 +20247,15 @@ function _getMockObservable() {
 * @throws NO_QUERY_ARGUMENT_PROVIDED_ERROR
 * @return {Object} An observable
 */
-function runSingleQueryMocked(query) {
+function runSingleQueryMocked(query, options) {
   switch (query) {
     case _settings.QUERY_MOB_HAPPINESS:
       return {
-        observable: _getMockObservable(1000, _settings.LA_TERMICA_COORDINATES.lat, _settings.LA_TERMICA_COORDINATES.lon, _settings.LA_TERMICA_COORDINATES.radius, true)
+        observable: _getMockObservable(5000, _settings.LA_TERMICA_COORDINATES.lat, _settings.LA_TERMICA_COORDINATES.lon, _settings.LA_TERMICA_COORDINATES.radius, true, options)
       };
     case _settings.QUERY_MOB_LOCATION:
       return {
-        observable: _getMockObservable(1000, _settings.LA_TERMICA_COORDINATES.lat, _settings.LA_TERMICA_COORDINATES.lon, _settings.LA_TERMICA_COORDINATES.radius)
+        observable: _getMockObservable((0, _random_data_generator.getInteger)(800, 1000), _settings.LA_TERMICA_COORDINATES.lat, _settings.LA_TERMICA_COORDINATES.lon, _settings.LA_TERMICA_COORDINATES.radius, false, options)
       };
     default:
       throw Error('NO_QUERY_ARGUMENT_PROVIDED_ERROR');
@@ -20106,9 +20317,7 @@ var GroupAverage = function GroupAverage(average, group) {
 
 
 function createHappinessMapPoint(valoPayload) {
-  return new MapPoint(valoPayload.position.latitude, valoPayload.position.longitude,
-  // `${ICON_URL}${valoPayload.status}.png`
-  valoPayload.happiness);
+  return new MapPoint(valoPayload.position.latitude, valoPayload.position.longitude, valoPayload.happiness);
 }
 
 /**
@@ -20118,9 +20327,7 @@ function createHappinessMapPoint(valoPayload) {
  * @return {MapPoint}                            A valid MapPoint
  */
 function createLocationMapPoint(valoPayload) {
-  return new MapPoint(valoPayload.position.latitude, valoPayload.position.longitude,
-  //  `${ICON_URL}footprints.png`
-  'footprints');
+  return new MapPoint(valoPayload.position.latitude, valoPayload.position.longitude, 'footprints');
 }
 
 function createGroupAverage(valoPayload) {
@@ -45287,124 +45494,6 @@ function extend() {
 __webpack_require__(149);
 module.exports = __webpack_require__(148);
 
-
-/***/ }),
-/* 387 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-/**
- * Utils module
- * @license MIT
- * @author Danilo Rossi <drossi@itrsgroup.com>
- * @author (Each contributor append a line here)
- */
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-exports.default = function (domElement) {
-  // <div class="ui indicating progress">
-  //   <div class="bar"></div>
-  //   <div class="label">Funding</div>
-  // </div>
-  //
-
-  var progressContainer = document.createElement('div');
-  progressContainer.classList.add('ui');
-  progressContainer.classList.add('indicating');
-  progressContainer.classList.add('progress');
-
-  var iconsContainer = document.createElement('div');
-  iconsContainer.style.textAlign = 'center';
-  iconsContainer.style.position = 'absolute';
-  iconsContainer.style.zIndex = '2';
-  // iconsContainer.style.width = '100%';
-  iconsContainer.style.height = '100%';
-  iconsContainer.style.top = '-20px'; //'4px';
-  iconsContainer.style.left = '4px';
-  iconsContainer.style.right = '4px';
-
-  var bar = document.createElement('div');
-  bar.classList.add('bar');
-
-  var label = document.createElement('div');
-  label.classList.add('label');
-
-  progressContainer.appendChild(iconsContainer);
-  progressContainer.appendChild(bar);
-  progressContainer.appendChild(label);
-
-  domElement.appendChild(progressContainer);
-
-  $(progressContainer).progress({
-    percent: 0
-  });
-
-  return {
-    currentAvg: null,
-    group: null,
-    init: function init(groupAverage, _ref) {
-      var _ref$leftIcon = _ref.leftIcon,
-          leftIcon = _ref$leftIcon === undefined ? '' : _ref$leftIcon,
-          _ref$centerIcon = _ref.centerIcon,
-          centerIcon = _ref$centerIcon === undefined ? '' : _ref$centerIcon,
-          _ref$rightIcon = _ref.rightIcon,
-          rightIcon = _ref$rightIcon === undefined ? '' : _ref$rightIcon;
-
-
-      this.currentAverage = groupAverage.average;
-      this.group = groupAverage.group;
-      label.textContent = this.group;
-
-      var icons = {
-        iLeft: leftIcon || '',
-        iCenter: centerIcon || '',
-        iRight: rightIcon || ''
-      };
-
-      if (icons.iLeft) {
-        var left = document.createElement('i');
-        icons.iLeft.split(' ').forEach(function (cssClass) {
-          left.classList.add(cssClass);
-        });
-        left.style.float = 'left';
-        iconsContainer.appendChild(left);
-      }
-
-      if (icons.iCenter) {
-        var center = document.createElement('i');
-        icons.iCenter.split(' ').forEach(function (cssClass) {
-          center.classList.add(cssClass);
-        });
-        iconsContainer.appendChild(center);
-      }
-
-      if (icons.iRight) {
-        var right = document.createElement('i');
-        icons.iRight.split(' ').forEach(function (cssClass) {
-          right.classList.add(cssClass);
-        });
-        right.style.float = 'right';
-        iconsContainer.appendChild(right);
-      }
-
-      $(progressContainer).progress({
-        percent: this.currentAverage
-      });
-      return this;
-    },
-    updateAvg: function updateAvg(avg) {
-      this.currentAverage = avg;
-      $(progressContainer).progress({
-        percent: this.currentAverage
-      });
-      return this;
-    }
-  };
-};
 
 /***/ })
 /******/ ]);

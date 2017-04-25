@@ -55,6 +55,150 @@ const valoSchemas = {
                 "origin" : {"type": "string"}
             }
         }
+    },
+    temperatureVinicius : {
+        "version": "",
+        "config": {},
+        "topDef": {
+            "type": "record",
+            "properties": {
+                "contributor" : {
+                    "type" : "contributor",
+                    "definition" : "iot_board"
+                },
+                "value" : {"type": "double"},
+                "units" : {"type": "string"},
+                "timestamp" : {"type": "datetime", "annotations":  ["urn:itrs:default-timestamp"]},
+                "geo_lat" : {"type": "double"},
+                "geo_long" : {"type": "double"}
+            }
+        }
+    },
+
+    iot_alcohol : {
+        "version": "1.0",
+        "config": {},
+        "topDef": {
+            "type": "record",
+            "properties": {
+                "contributor": {
+                    "type":"contributor", "definition":"iot_board"
+                },
+                "timestamp": {
+                    "type": "datetime",
+                    "annotations": ["urn:itrs:default-timestamp"]
+                },
+                "position": {
+                    "type": "record",
+                    "properties": {
+                        "latitude" : {"type": "double"},
+                        "longitude" : {"type": "double"}
+                    }
+                },
+                "alcohol" : {"type": "double"},
+                "units" : {"type": "string"}
+            }
+        }
+    },
+    iot_temperature : {
+        "version": "1.0",
+        "config": {},
+        "topDef": {
+            "type": "record",
+            "properties": {
+                "contributor": {
+                    "type":"contributor", "definition":"iot_board"
+                },
+                "timestamp": {
+                    "type": "datetime",
+                    "annotations": ["urn:itrs:default-timestamp"]
+                },
+                "position": {
+                    "type": "record",
+                    "properties": {
+                        "latitude" : {"type": "double"},
+                        "longitude" : {"type": "double"}
+                    }
+                },
+                "temperature" : {"type": "double"},
+                "units" : {"type": "string"}
+            }
+        }
+    },
+    iot_distance : {
+        "version": "1.0",
+        "config": {},
+        "topDef": {
+            "type": "record",
+            "properties": {
+                "contributor": {
+                    "type":"contributor", "definition":"iot_board"
+                },
+                "timestamp": {
+                    "type": "datetime",
+                    "annotations": ["urn:itrs:default-timestamp"]
+                },
+                "position": {
+                    "type": "record",
+                    "properties": {
+                        "latitude" : {"type": "double"},
+                        "longitude" : {"type": "double"}
+                    }
+                },
+                "distance" : {"type": "double"},
+                "units" : {"type": "string"}
+            }
+        }
+    },
+    iot_humidity : {
+        "version": "1.0",
+        "config": {},
+        "topDef": {
+            "type": "record",
+            "properties": {
+                "contributor": {
+                    "type":"contributor", "definition":"iot_board"
+                },
+                "timestamp": {
+                    "type": "datetime",
+                    "annotations": ["urn:itrs:default-timestamp"]
+                },
+                "position": {
+                    "type": "record",
+                    "properties": {
+                        "latitude" : {"type": "double"},
+                        "longitude" : {"type": "double"}
+                    }
+                },
+                "humidity" : {"type": "double"},
+                "units" : {"type": "string"}
+            }
+        }
+    },
+    iot_luminance : {
+        "version": "1.0",
+        "config": {},
+        "topDef": {
+            "type": "record",
+            "properties": {
+                "contributor": {
+                    "type":"contributor", "definition":"iot_board"
+                },
+                "timestamp": {
+                    "type": "datetime",
+                    "annotations": ["urn:itrs:default-timestamp"]
+                },
+                "position": {
+                    "type": "record",
+                    "properties": {
+                        "latitude" : {"type": "double"},
+                        "longitude" : {"type": "double"}
+                    }
+                },
+                "luminance" : {"type": "double"},
+                "units" : {"type": "string"}
+            }
+        }
     }
 };
 
@@ -69,11 +213,12 @@ const mappings = [
         "transportOrigin" : '/jonthebeach/sensors/temperature',
         "valoClient" : valoClientConfigs.valo1,
         "valoTenant" : "demo",
-        "valoCollection" : "iot",
+        "valoCollection" : "iot_board",
         "valoStream" : "temperature",
-        "valoSchema" : valoSchemas.singleWithTimestamp,
+        "valoSchema" : valoSchemas.temperatureVinicius,
         "valoRepo" : "tsr" // "tsr"|"ssr"|null
     },
+/*
     {
         "transportType" : "mqtt",
         "transportClient" : mqttClientConfigs.mqtt1,
@@ -118,6 +263,7 @@ const mappings = [
         "valoSchema" : valoSchemas.singleWithTimestamp,
         "valoRepo" : "tsr" // "tsr"|"ssr"|null
     }
+*/
 ];
 
 ///////////////////////////////////////////////////////////////////////////////
