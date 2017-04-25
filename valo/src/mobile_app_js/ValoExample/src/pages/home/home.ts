@@ -43,19 +43,8 @@ export class HomePage {
   }
 
   locationWatch = null
-
-  dummyLocation = {
-    coords: {
-      latitude: 0,
-      longitude: 0,
-      altitude: 0,
-      accuracy: 0,
-      speed: 0,
-      heading: 0
-    }
-  }
-
-  initialized = false;
+  initialized = false
+  buttonsDisabled = false
 
   constructor(public navCtrl: NavController, private storage: Storage, private geolocation: Geolocation, public toastCtrl: ToastController) {
 
@@ -77,18 +66,19 @@ export class HomePage {
           this.initialized = true;
           this.userDetails = JSON.parse(data);
           this.setupGeolocationWatch();
-        } else {
-          this.navCtrl.parent.select(1);
         }
       },
       error => {
-        this.navCtrl.parent.select(1);
       }
     );
   }
 
   ionViewWillUnload() {
     clearInterval(this.locationWatch);
+  }
+
+  showRegistrationPage() {
+    this.navCtrl.parent.select(1);
   }
 
   // If it hasn't been done yet, we set up a function to send the current location to Valo every minute
@@ -107,7 +97,6 @@ export class HomePage {
         this.publishLocationEvent(this.userDetails.valoDetails.location, resp);
       }
     ).catch((error) => {
-      //this.publishLocationEvent(this.userDetails.valoDetails.location, this.dummyLocation);
       console.log(error);
     });
   }
@@ -149,14 +138,17 @@ export class HomePage {
   // When a user clicks on a rating button, we call this function and process the current rating
   // We also try to get the user's current location, and if successful, we publish and event to Valo
   //  which contains the user's current location and happiness rating
+  // In addition, we also want to disable the buttons momentarily to prevent users from flooding Valo
+  //  with user ratings
   sendRating(event, rating) {
     this.geolocation.getCurrentPosition(this.geolocationOptions).then(
       (resp) => {
         this.publishHappinessEvent(this.userDetails.valoDetails.happiness, resp, rating);
       }).catch((error) => {
-        //this.publishHappinessEvent(this.userDetails.valoDetails.happiness, this.dummyLocation, rating);
         console.log(error);
       });
+    this.buttonsDisabled = true;
+    setTimeout(() => { this.buttonsDisabled = false }, 10000);
   }
 
   // We make use of the Valo SDK to publish events to our Valo instance
