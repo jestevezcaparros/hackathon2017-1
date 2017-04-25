@@ -66,12 +66,9 @@ export class HomePage {
           this.initialized = true;
           this.userDetails = JSON.parse(data);
           this.setupGeolocationWatch();
-        } else {
-          //this.navCtrl.parent.select(1);
         }
       },
       error => {
-        //this.navCtrl.parent.select(1);
       }
     );
   }
