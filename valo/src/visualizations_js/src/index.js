@@ -13,10 +13,16 @@ import JotbMap from './map';
 import {
   MAP_CONTAINER_CSS_SELECTOR,
   LA_TERMICA_COORDINATES,
-  MAP_OPTIONS
+  MAP_OPTIONS,
+  PEOPLE,
+  DEBUG
 } from './settings'
 
-import * as Valo from './valo/dao'
+import {
+  readMobileHappinesEvents
+  ,readMobileLocationEvents
+  ,readGroupsAvg
+} from './valo/dao'
 
 import {
   createHappinessMapPoint,
@@ -38,6 +44,55 @@ import {
   printLog
 } from './utils';
 
+// read events from Valo mob_happiness stream
+function _readMobileHappinesEvents(map){
+  readMobileHappinesEvents((error, valoPayload) => {
+    // Manage your error
+    if(error) return printError(error);
+    // convert Valo event to MapPoint, add it to the map
+    map.addPoints(createHappinessMapPoint(valoPayload));
+  });
+};
+
+function _readMobileLocationEvents(map){
+  readMobileLocationEvents((error, valoPayload) => {
+    // Manage your error
+    if(error) return printError(error);
+    // convert Valo event to MapPoint, add it to the map
+    map.addPoints(createLocationMapPoint(valoPayload));
+  });
+}
+
+// read average by contributor
+function _readGroupsAvg() {
+
+  let averageBars = new Map();
+
+  readGroupsAvg(valoPayload => {
+
+    // create a GroupAverage element
+    const groupAverage = createGroupAverage(valoPayload);
+
+    // no bar chart for this group, create a new one
+    if(!averageBars.has(groupAverage.group)) {
+
+      // create a bar chart
+      const chart =
+        avgBar(getNextBarChartContainer())
+        .init(groupAverage);
+
+      // store it
+      averageBars.set(groupAverage.group, chart);
+
+    } else {
+
+      // update existing bar chart for current event participant
+      averageBars.get(groupAverage.group).updateAvg(groupAverage.average);
+    }
+  });
+
+}
+
 /**
 * This creates a google Maps Api v3 instance rendering the map
 * afterwards it starts listening to real time events coming from Valo.
@@ -49,8 +104,6 @@ import {
 */
 async function initMap(){
 
-  let averageBars = new Map();
-
   try {
 
     // Init and render the map onto the DOM
@@ -59,49 +112,19 @@ async function initMap(){
       options: MAP_OPTIONS
     });
 
-    // read events from Valo mob_happiness stream
-    Valo.readMobileHappinesEvents((error, valoPayload) => {
+    _readMobileHappinesEvents(map);
 
-      // Manage your error
-      if(error) return printError(error);
+    //@TODO This should be moved to the data_generator, it remains here
+    // just for testing purposes
+    if(DEBUG){
+      Array.from({length: PEOPLE})
+        .forEach(() => _readMobileLocationEvents(map));
+    }
+    else {
+      _readMobileLocationEvents(map);
+    }
 
-      // convert Valo event to MapPoint, add it to the map
-      map.addPoints(createHappinessMapPoint(valoPayload));
-    });
-
-    // read events from Valo mob_location stream
-    Valo.readMobileLocationEvents((error, valoPayload) => {
-
-      // Manage your error
-      if(error) return printError(error);
-
-      // convert Valo event to MapPoint, add it to the map
-      map.addPoints(createLocationMapPoint(valoPayload));
-    });
-
-    // read average by contributor
-    Valo.readGroupsAvg(valoPayload => {
-
-      // create a GroupAverage element
-      const groupAverage = createGroupAverage(valoPayload);
-
-      // no bar chart for this group, create a new one
-      if(!averageBars.has(groupAverage.group)) {
-
-        // create a bar chart
-        const chart =
-          avgBar(getNextBarChartContainer())
-          .init(groupAverage);
-
-        // store it
-        averageBars.set(groupAverage.group, chart);
-
-      } else {
-
-        // update existing bar chart for current event participant
-        averageBars.get(groupAverage.group).updateAvg(groupAverage.average);
-      }
-    })
+    _readGroupsAvg();
 
   } catch (error) {
     printError(error);
