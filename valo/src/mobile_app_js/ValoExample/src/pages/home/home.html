@@ -2,45 +2,49 @@
 
   <div *ngIf="isInitialized() == true">
     <ion-navbar color='primary'>
-      <ion-title>Rate #JOTB</ion-title>
+      <ion-title>Rate J On The Beach</ion-title>
     </ion-navbar>
 
     <h3>How happy are you where you with the event right now?</h3>
 
     <p>
-      <button ion-button icon-left class="button button-happy" (click)="sendRating($event, 1)">
+      <button ion-button icon-left class="button button-happy" [disabled]="buttonsDisabled" (click)="sendRating($event, 1)">
       <ion-icon name="happy"></ion-icon>
         This is great!
-    </button>
-    </p>
-
-    <p>
-      <button ion-button icon-left class="button button-meh" (click)="sendRating($event, 0)">
+      </button>
+      <br/>
+      <button ion-button icon-left class="button button-meh" [disabled]="buttonsDisabled" (click)="sendRating($event, 0)">
       <ion-icon name="happy"></ion-icon>
         It's OK
-    </button>
-    </p>
-
-    <p>
-      <button ion-button icon-left class="button button-sad" (click)="sendRating($event, -1)">
+      </button>
+      <br/>
+      <button ion-button icon-left class="button button-sad" [disabled]="buttonsDisabled" (click)="sendRating($event, -1)">
       <ion-icon name="sad"></ion-icon>
         Something seems to be wrong
-    </button>
+      </button>
+    </p>
+    <p *ngIf="buttonsDisabled">
+      Please wait for some time before sending another rating.
     </p>
   </div>
 
-<!--
   <div *ngIf="isInitialized() == false">
     <ion-navbar color='primary'>
       <ion-title>Valo Example</ion-title>
     </ion-navbar>
 
     <p>
-      Before you use this application, may we ask you to fill up the registration details in the Registration tab.
-      You will be asked to enter some details about yourself, as well as details of a Valo instance you want to use.
-      Don't forget to save the details, after which you can come back to this Home.
+      This is a sample mobile application which we can use to interface with a Valo environment. What this application will do is send two kinds of information to Valo:
+    </p>
+    <ul>
+      <li>The mobile device's current location, to be sent periodically</li>
+      <li>A user's happiness rating with the event along with the mobile device's current location, to be sent when user selects a "Happiness" rating button
+    </ul>
+
+    <p>
+      Before you use this application, may we ask you to fill up the registration details in the <a (click)="showRegistrationPage()">Registration</a> tab. You will be asked to enter some details about yourself, as well as details of a Valo instance you want to use. Don't forget to save the details,
+      after which you can come back to the Home page using the tabs below.
     </p>
   </div>
-//-->
 
 </ion-content>
