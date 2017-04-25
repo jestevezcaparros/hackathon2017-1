@@ -34,13 +34,18 @@ We will need to verify that both the Surfboard hardware and IDE are properly con
 ### Arduino IDE
 Open the Arduino IDE and add the libraries and configure the conection with the Surfboard.
 
-#### Add libraries
+#### Adding libraries
+You will need to add the Surfboard libraries before you start coding.
+
+##### Adding libraries the easy way
 First of all copy the Arduino folder at `userhome/Documents` in `Un*x` systems and under `My Documents` under Windows OS. This should add the libraries automatically. 
 
-Open the Arduino IDE and verify that libraries are listed under menu `Sketch > Include libraries`. If it is not the case, you can add them manually. Open `Sketch > Include libraries > Add .ZIP library` from the menu and select the directories under `Arduino/libraries`.
+##### Adding libraries manually
+If libraries are not listed under menu `Sketch > Include libraries` in your Arduino IDE, you can add them manually by opening `Sketch > Include libraries > Add .ZIP library` from the menu and select the directories under `Arduino/libraries`.
 
 ![](add_library.png)
 
+##### Verifying bridge library installation
 Verify that `bridge library` is also installed. You can do this through the menu `Sketch > Include libraries > Manage libraries`. 
 
 ![](manage_library.png)
