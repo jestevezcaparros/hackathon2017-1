@@ -215,10 +215,9 @@ const mappings = [
         "valoTenant" : "demo",
         "valoCollection" : "iot_board",
         "valoStream" : "temperature",
-        "valoSchema" : valoSchemas.temperatureVinicius,
+        "valoSchema" : valoSchemas.iot_temperature,
         "valoRepo" : "tsr" // "tsr"|"ssr"|null
     },
-/*
     {
         "transportType" : "mqtt",
         "transportClient" : mqttClientConfigs.mqtt1,
@@ -227,7 +226,7 @@ const mappings = [
         "valoTenant" : "demo",
         "valoCollection" : "iot",
         "valoStream" : "humidity",
-        "valoSchema" : valoSchemas.singleWithTimestamp,
+        "valoSchema" : valoSchemas.iot_humidity,
         "valoRepo" : "tsr" // "tsr"|"ssr"|null
     },
     {
@@ -238,7 +237,7 @@ const mappings = [
         "valoTenant" : "demo",
         "valoCollection" : "iot",
         "valoStream" : "alcohol",
-        "valoSchema" : valoSchemas.singleWithTimestamp,
+        "valoSchema" : valoSchemas.iot_alcohol,
         "valoRepo" : "tsr" // "tsr"|"ssr"|null
     },
     {
@@ -249,7 +248,7 @@ const mappings = [
         "valoTenant" : "demo",
         "valoCollection" : "iot",
         "valoStream" : "light",
-        "valoSchema" : valoSchemas.singleWithTimestamp,
+        "valoSchema" : valoSchemas.iot_luminance,
         "valoRepo" : "tsr" // "tsr"|"ssr"|null
     },
     {
@@ -260,10 +259,9 @@ const mappings = [
         "valoTenant" : "demo",
         "valoCollection" : "iot",
         "valoStream" : "distance",
-        "valoSchema" : valoSchemas.singleWithTimestamp,
+        "valoSchema" : valoSchemas.iot_distance,
         "valoRepo" : "tsr" // "tsr"|"ssr"|null
     }
-*/
 ];
 
 ///////////////////////////////////////////////////////////////////////////////
