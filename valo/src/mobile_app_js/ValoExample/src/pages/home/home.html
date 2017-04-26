@@ -2,10 +2,10 @@
 
   <div *ngIf="isInitialized() == true">
     <ion-navbar color='primary'>
-      <ion-title>Rate J On The Beach</ion-title>
+      <ion-title>Rate JOTB 2017</ion-title>
     </ion-navbar>
 
-    <h3>How happy are you where you with the event right now?</h3>
+    <h3>How happy are you with the event right now?</h3>
 
     <p>
       <button ion-button icon-left class="button button-happy" [disabled]="buttonsDisabled" (click)="sendRating($event, 1)">
@@ -20,7 +20,7 @@
       <br/>
       <button ion-button icon-left class="button button-sad" [disabled]="buttonsDisabled" (click)="sendRating($event, -1)">
       <ion-icon name="sad"></ion-icon>
-        Something seems to be wrong
+        Needs improvement
       </button>
     </p>
     <p *ngIf="buttonsDisabled">
