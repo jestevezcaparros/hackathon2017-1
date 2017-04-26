@@ -12,8 +12,11 @@
  import {
    QUERY_MOB_HAPPINESS,
    QUERY_MOB_LOCATION,
+   HISTORICAL_QUERY_MOB_HAPPINESS,
+   HISTORICAL_QUERY_MOB_LOCATION,
    LA_TERMICA_COORDINATES
  } from '../settings';
+
 import {
   getLocationWithinRadius,
   getRandomWalk,
@@ -55,7 +58,9 @@ import {
        observer.onNext(getPayload(lat, lon, radius, happiness, randomWalk));
        setTimeout(emitEvent, interval);
      }
-     emitEvent();
+     if(!options.historical) return emitEvent();
+     Array.from({length: 100})
+     .forEach(i=>observer.onNext(getPayload(lat, lon, radius, happiness, randomWalk)));
    });
  }
 
@@ -78,6 +83,16 @@ import {
             true,
             options)
         };
+     case HISTORICAL_QUERY_MOB_HAPPINESS:
+        return {
+          observable: _getMockObservable(
+            5000,
+            LA_TERMICA_COORDINATES.lat,
+            LA_TERMICA_COORDINATES.lon,
+            LA_TERMICA_COORDINATES.radius,
+            true,
+            {historical: true})
+        };
      case QUERY_MOB_LOCATION:
        return {
          observable: _getMockObservable(
@@ -87,6 +102,16 @@ import {
            LA_TERMICA_COORDINATES.radius,
            false,
            options)
+       };
+     case HISTORICAL_QUERY_MOB_LOCATION:
+       return {
+         observable: _getMockObservable(
+           getInteger(800, 1000),
+           LA_TERMICA_COORDINATES.lat,
+           LA_TERMICA_COORDINATES.lon,
+           LA_TERMICA_COORDINATES.radius,
+           false,
+           {historical: true})
        };
      default:
       throw Error('NO_QUERY_ARGUMENT_PROVIDED_ERROR');

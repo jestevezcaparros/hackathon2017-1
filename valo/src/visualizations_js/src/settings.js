@@ -7,19 +7,33 @@
  * @author Danilo Rossi <drossi@itrsgroup.com>
  * @author (Each contributor append a line here)
  */
-export const DEBUG = true;
-export const HOST = {valoHost: "192.168.35.19", valoPort: 8888};
+export const DEBUG = false;
+export const HOST = {valoHost: "localhost", valoPort: 8888};
 export const TENANT = 'demo';
 export const QUERY_MOB_HAPPINESS = 'from /streams/demo/jotb/mob_happiness';
+export const HISTORICAL_QUERY_MOB_HAPPINESS = 'from historical /streams/demo/jotb/mob_happiness take 10000';
 export const QUERY_MOB_LOCATION = 'from /streams/demo/jotb/mob_location';
+export const HISTORICAL_QUERY_MOB_LOCATION = 'from historical /streams/demo/jotb/mob_location take 10000';
 export const ICON_URL = 'http://localhost:8080/icons/'
 export const MAP_CONTAINER_CSS_SELECTOR = '.map-container';
 // Emulates how many people is publishing data to Valo
 export const PEOPLE = 3;
+// Use Record and Replay Version
+export const REPLAY = false;
 export const LA_TERMICA_COORDINATES = {
   lat: 36.689150,
   lon: -4.445000,
-  radius: 80
+  radius: 80,
+  bounds:{
+    sw:{
+      lat: 36.688845,
+      lon: -4.445961
+    },
+    ne: {
+      lat: 36.689417,
+      lon: -4.443649
+    }
+  }
 };
 // export const ITRS_COORDINATES = {
 //     lat: 36.734684,
@@ -36,39 +50,39 @@ export const MAP_OPTIONS = {
     minZoom: 18,
     maxZoom: 20,
     center: LA_TERMICA_COORDINATES,
-    styles: [
-    {
-        "elementType": "labels",
-        "stylers": [
-            {
-                "visibility": "off"
-            }
-        ]
-    },
-    {
-        "featureType": "all",
-        "elementType": "all",
-
-        "stylers": [
-            {
-                "invert_lightness": true
-            },
-            {
-                "saturation": -80
-            },
-            {
-                "lightness": 30
-            },
-            {
-                "gamma": 0.5
-            },
-            {
-                "hue": "#3d433a"
-            }
-
-        ]
-    }
-]
+//     styles: [
+//     {
+//         "elementType": "labels",
+//         "stylers": [
+//             {
+//                 "visibility": "off"
+//             }
+//         ]
+//     },
+//     {
+//         "featureType": "all",
+//         "elementType": "all",
+//
+//         "stylers": [
+//             {
+//                 "invert_lightness": true
+//             },
+//             {
+//                 "saturation": -80
+//             },
+//             {
+//                 "lightness": 30
+//             },
+//             {
+//                 "gamma": 0.5
+//             },
+//             {
+//                 "hue": "#3d433a"
+//             }
+//
+//         ]
+//     }
+// ]
 };
 export const AUDITORIO_POLYGON = [
     {lat: 36.689026, lng: -4.444346},

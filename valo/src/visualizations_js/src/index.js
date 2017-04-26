@@ -49,15 +49,20 @@ function _readMobileHappinesEvents(map){
   readMobileHappinesEvents((error, valoPayload) => {
     // Manage your error
     if(error) return printError(error);
+    // No more data
+    if(!valoPayload) return;
     // convert Valo event to MapPoint, add it to the map
     map.addPoints(createHappinessMapPoint(valoPayload));
   });
 };
 
+// read events from Valo mob_location stream
 function _readMobileLocationEvents(map){
   readMobileLocationEvents((error, valoPayload) => {
     // Manage your error
     if(error) return printError(error);
+    // No more data
+    if(!valoPayload) return;
     // convert Valo event to MapPoint, add it to the map
     map.addPoints(createLocationMapPoint(valoPayload));
   });
@@ -115,7 +120,7 @@ async function initMap(){
     _readMobileHappinesEvents(map);
 
     //@TODO This should be moved to the data_generator, it remains here
-    // just for testing purposes
+    // just for testing purposes. Use PEOPLE setting to add/remove people
     if(DEBUG){
       Array.from({length: PEOPLE})
         .forEach(() => _readMobileLocationEvents(map));

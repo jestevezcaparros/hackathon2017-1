@@ -69,11 +69,11 @@ export function plotPoint(context, point, projection, zoomLevel=20) {
  * @param {*} coordinates
  */
 export function createMap({domElement, options}) {
+    const bounds = new window.google.maps.LatLngBounds(
+      new window.google.maps.LatLng(options.center.bounds.sw.lat, options.center.bounds.sw.lon),
+      new window.google.maps.LatLng(options.center.bounds.ne.lat, options.center.bounds.ne.lon));
     options.center = new window.google.maps.LatLng(options.center.lat, options.center.lon);
     const map = new window.google.maps.Map(domElement, options);
-    const bounds = new window.google.maps.LatLngBounds(
-      new window.google.maps.LatLng(36.688845, -4.445961),
-      new window.google.maps.LatLng(36.689417, -4.443649));
     window.google.maps.event.addListener(map, "dragend", () => updateMap(map));
     window.google.maps.event.addListener(map, "zoom_changed", () => updateMap(map));
     window.google.maps.event.addListener(map, "resize", () => updateMap(map));
