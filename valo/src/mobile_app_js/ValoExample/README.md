@@ -22,7 +22,7 @@ To test in a mobile device using Ionic View:
 * Edit `ionic.config.json` by deleting the value for `app_id` - this will allow generation of a new unique app id in the next step:
 <pre><code>{
   "name": "ValoExample",
-  "app_id": "9ed6fcee",
+  "app_id": "",
   "v2": true,
   "typescript": true
 }</code></pre>
