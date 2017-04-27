@@ -14,7 +14,7 @@ char pass[] = "secretPassword";   // your network password
 int status = WL_IDLE_STATUS;
 
 // Contributor
-Contributor con(Serial, "3452352345", "localhost", 8888);
+Contributor<Print> con(Serial, "3452352345", "localhost", 8888);
 
 // Sensors
 SensorSample temp("/streams/iot/team1/temperature", "temperature", "celsius");
