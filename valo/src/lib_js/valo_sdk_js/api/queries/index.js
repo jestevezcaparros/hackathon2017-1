@@ -20,7 +20,7 @@ try {
     MyEventSource = EventSource
 } catch(e) {
     // If not in browser, EventSource ref does not exist
-    MyEventSource = NodeEventSource    
+    MyEventSource = NodeEventSource
 }
 
 /* Internal services dependencies*/
@@ -37,7 +37,8 @@ import WrapError from '../../../util_js/error';
 const DEFAULT_HOST = "localhost";
 const DEFAULT_PORT = 8888;
 const DEFAULT_HEADERS = {"Content-Type" : "application/json"};
-
+const EOS_MSG = 'eos';
+const SOS_MSG = 'sos';
 
 /**
  * Create session - POST /execution/:tenant/sessions
@@ -295,12 +296,23 @@ export async function runSingleQuery(
             };
 
             sseSource.onmessage = msg => {
-                observer.onNext(msg);
+              try {
+                const data = JSON.parse(msg.data);
+                switch(data.type){
+                  case SOS_MSG:
+                    return;
+                  case EOS_MSG:
+                    return observer.onCompleted();
+                  default:
+                    return observer.onNext(msg);
+                }
+              } catch (e) {
+                observer.onError(err);
+              }
             };
 
             sseSource.onerror = err => {
                 console.error("> SSE ERROR: ", err);
-                observer.onError(err);
             };
 
             return function dispose() {

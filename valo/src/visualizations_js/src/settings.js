@@ -7,23 +7,49 @@
  * @author Danilo Rossi <drossi@itrsgroup.com>
  * @author (Each contributor append a line here)
  */
-export const DEBUG = true;
-export const HOST = {valoHost: "192.168.35.19", valoPort: 8888};
+export const DEBUG = false;
+export const HOST = {valoHost: "localhost", valoPort: 8888};
 export const TENANT = 'demo';
 export const QUERY_MOB_HAPPINESS = 'from /streams/demo/jotb/mob_happiness';
+export const HISTORICAL_QUERY_MOB_HAPPINESS = 'from historical /streams/demo/jotb/mob_happiness order by timestamp take 10000';
 export const QUERY_MOB_LOCATION = 'from /streams/demo/jotb/mob_location';
+export const HISTORICAL_QUERY_MOB_LOCATION = 'from historical /streams/demo/jotb/mob_location order by timestamp take 10000';
 export const ICON_URL = 'http://localhost:8080/icons/'
 export const MAP_CONTAINER_CSS_SELECTOR = '.map-container';
 // Emulates how many people is publishing data to Valo
 export const PEOPLE = 3;
+// Use Record and Replay Version
+// (to enable it, append the query search ?replay to the server url)
+export const REPLAY = false;
 export const LA_TERMICA_COORDINATES = {
   lat: 36.689150,
   lon: -4.445000,
-  radius: 80
+  radius: 80,
+  bounds:{
+    sw:{
+      lat: 36.688845,
+      lon: -4.445961
+    },
+    ne: {
+      lat: 36.689417,
+      lon: -4.443649
+    }
+  }
 };
 // export const ITRS_COORDINATES = {
-//     lat: 36.734684,
-//     lon: -4.557648
+//   lat: 36.734948
+//   lon: -4.557490
+//   radius: 80,
+//   bounds:{
+//     sw:{
+//       lat: 36.734823
+//       lon: -4.558412
+//     },
+//     ne: {
+//       lat: 36.734634,
+//       lon: -4.557071
+//     }
+//   }
 // }
 export const MAP_OPTIONS = {
     zoom: 20,
