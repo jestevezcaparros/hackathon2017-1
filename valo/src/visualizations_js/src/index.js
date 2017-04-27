@@ -106,13 +106,6 @@ async function initMap(){
       }
     })
 
-    //@TODO This should be moved to the data_generator, it remains here
-    // just for testing purposes
-    // if(DEBUG){
-    //   Array.from({length: PEOPLE})
-    //     .forEach(() => _readMobileLocationEvents(map));
-    // }
-
   } catch (error) {
     printError(error);
   }

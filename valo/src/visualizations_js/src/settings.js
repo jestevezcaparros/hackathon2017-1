@@ -14,7 +14,7 @@ export const QUERY_MOB_HAPPINESS = 'from /streams/demo/jotb/mob_happiness';
 export const HISTORICAL_QUERY_MOB_HAPPINESS = 'from historical /streams/demo/jotb/mob_happiness order by timestamp take 10000';
 export const QUERY_MOB_LOCATION = 'from /streams/demo/jotb/mob_location';
 export const HISTORICAL_QUERY_MOB_LOCATION = 'from historical /streams/demo/jotb/mob_location order by timestamp take 10000';
-export const ICON_URL = 'http://localhost:8080/icons/'
+export const ICON_URL = 'http://localhost:8080//valo/src/visualizations_js/icons/'
 export const MAP_CONTAINER_CSS_SELECTOR = '.map-container';
 // Emulates how many people is publishing data to Valo
 export const PEOPLE = 3;

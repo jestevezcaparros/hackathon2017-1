@@ -3814,7 +3814,7 @@ var QUERY_MOB_HAPPINESS = exports.QUERY_MOB_HAPPINESS = 'from /streams/demo/jotb
 var HISTORICAL_QUERY_MOB_HAPPINESS = exports.HISTORICAL_QUERY_MOB_HAPPINESS = 'from historical /streams/demo/jotb/mob_happiness order by timestamp take 10000';
 var QUERY_MOB_LOCATION = exports.QUERY_MOB_LOCATION = 'from /streams/demo/jotb/mob_location';
 var HISTORICAL_QUERY_MOB_LOCATION = exports.HISTORICAL_QUERY_MOB_LOCATION = 'from historical /streams/demo/jotb/mob_location order by timestamp take 10000';
-var ICON_URL = exports.ICON_URL = 'http://localhost:8080/icons/';
+var ICON_URL = exports.ICON_URL = 'http://localhost:8080//valo/src/visualizations_js/icons/';
 var MAP_CONTAINER_CSS_SELECTOR = exports.MAP_CONTAINER_CSS_SELECTOR = '.map-container';
 // Emulates how many people is publishing data to Valo
 var PEOPLE = exports.PEOPLE = 3;
@@ -17499,13 +17499,6 @@ var initMap = function () {
                   averageBars.get(groupAverage.group).updateAvg(groupAverage.average);
                 }
               });
-
-              //@TODO This should be moved to the data_generator, it remains here
-              // just for testing purposes
-              // if(DEBUG){
-              //   Array.from({length: PEOPLE})
-              //     .forEach(() => _readMobileLocationEvents(map));
-              // }
             } catch (error) {
               (0, _utils.printError)(error);
             }
@@ -20298,7 +20291,7 @@ function _getMockObservable() {
   var options = arguments.length > 5 && arguments[5] !== undefined ? arguments[5] : {};
 
   //@TODO set in a setting the start coord point
-  var randomWalk = (0, _random_data_generator.getRandomWalk)({ latitude: 36.689451, longitude: -4.445371 });
+  var randomWalk = (0, _random_data_generator.getRandomWalk)({ latitude: _settings.LA_TERMICA_COORDINATES.lat, longitude: _settings.LA_TERMICA_COORDINATES.lon });
   return _rxLite2.default.Observable.create(function (observer) {
     var emitEvent = function emitEvent() {
       observer.onNext(getPayload(lat, lon, radius, happiness, randomWalk));
