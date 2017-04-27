@@ -16,7 +16,7 @@ namespace io {
 namespace valo {
 namespace iot {
 
-static char g_date_time[] = "2017-04-20T10:52:28.638Z";
+static char g_date_time[] = "0000-00-00T00:00:00.000Z";
 
 /**
  * This class represents a sample of the stream content for the IoT demonstration.
@@ -61,7 +61,10 @@ class SensorSample {
    * Sets the value for the sensor.
    * @param value
    */
-  inline void setValue(const char *value) { value_ = value; }
+  inline void setValue(const char *value) {
+    refresh_date_time();
+    value_ = value;
+  }
 
   /**
    * Serialise the sample into a string for a given contributor identifier.
@@ -71,7 +74,6 @@ class SensorSample {
    * @return the length of the serialised string.
    */
   inline int toString(const char *id, char *output) const {
-    refresh_date_time();
     sprintf(output, "{\"contributor\":\"%s\", \"position\":{\"latitude\":%s,\"longitude\":%s},"
         "\"timestamp\":\"%s\",\"%s\":%s,\"units\":\"%s\"}", id, lon_, lat_, g_date_time, meas_, value_, unit_);
   }
@@ -81,7 +83,7 @@ class SensorSample {
   // ---------------------------------------------------------------------------------------------------------------------
  protected:
   inline void refresh_date_time() const {
-    // TODO: Call Time API to get the time stamp and set it into global g_date_time
+    sprintf(g_date_time, "%04d-%02d-%02dT%02d:%02d:%02d.000Z",year(),month(), day(), hour(),minute(),second());
   }
 
   // ---------------------------------------------------------------------------------------------------------------------

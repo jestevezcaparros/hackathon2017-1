@@ -2,6 +2,8 @@
 // Arduino dependencies
 #include <SPI.h>
 #include <WiFi.h>
+#include <WiFiClient.h>
+#include <Time.h>
 
 // Internal dependencies
 #include <SensorSample.h>
@@ -13,7 +15,11 @@ char ssid[] = "yourNetwork";      //  your network SSID (name)
 char pass[] = "secretPassword";   // your network password
 int status = WL_IDLE_STATUS;
 
+// Initialize the Wifi client library
+//WiFiClient client;
+
 // Contributor
+//Contributor<Print> con(client, "3452352345", "localhost", 8888);
 Contributor<Print> con(Serial, "3452352345", "localhost", 8888);
 
 // Sensors
@@ -55,7 +61,7 @@ void setup() {
   Serial.begin(115200);
 
   // Sets the wifi
-  setupWifi();
+  //setupWifi();
 
   // Set the sensor static data
   temp.setPosition("36.7585406465564", "-4.3971722687");
