@@ -17,11 +17,29 @@ const LOCAL_VALO = {valoHost: "localhost", valoPort: 8888};
 const TENANT = "demo";
 const COLLECTION = "iot_board";
 const STREAM_NAME = "temperature";
-const QUERY = `
+const QUERY_ = `
 from /streams/demo/iot_board/temperature
 group by contributor, timestamp window of 1 minute every 1 second
 select contributor, timestamp, avg(temperature) as Temperature,
 last(position.latitude) as lat, last(position.longitude) as long
+`
+const QUERY__ = `
+from /streams/demo/mobile/happiness
+group by contributor.user.typeOfParticipant
+select typeOfParticipant as TypeOfParticipant, avg( (toDouble(happiness)+1.0) / 2.0) as AverageHappiness
+-- AverageHappiness shouyd be in interval [0.0, 1.0]
+`
+
+const QUERY___ = `
+from /streams/demo/mobile/location
+group by contributor, timestamp window of 1 minute every 1 minute
+select contributor, timestamp, last(position.latitude) as lat, last(position.longitude) as long
+`
+
+const QUERY = `
+from historical /streams/demo/mobile/happiness
+group by contributor, timestamp window of 1 minute every 1 minute
+select contributor, timestamp, last(happiness) as Happiness, last(position.latitude) as lat, last(position.longitude) as long
 `
 
 //
