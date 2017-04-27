@@ -26,17 +26,17 @@ import {
 
 import percentBar from './components/percent_bar'
 
+import {
+  printError,
+  printLog
+} from './utils';
+
 function getNextBarChartContainer() {
   var chartContainer = document.createElement('div');
   chartContainer.classList.add('avg-chart-container');
   document.querySelector('.avg-container').appendChild(chartContainer);
   return chartContainer;
 }
-
-import {
-  printError,
-  printLog
-} from './utils';
 
 /**
 * This creates a google Maps Api v3 instance rendering the map
@@ -61,7 +61,6 @@ async function initMap(){
 
     // read events from Valo mob_happiness stream
     Valo.readMobileHappinesEvents((error, valoPayload) => {
-
       // Manage your error
       if(error) return printError(error);
 
@@ -113,7 +112,7 @@ async function initMap(){
     //   Array.from({length: PEOPLE})
     //     .forEach(() => _readMobileLocationEvents(map));
     // }
-    
+
   } catch (error) {
     printError(error);
   }

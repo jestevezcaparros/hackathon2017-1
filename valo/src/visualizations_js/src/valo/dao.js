@@ -28,10 +28,23 @@ import {
   HOST,
   TENANT,
   QUERY_MOB_HAPPINESS,
+  HISTORICAL_QUERY_MOB_HAPPINESS,
   QUERY_MOB_LOCATION,
+  HISTORICAL_QUERY_MOB_LOCATION,
+  REPLAY,
   DEBUG
 } from '../settings'
 
+import Rx from 'rx-lite';
+
+const SHOULD_REPLAY = REPLAY || window.location.search.includes('replay');
+
+function replayObservabable(observable){
+  return observable.zip(
+    Rx.Observable.interval(500),
+    i => i // Identity function
+  );
+}
 /**
 * It creates a new Valo session and runs the QUERY_MOB_HAPPINESS query
 * Once query is created on Valo it is started and a new SSE connection is opened
@@ -46,13 +59,16 @@ import {
 */
 export async function readMobileHappinesEvents(callback){
  try {
+    let dataBuffer = [];
     const { observable } = await (DEBUG ?
-      runSingleQueryMocked(QUERY_MOB_HAPPINESS) : runSingleQuery(HOST, TENANT, QUERY_MOB_HAPPINESS));
+      runSingleQueryMocked(SHOULD_REPLAY ? HISTORICAL_QUERY_MOB_HAPPINESS : QUERY_MOB_HAPPINESS) :
+      runSingleQuery(HOST, TENANT, SHOULD_REPLAY ? HISTORICAL_QUERY_MOB_HAPPINESS: QUERY_MOB_HAPPINESS));
     if(!callback || !isFunction(callback)) return observable;
-    observable.subscribe(
-      payload => payload && callback(null, payload),
-      error => callback(error),
-      completed => callback());
+    const _observable = SHOULD_REPLAY ? replayObservabable(observable) : observable;
+    _observable.subscribe(
+     payload => payload && callback(null, payload),
+     error => callback(error),
+     completed => callback(null, null));
  } catch (error) {
    printError(error);
    callback(error);
@@ -73,12 +89,16 @@ export async function readMobileHappinesEvents(callback){
 */
 export async function readMobileLocationEvents(callback){
   try {
+     let dataBuffer = [];
      const { observable } = await (DEBUG ?
-       runSingleQueryMocked(QUERY_MOB_LOCATION) : runSingleQuery(HOST, TENANT, QUERY_MOB_LOCATION));
-     observable.subscribe(
-       payload => payload && callback(null, payload),
-       error => callback(error),
-       completed => callback());
+       runSingleQueryMocked(SHOULD_REPLAY ? HISTORICAL_QUERY_MOB_LOCATION : QUERY_MOB_LOCATION) :
+       runSingleQuery(HOST, TENANT, SHOULD_REPLAY ? HISTORICAL_QUERY_MOB_LOCATION : QUERY_MOB_LOCATION));
+    if(!callback || !isFunction(callback)) return observable;
+    const _observable = SHOULD_REPLAY ? replayObservabable(observable) : observable;
+    _observable.subscribe(
+     payload => payload && callback(null, payload),
+     error => callback(error),
+     completed => callback(null, null));
   } catch (error) {
     printError(error);
     callback(error);
