@@ -4,7 +4,8 @@
  *
  * This file declares the Contributor class implementation
  *
- * ITRS Group all rights reserved (c) 2017.
+ * @license MIT
+ * @author David Torelli Rosendo <dtorelli@itrsgroup.com>
  */
 
 #ifndef IO_VALO_IOT_CONTRIBUTOR_H
@@ -27,13 +28,11 @@ namespace iot {
  * data.
  *
  * @code
- * // One stream with temperature and humidity
- * Contributor con("3645634565", "localhost", 8888);
- * con.feed("/streams/iot/team1/temp_humidity", "{\"temp\":%d, \"humidity\":%d}", 30, 40);
- *
- * // One stream with temperature and another with humidity
- * con.feed("/streams/iot/team1/temp", "{\"temp\":%d}", 30);
- * con.feed("/streams/iot/team1/humidity", "{\"humidity\":%d}", 40);
+ * Contributor con(client, "3452352345", "localhost", 8888);
+ * SensorSample temp("/streams/iot/team1/temperature", "temperature", "celsius");
+ * temp.setPosition("36.7585406465564", "-4.3971722687");
+ * temp.setValue("30");
+ * con.feed(temp);
  * @endcode
  */
 class Contributor {

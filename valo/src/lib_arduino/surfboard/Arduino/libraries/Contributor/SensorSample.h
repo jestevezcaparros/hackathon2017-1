@@ -1,9 +1,8 @@
 /**
- * @file SensorSample.h
- *
  * This file declares the Sample class implementation for the sensor stream schema used in JOTB Hackathon.
  *
- * ITRS Group all rights reserved (c) 2017.
+ * @license MIT
+ * @author David Torelli Rosendo <dtorelli@itrsgroup.com>
  */
 
 // External dependencies
@@ -23,7 +22,9 @@ static char g_date_time[] = "2017-04-20T10:52:28.638Z";
  * It encapsulates the construction of the sample payload for a given sensor.
  *
  * @code
- *
+ * SensorSample temp("/streams/iot/team1/temperature", "temperature", "celsius");
+ * temp.setPosition("36.7585406465564", "-4.3971722687");
+ * temp.setValue("30");
  * @endcode
  */
 class SensorSample {

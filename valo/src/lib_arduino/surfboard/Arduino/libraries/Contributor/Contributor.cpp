@@ -4,7 +4,8 @@
  *
  * This file defines the Contributor class implementation.
  *
- * ITRS Group all rights reserved (c) 2017.
+ * @license MIT
+ * @author David Torelli Rosendo <dtorelli@itrsgroup.com>
  */
 
 // External dependencies
