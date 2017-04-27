@@ -20,14 +20,12 @@ To test in a mobile device using Ionic View:
 
 * Create an Ionic account through their [webpage](https://ionicframework.com/)
 * Edit `ionic.config.json` by deleting the value for `app_id` - this will allow generation of a new unique app id in the next step:
-<pre><code>
-{
+<pre><code>{
   "name": "ValoExample",
   "app_id": "9ed6fcee",
   "v2": true,
   "typescript": true
-}
-</code></pre>
+}</code></pre>
 
 * Run `ionic upload` - take note of the generated app id
 * Download the [Ionic View](http://view.ionic.io/) app
