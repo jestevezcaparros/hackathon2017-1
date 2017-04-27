@@ -1,9 +1,10 @@
 /**
- * This file declares the Sample class implementation for the sensor stream schema used in JOTB Hackathon.
- *
- * @license MIT
- * @author David Torelli Rosendo <dtorelli@itrsgroup.com>
- */
+* @file SensorSample.h
+*
+* This file declares the Sample class implementation for the sensor stream schema used in JOTB Hackathon.
+*
+* ITRS Group all rights reserved (c) 2017.
+*/
 
 // External dependencies
 #include <stdio.h>
@@ -22,9 +23,7 @@ static char g_date_time[] = "2017-04-20T10:52:28.638Z";
  * It encapsulates the construction of the sample payload for a given sensor.
  *
  * @code
- * SensorSample temp("/streams/iot/team1/temperature", "temperature", "celsius");
- * temp.setPosition("36.7585406465564", "-4.3971722687");
- * temp.setValue("30");
+ *
  * @endcode
  */
 class SensorSample {
@@ -71,7 +70,7 @@ class SensorSample {
    * @param output the output string containing the serialised data.
    * @return the length of the serialised string.
    */
-  inline int toString(const char *id, char *output) {
+  inline int toString(const char *id, char *output) const {
     refresh_date_time();
     sprintf(output, "{\"contributor\":\"%s\", \"position\":{\"latitude\":%s,\"longitude\":%s},"
         "\"timestamp\":\"%s\",\"%s\":%s,\"units\":\"%s\"}", id, lon_, lat_, g_date_time, meas_, value_, unit_);
@@ -81,7 +80,7 @@ class SensorSample {
   // Protected methods
   // ---------------------------------------------------------------------------------------------------------------------
  protected:
-  inline void refresh_date_time() {
+  inline void refresh_date_time() const {
     // TODO: Call Time API to get the time stamp and set it into global g_date_time
   }
 

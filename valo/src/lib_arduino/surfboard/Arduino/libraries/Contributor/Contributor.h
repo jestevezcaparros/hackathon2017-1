@@ -11,16 +11,31 @@
 #ifndef IO_VALO_IOT_CONTRIBUTOR_H
 #define IO_VALO_IOT_CONTRIBUTOR_H
 
-// Arduino dependencies because of Print interface
-#if ARDUINO >= 100
-#include <Arduino.h>
-#else
-#include <WProgram.h>
-#endif
+// External dependencies
+#include <stdio.h>
+
+// Internal dependencies
+#include "SensorSample.h"
 
 namespace io {
 namespace valo {
 namespace iot {
+
+// ---------------------------------------------------------------------------------------------------------------------
+// ---------------------------------------------------------------------------------------------------------------------
+// [constants]
+// ---------------------------------------------------------------------------------------------------------------------
+// ---------------------------------------------------------------------------------------------------------------------
+
+#define MAX_PAYLOAD_SIZE 256
+
+// ---------------------------------------------------------------------------------------------------------------------
+// ---------------------------------------------------------------------------------------------------------------------
+// [globals]
+// ---------------------------------------------------------------------------------------------------------------------
+// ---------------------------------------------------------------------------------------------------------------------
+
+char json_sample[MAX_PAYLOAD_SIZE];
 
 /**
  * This class represents a contributor inside Valo system.
@@ -28,13 +43,16 @@ namespace iot {
  * data.
  *
  * @code
- * Contributor con(client, "3452352345", "localhost", 8888);
- * SensorSample temp("/streams/iot/team1/temperature", "temperature", "celsius");
- * temp.setPosition("36.7585406465564", "-4.3971722687");
- * temp.setValue("30");
- * con.feed(temp);
+ * // One stream with temperature and humidity
+ * Contributor con("3645634565", "localhost", 8888);
+ * con.feed("/streams/iot/team1/temp_humidity", "{\"temp\":%d, \"humidity\":%d}", 30, 40);
+ *
+ * // One stream with temperature and another with humidity
+ * con.feed("/streams/iot/team1/temp", "{\"temp\":%d}", 30);
+ * con.feed("/streams/iot/team1/humidity", "{\"humidity\":%d}", 40);
  * @endcode
  */
+template<typename T>
 class Contributor {
 
   // ---------------------------------------------------------------------------------------------------------------------
@@ -50,12 +68,13 @@ class Contributor {
    * @param host the host where this contributor is pointing to.
    * @param port the port in the host where this contributor is pointing to.
    */
-  Contributor(const Print &p, const char *id, const char *host, int port);
+  Contributor(const T &p, const char *id, const char *host, int port) : p_(p), id_(id), host_(host), port_(port) {
+  }
 
   /**
    * Destructor.
    */
-  virtual ~Contributor();
+  virtual ~Contributor() {};
 
   /**
    * Feeds the stream with a given sample of data.
@@ -64,7 +83,15 @@ class Contributor {
    * @param sch stream format without considering the contributor schema.
    * @param ... Variable arguments ...
    */
-  void feed(const char *uri, const char *sch, ...);
+  inline void feed(const char *uri, const char *sch, ...) {
+    // Compose the payload from the given schema and values
+    va_list arg_ptr;
+    va_start(arg_ptr, sch);
+    int count = sprintf(json_sample, sch, arg_ptr);
+    // Send the value through the stream
+    send(uri, json_sample, count);
+    va_end(arg_ptr);
+  }
 
   /**
    * Sends the sample information through the stream.
@@ -72,7 +99,11 @@ class Contributor {
    * @param uri the uri of the target stream where data will be feed.
    * @param sample the sample of data to be sent to the stream.
    */
-  void feed(const SensorSample &sample);
+  inline void feed(const SensorSample &sample) {
+    // Stringify the sample and send it through the stream
+    int count = sample.toString(id_, json_sample);
+    send(sample.stream_, json_sample, count);
+  }
 
   /**
    * Feeds the stream with a given sample of data.
@@ -80,13 +111,20 @@ class Contributor {
    * @param uri the uri of the target stream where data will be feed.
    * @param data data to send to the stream.
    */
-  void send(const char *uri, const char *data, int length);
+  inline void send(const char *uri, const char *data, int length)  {
+    p_.print("POST "); p_.print(uri); p_.println(" HTTP/1.1");            // POST URI
+    p_.print("Host:"); p_.print(host_); p_.print(":"); p_.println(port_); // Host header
+    p_.println("Content-Type: application/json");                         // JSON content type
+    p_.print("Content-Length:"); p_.println(length);                      // Content length
+    p_.println();                                                         // End of headers
+    p_.println(data);                                                     // POST message body
+  }
 
   // ---------------------------------------------------------------------------------------------------------------------
   // Public attributes
   // ---------------------------------------------------------------------------------------------------------------------
  public:
-  const Print &p_;
+  const T &p_;
   const char *id_;
 
   // ---------------------------------------------------------------------------------------------------------------------
