@@ -4526,14 +4526,15 @@ var DEBUG = exports.DEBUG = false;
 var HOST = exports.HOST = { valoHost: "localhost", valoPort: 8888 };
 var TENANT = exports.TENANT = 'demo';
 var QUERY_MOB_HAPPINESS = exports.QUERY_MOB_HAPPINESS = 'from /streams/demo/jotb/mob_happiness';
-var HISTORICAL_QUERY_MOB_HAPPINESS = exports.HISTORICAL_QUERY_MOB_HAPPINESS = 'from historical /streams/demo/jotb/mob_happiness take 10000';
+var HISTORICAL_QUERY_MOB_HAPPINESS = exports.HISTORICAL_QUERY_MOB_HAPPINESS = 'from historical /streams/demo/jotb/mob_happiness order by timestamp take 10000';
 var QUERY_MOB_LOCATION = exports.QUERY_MOB_LOCATION = 'from /streams/demo/jotb/mob_location';
-var HISTORICAL_QUERY_MOB_LOCATION = exports.HISTORICAL_QUERY_MOB_LOCATION = 'from historical /streams/demo/jotb/mob_location take 10000';
+var HISTORICAL_QUERY_MOB_LOCATION = exports.HISTORICAL_QUERY_MOB_LOCATION = 'from historical /streams/demo/jotb/mob_location order by timestamp take 10000';
 var ICON_URL = exports.ICON_URL = 'http://localhost:8080/icons/';
 var MAP_CONTAINER_CSS_SELECTOR = exports.MAP_CONTAINER_CSS_SELECTOR = '.map-container';
 // Emulates how many people is publishing data to Valo
 var PEOPLE = exports.PEOPLE = 3;
 // Use Record and Replay Version
+// (to enable it, append the query search ?replay to the server url)
 var REPLAY = exports.REPLAY = false;
 var LA_TERMICA_COORDINATES = exports.LA_TERMICA_COORDINATES = {
     lat: 36.689150,
@@ -4551,8 +4552,19 @@ var LA_TERMICA_COORDINATES = exports.LA_TERMICA_COORDINATES = {
     }
 };
 // export const ITRS_COORDINATES = {
-//     lat: 36.734684,
-//     lon: -4.557648
+//   lat: 36.734948
+//   lon: -4.557490
+//   radius: 80,
+//   bounds:{
+//     sw:{
+//       lat: 36.734823
+//       lon: -4.558412
+//     },
+//     ne: {
+//       lat: 36.734634,
+//       lon: -4.557071
+//     }
+//   }
 // }
 var MAP_OPTIONS = exports.MAP_OPTIONS = {
     zoom: 20,
@@ -4564,7 +4576,28 @@ var MAP_OPTIONS = exports.MAP_OPTIONS = {
     scaleControl: false,
     minZoom: 18,
     maxZoom: 20,
-    center: LA_TERMICA_COORDINATES
+    center: LA_TERMICA_COORDINATES,
+    styles: [{
+        "elementType": "labels",
+        "stylers": [{
+            "visibility": "off"
+        }]
+    }, {
+        "featureType": "all",
+        "elementType": "all",
+
+        "stylers": [{
+            "invert_lightness": true
+        }, {
+            "saturation": -80
+        }, {
+            "lightness": 30
+        }, {
+            "gamma": 0.5
+        }, {
+            "hue": "#3d433a"
+        }]
+    }]
 };
 var AUDITORIO_POLYGON = exports.AUDITORIO_POLYGON = [{ lat: 36.689026, lng: -4.444346 }, { lat: 36.688893, lng: -4.443849 }, { lat: 36.689431, lng: -4.443629 }, { lat: 36.689561, lng: -4.444127 }];
 
@@ -10255,11 +10288,13 @@ module.exports = function(module) {
 */
 var initMap = function () {
   var _ref = _asyncToGenerator(regeneratorRuntime.mark(function _callee() {
-    var map;
+    var averageBars, map;
     return regeneratorRuntime.wrap(function _callee$(_context) {
       while (1) {
         switch (_context.prev = _context.next) {
           case 0:
+            averageBars = new Map();
+
 
             try {
 
@@ -10269,25 +10304,62 @@ var initMap = function () {
                 options: _settings.MAP_OPTIONS
               });
 
+              // read events from Valo mob_happiness stream
 
-              _readMobileHappinesEvents(map);
+              Valo.readMobileHappinesEvents(function (error, valoPayload) {
+                // Manage your error
+                if (error) return (0, _utils.printError)(error);
+
+                // convert Valo event to MapPoint, add it to the map
+                map.addPoints((0, _vos.createHappinessMapPoint)(valoPayload));
+              });
+
+              // read events from Valo mob_location stream
+              Valo.readMobileLocationEvents(function (error, valoPayload) {
+
+                // Manage your error
+                if (error) return (0, _utils.printError)(error);
+
+                // convert Valo event to MapPoint, add it to the map
+                map.addPoints((0, _vos.createLocationMapPoint)(valoPayload));
+              });
+
+              // read average by contributor
+              Valo.readGroupsAvg(function (valoPayload) {
+
+                // create a GroupAverage element
+                var groupAverage = (0, _vos.createGroupAverage)(valoPayload);
+
+                // no bar chart for this group, create a new one
+                if (!averageBars.has(groupAverage.group)) {
+
+                  // create a bar chart
+                  var chart = (0, _percent_bar2.default)(getNextBarChartContainer()).init(groupAverage, {
+                    leftIcon: 'red frown icon',
+                    centerIcon: 'yellow meh icon',
+                    rightIcon: 'green smile icon'
+                  });
+
+                  // store it
+                  averageBars.set(groupAverage.group, chart);
+                } else {
+
+                  // update existing bar chart for current event participant
+                  averageBars.get(groupAverage.group).updateAvg(groupAverage.average);
+                }
+              });
 
               //@TODO This should be moved to the data_generator, it remains here
-              // just for testing purposes. Use PEOPLE setting to add/remove people
-              if (_settings.DEBUG) {
-                Array.from({ length: _settings.PEOPLE }).forEach(function () {
-                  return _readMobileLocationEvents(map);
-                });
-              } else {
-                _readMobileLocationEvents(map);
-              }
-
-              _readGroupsAvg();
+              // just for testing purposes
+              // if(DEBUG){
+              //   Array.from({length: PEOPLE})
+              //     .forEach(() => _readMobileLocationEvents(map));
+              // }
             } catch (error) {
               (0, _utils.printError)(error);
             }
 
-          case 1:
+          case 2:
           case 'end':
             return _context.stop();
         }
@@ -10308,13 +10380,17 @@ var _settings = __webpack_require__(69);
 
 var _dao = __webpack_require__(171);
 
+var Valo = _interopRequireWildcard(_dao);
+
 var _vos = __webpack_require__(172);
 
-var _avg_bar = __webpack_require__(169);
+var _percent_bar = __webpack_require__(387);
 
-var _avg_bar2 = _interopRequireDefault(_avg_bar);
+var _percent_bar2 = _interopRequireDefault(_percent_bar);
 
 var _utils = __webpack_require__(105);
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -10327,61 +10403,11 @@ function getNextBarChartContainer() {
   return chartContainer;
 }
 
-// read events from Valo mob_happiness stream
-function _readMobileHappinesEvents(map) {
-  (0, _dao.readMobileHappinesEvents)(function (error, valoPayload) {
-    // Manage your error
-    if (error) return (0, _utils.printError)(error);
-    // No more data
-    if (!valoPayload) return;
-    // convert Valo event to MapPoint, add it to the map
-    map.addPoints((0, _vos.createHappinessMapPoint)(valoPayload));
-  });
-};
-
-// read events from Valo mob_location stream
-function _readMobileLocationEvents(map) {
-  (0, _dao.readMobileLocationEvents)(function (error, valoPayload) {
-    // Manage your error
-    if (error) return (0, _utils.printError)(error);
-    // No more data
-    if (!valoPayload) return;
-    // convert Valo event to MapPoint, add it to the map
-    map.addPoints((0, _vos.createLocationMapPoint)(valoPayload));
-  });
-}
-
-// read average by contributor
-function _readGroupsAvg() {
-
-  var averageBars = new Map();
-
-  (0, _dao.readGroupsAvg)(function (valoPayload) {
-
-    // create a GroupAverage element
-    var groupAverage = (0, _vos.createGroupAverage)(valoPayload);
-
-    // no bar chart for this group, create a new one
-    if (!averageBars.has(groupAverage.group)) {
-
-      // create a bar chart
-      var chart = (0, _avg_bar2.default)(getNextBarChartContainer()).init(groupAverage);
-
-      // store it
-      averageBars.set(groupAverage.group, chart);
-    } else {
-
-      // update existing bar chart for current event participant
-      averageBars.get(groupAverage.group).updateAvg(groupAverage.average);
-    }
-  });
-}
-
 (function init() {
 
-  // document.querySelector('#top-menu-about').addEventListener('click', function(event) {
-  //   $('.ui.basic.modal.about').modal('show');
-  // });
+  document.querySelector('#top-menu-about').addEventListener('click', function (event) {
+    $('.ui.basic.modal.about').modal('show');
+  });
 
   window.initMap = initMap;
 })();
@@ -12399,7 +12425,7 @@ var setStreamRepository = exports.setStreamRepository = function () {
  *
  * @async
  * @returns null
- * @throws {VALO.NoResponseFromVal | VALO.NotFound | VALO.InternalServerError}
+ * @throws {VALO.NoResponseFromVal | VALO.NotFound | VALO.InternalServerError | VALO.BadGateway }
  */
 
 
@@ -12442,7 +12468,8 @@ var publishEventToStream = exports.publishEventToStream = function () {
 
                         (0, _util.throwValoApiError)(_context4.t0, {
                             404: "NotFound",
-                            500: "InternalServerError"
+                            500: "InternalServerError",
+                            502: "BadGateway"
                         });
 
                     case 10:
@@ -12565,74 +12592,7 @@ Object.defineProperty(exports, 'retryOnConflict', {
 });
 
 /***/ }),
-/* 169 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-/**
- * Utils module
- * @license MIT
- * @author Danilo Rossi <drossi@itrsgroup.com>
- * @author (Each contributor append a line here)
- */
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-exports.default = function (domElement) {
-  // <div class="ui indicating progress">
-  //   <div class="bar"></div>
-  //   <div class="label">Funding</div>
-  // </div>
-  //
-
-  var progressContainer = document.createElement('div');
-  progressContainer.classList.add('ui');
-  progressContainer.classList.add('indicating');
-  progressContainer.classList.add('progress');
-
-  var bar = document.createElement('div');
-  bar.classList.add('bar');
-
-  var label = document.createElement('div');
-  label.classList.add('label');
-
-  progressContainer.appendChild(bar);
-  progressContainer.appendChild(label);
-
-  domElement.appendChild(progressContainer);
-
-  $(progressContainer).progress({
-    percent: 0
-  });
-
-  return {
-    currentAvg: null,
-    group: null,
-    init: function init(groupAverage) {
-      this.currentAverage = groupAverage.average;
-      this.group = groupAverage.group;
-
-      label.textContent = this.group;
-      //domElement.textContent = `Group: ${this.group} > ${this.currentAverage}`;
-      $(progressContainer).progress({
-        percent: this.currentAverage
-      });
-      return this;
-    },
-    updateAvg: function updateAvg(avg) {
-      this.currentAverage = avg;
-      $(progressContainer).progress({
-        percent: this.currentAverage
-      });
-      return this;
-    }
-  };
-};
-
-/***/ }),
+/* 169 */,
 /* 170 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -12905,12 +12865,12 @@ var readGroupsAvg = exports.readGroupsAvg = function () {
               return Math.floor(Math.random() * (high - low + 1) + low);
             };
 
-            groups = ['Group 1', 'Group 2', 'Group 3', 'Group 4'];
+            groups = ['Group 1 Happiness', 'Group 2 Happiness', 'Group 3 Happiness', 'Group 4 Happiness'];
 
 
             setInterval(function () {
               var payload = {
-                "avg": getRandomHappiness(-1, 1),
+                "avg": getRandomInteger(0, 100), //getRandomHappiness(-1, 1),
                 "participant": groups[getRandomInteger(0, groups.length - 1)]
               };
               console.log('payload', payload);
@@ -12954,7 +12914,7 @@ function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, a
 var SHOULD_REPLAY = _settings.REPLAY || window.location.search.includes('replay');
 
 function replayObservabable(observable) {
-  return observable.zip(_rxLite2.default.Observable.interval(1000), function (i) {
+  return observable.zip(_rxLite2.default.Observable.interval(500), function (i) {
     return i;
   } // Identity function
   );
@@ -13002,8 +12962,7 @@ var MapPoint = function MapPoint(latitude, longitude, icon) {
 var GroupAverage = function GroupAverage(average, group) {
   _classCallCheck(this, GroupAverage);
 
-  this.scale = d3.scaleLinear().domain([-1, 1]).range([0, 100]);
-  this.average = this.scale(average || -1);
+  this.average = average;
   this.group = group;
 };
 
@@ -45497,6 +45456,124 @@ function runSingleQueryMocked(query, options) {
 }.call(this));
 
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(11), __webpack_require__(145)(module)))
+
+/***/ }),
+/* 387 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+/**
+ * Utils module
+ * @license MIT
+ * @author Danilo Rossi <drossi@itrsgroup.com>
+ * @author (Each contributor append a line here)
+ */
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+exports.default = function (domElement) {
+  // <div class="ui indicating progress">
+  //   <div class="bar"></div>
+  //   <div class="label">Funding</div>
+  // </div>
+  //
+
+  var progressContainer = document.createElement('div');
+  progressContainer.classList.add('ui');
+  progressContainer.classList.add('indicating');
+  progressContainer.classList.add('progress');
+
+  var iconsContainer = document.createElement('div');
+  iconsContainer.style.textAlign = 'center';
+  iconsContainer.style.position = 'absolute';
+  iconsContainer.style.zIndex = '2';
+  // iconsContainer.style.width = '100%';
+  iconsContainer.style.height = '100%';
+  iconsContainer.style.top = '-20px'; //'4px';
+  iconsContainer.style.left = '4px';
+  iconsContainer.style.right = '4px';
+
+  var bar = document.createElement('div');
+  bar.classList.add('bar');
+
+  var label = document.createElement('div');
+  label.classList.add('label');
+
+  progressContainer.appendChild(iconsContainer);
+  progressContainer.appendChild(bar);
+  progressContainer.appendChild(label);
+
+  domElement.appendChild(progressContainer);
+
+  $(progressContainer).progress({
+    percent: 0
+  });
+
+  return {
+    currentAvg: null,
+    group: null,
+    init: function init(groupAverage, _ref) {
+      var _ref$leftIcon = _ref.leftIcon,
+          leftIcon = _ref$leftIcon === undefined ? '' : _ref$leftIcon,
+          _ref$centerIcon = _ref.centerIcon,
+          centerIcon = _ref$centerIcon === undefined ? '' : _ref$centerIcon,
+          _ref$rightIcon = _ref.rightIcon,
+          rightIcon = _ref$rightIcon === undefined ? '' : _ref$rightIcon;
+
+
+      this.currentAverage = groupAverage.average;
+      this.group = groupAverage.group;
+      label.textContent = this.group;
+
+      var icons = {
+        iLeft: leftIcon || '',
+        iCenter: centerIcon || '',
+        iRight: rightIcon || ''
+      };
+
+      if (icons.iLeft) {
+        var left = document.createElement('i');
+        icons.iLeft.split(' ').forEach(function (cssClass) {
+          left.classList.add(cssClass);
+        });
+        left.style.float = 'left';
+        iconsContainer.appendChild(left);
+      }
+
+      if (icons.iCenter) {
+        var center = document.createElement('i');
+        icons.iCenter.split(' ').forEach(function (cssClass) {
+          center.classList.add(cssClass);
+        });
+        iconsContainer.appendChild(center);
+      }
+
+      if (icons.iRight) {
+        var right = document.createElement('i');
+        icons.iRight.split(' ').forEach(function (cssClass) {
+          right.classList.add(cssClass);
+        });
+        right.style.float = 'right';
+        iconsContainer.appendChild(right);
+      }
+
+      $(progressContainer).progress({
+        percent: this.currentAverage
+      });
+      return this;
+    },
+    updateAvg: function updateAvg(avg) {
+      this.currentAverage = avg;
+      $(progressContainer).progress({
+        percent: this.currentAverage
+      });
+      return this;
+    }
+  };
+};
 
 /***/ })
 /******/ ]);

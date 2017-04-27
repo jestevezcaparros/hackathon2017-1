@@ -19,7 +19,8 @@
                     "longitude" : {"type": "double"}
                 }
             },
-            "temperature" : {"type": "double"}
+            "temperature" : {"type": "double"},
+            "units" : {"type": "string"}
          }
       }
    }

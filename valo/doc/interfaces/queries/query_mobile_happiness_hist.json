@@ -1,0 +1,29 @@
+{
+    "config": {
+        "key": [
+            "contributor",
+            "timestamp"
+        ]
+    },
+    "topDef": {
+        "type": "record",
+        "properties": {
+            "contributor": {
+                "type": "contributor",
+                "definition": "mobile_user"
+            },
+            "timestamp": {
+                "type": "datetime"
+            },
+            "Happiness": {
+                "type": "int"
+            },
+            "long": {
+                "type": "double"
+            },
+            "lat": {
+                "type": "double"
+            }
+        }
+    }
+}

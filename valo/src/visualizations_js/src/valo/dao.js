@@ -41,7 +41,7 @@ const SHOULD_REPLAY = REPLAY || window.location.search.includes('replay');
 
 function replayObservabable(observable){
   return observable.zip(
-    Rx.Observable.interval(1000),
+    Rx.Observable.interval(500),
     i => i // Identity function
   );
 }
@@ -93,7 +93,7 @@ export async function readMobileLocationEvents(callback){
      const { observable } = await (DEBUG ?
        runSingleQueryMocked(SHOULD_REPLAY ? HISTORICAL_QUERY_MOB_LOCATION : QUERY_MOB_LOCATION) :
        runSingleQuery(HOST, TENANT, SHOULD_REPLAY ? HISTORICAL_QUERY_MOB_LOCATION : QUERY_MOB_LOCATION));
-    if(!callback || !isFunction(callback)) return observable; 
+    if(!callback || !isFunction(callback)) return observable;
     const _observable = SHOULD_REPLAY ? replayObservabable(observable) : observable;
     _observable.subscribe(
      payload => payload && callback(null, payload),
@@ -123,11 +123,11 @@ export async function readGroupsAvg(callback){
   function getRandomHappiness(low, high) {
     return (Math.random() * (high - low) + low).toFixed(4)
   }
-  const groups = ['Group 1', 'Group 2', 'Group 3', 'Group 4']
+  const groups = ['Group 1 Happiness', 'Group 2 Happiness', 'Group 3 Happiness', 'Group 4 Happiness']
 
    setInterval(() => {
      const payload = {
-       "avg": getRandomHappiness(-1, 1),
+       "avg": getRandomInteger(0, 100), //getRandomHappiness(-1, 1),
        "participant": groups[getRandomInteger(0, groups.length - 1)],
      };
      console.log('payload', payload);

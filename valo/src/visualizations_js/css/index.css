@@ -14,17 +14,21 @@ html, body {
   z-index: 1;
   position: absolute;
   right: 5px;
-  top: 5px;
+  top: 45px;
   width: 200px;
-  padding: 0 20px;
+  padding: 20px;
   background-color: rgba(255, 255, 255, 1);
   border-radius: 10px;
 }
 
 .avg-container .avg-chart-container {
-  padding-bottom: 20px;
+  padding-top: 20px;
 }
-/*.ui.menu {
+.avg-container .avg-chart-container:not(:first-child) {
+  padding-top: 40px;
+}
+
+.ui.menu {
   height: 40px;
 }
 
@@ -34,7 +38,7 @@ html, body {
 .ui.menu .ui.container .header.item img.logo {
   height: 80%;
   width: 80%;
-}*/
+}
 
 .overlay {
   pointer-events: none;

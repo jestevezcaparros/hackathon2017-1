@@ -1,0 +1,18 @@
+{
+    "config": {
+        "key": [
+            "TypeOfParticipant"
+        ]
+    },
+    "topDef": {
+        "type": "record",
+        "properties": {
+            "TypeOfParticipant": {
+                "type": "string"
+            },
+            "AverageHappiness": {
+                "type": "double"
+            }
+        }
+    }
+}

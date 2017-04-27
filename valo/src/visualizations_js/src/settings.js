@@ -11,14 +11,15 @@ export const DEBUG = false;
 export const HOST = {valoHost: "localhost", valoPort: 8888};
 export const TENANT = 'demo';
 export const QUERY_MOB_HAPPINESS = 'from /streams/demo/jotb/mob_happiness';
-export const HISTORICAL_QUERY_MOB_HAPPINESS = 'from historical /streams/demo/jotb/mob_happiness take 10000';
+export const HISTORICAL_QUERY_MOB_HAPPINESS = 'from historical /streams/demo/jotb/mob_happiness order by timestamp take 10000';
 export const QUERY_MOB_LOCATION = 'from /streams/demo/jotb/mob_location';
-export const HISTORICAL_QUERY_MOB_LOCATION = 'from historical /streams/demo/jotb/mob_location take 10000';
+export const HISTORICAL_QUERY_MOB_LOCATION = 'from historical /streams/demo/jotb/mob_location order by timestamp take 10000';
 export const ICON_URL = 'http://localhost:8080/icons/'
 export const MAP_CONTAINER_CSS_SELECTOR = '.map-container';
 // Emulates how many people is publishing data to Valo
 export const PEOPLE = 3;
 // Use Record and Replay Version
+// (to enable it, append the query search ?replay to the server url)
 export const REPLAY = false;
 export const LA_TERMICA_COORDINATES = {
   lat: 36.689150,
@@ -36,8 +37,19 @@ export const LA_TERMICA_COORDINATES = {
   }
 };
 // export const ITRS_COORDINATES = {
-//     lat: 36.734684,
-//     lon: -4.557648
+//   lat: 36.734948
+//   lon: -4.557490
+//   radius: 80,
+//   bounds:{
+//     sw:{
+//       lat: 36.734823
+//       lon: -4.558412
+//     },
+//     ne: {
+//       lat: 36.734634,
+//       lon: -4.557071
+//     }
+//   }
 // }
 export const MAP_OPTIONS = {
     zoom: 20,
@@ -50,39 +62,39 @@ export const MAP_OPTIONS = {
     minZoom: 18,
     maxZoom: 20,
     center: LA_TERMICA_COORDINATES,
-//     styles: [
-//     {
-//         "elementType": "labels",
-//         "stylers": [
-//             {
-//                 "visibility": "off"
-//             }
-//         ]
-//     },
-//     {
-//         "featureType": "all",
-//         "elementType": "all",
-//
-//         "stylers": [
-//             {
-//                 "invert_lightness": true
-//             },
-//             {
-//                 "saturation": -80
-//             },
-//             {
-//                 "lightness": 30
-//             },
-//             {
-//                 "gamma": 0.5
-//             },
-//             {
-//                 "hue": "#3d433a"
-//             }
-//
-//         ]
-//     }
-// ]
+    styles: [
+    {
+        "elementType": "labels",
+        "stylers": [
+            {
+                "visibility": "off"
+            }
+        ]
+    },
+    {
+        "featureType": "all",
+        "elementType": "all",
+
+        "stylers": [
+            {
+                "invert_lightness": true
+            },
+            {
+                "saturation": -80
+            },
+            {
+                "lightness": 30
+            },
+            {
+                "gamma": 0.5
+            },
+            {
+                "hue": "#3d433a"
+            }
+
+        ]
+    }
+]
 };
 export const AUDITORIO_POLYGON = [
     {lat: 36.689026, lng: -4.444346},
