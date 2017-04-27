@@ -12,10 +12,10 @@ Decompress the file in your user folder and follow the instructions of the insta
 ## Install the USB to Serial driver
 Please, install the driver (regarding your OS) to communicate your computer with the Surfboard.
 
-| OS Version | File | Link |
-|------------|------|------|
-|Windows     |      |      |
-|Linux       |      |      |
+| OS Version | File | Link | Notes |
+|------------|------|------|-------|
+|Windows     | [driver](http://sparks.gogo.co.nz/assets/_site_/downloads/CH34x_Install_Windows_v3_4.zip) | [instructions](http://sparks.gogo.co.nz/ch340.html) |       |
+|Linux       | [driver](http://sparks.gogo.co.nz/assets/_site_/downloads/CH340_LINUX.zip) | [instructions](http://sparks.gogo.co.nz/ch340.html) | Should be provided within your Linux kernel distribution |
 |OS X Sierra |[driver](CH34x_Install/OS\ X/CH34x_Install_V1.3.pkg)|[instructions](http://www.mblock.cc/posts/run-makeblock-ch340-ch341-on-mac-os-sierra)|
 |OS X (older)|[driver](CH34x_Install/OS\ X/CH34x_Install.pkg)|[instructions](CH34x_Install/OS\ X/ReadMe.pdf)|
 
@@ -81,7 +81,7 @@ Wifi and uploading functionality are not available at the same time (see picture
 ## Hello IoT!
 Let's move on and write our first IoT application.
 
-Create a new Arduino project. You will see that a page appears showing two methods: setup and loop.
+Create a new Arduino project. You will see that a page appears showing two methods: `setup` and `loop`.
 
 ### Setup
 In the setup method you have to define the configuration ports of the Surfboard considering the devices (Wifi, Serial, ...) / GPIOs (Leds, ...) you need for your program.
@@ -92,10 +92,12 @@ void setup() {
   Serial.begin(9600);
 }
 ```
+> This will be only initialised once after every Arduino restart.
 
 ### Main loop
-In the main loop you write the logic of your application. It is easier if you model your application based on events as a state machine to facilitate the handling of concurrence in absence of multithreading.
-> Note: Think that most embedded systems does not multiprocessing capabilities.
+In the main loop you write the logic of your application.
+The main code will be invoking this loop in an infinite loop. You can think of events programming oriented where the loop consume messages from the main event queue thus facilitating the handling of concurrence in the absence of multithreading on this embedded devices.
+> Note: Think that most embedded systems do not have operating systems neither multiprocessing capabilities.
 
 ```
 void loop() {
@@ -104,6 +106,8 @@ void loop() {
   delay(1000);
 }
 ```
+
+In this example, the `loop` method will be invoked every second.
 
 ### Debugging
 Println is the way to debug in your Arduino IDE. You can show a terminal to debug your first hello world application.
