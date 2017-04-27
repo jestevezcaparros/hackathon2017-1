@@ -9,7 +9,7 @@
     "premake:viz": "npm install",
     "make:viz": "webpack --config valo/src/visualizations_js/webpack.config.js",
     "prelaunch:viz": "npm install",
-    "launch:viz": "http-server valo/src/visualizations_js -s -o -c-1"
+    "launch:viz": "http-server . -s -o valo/src/visualizations_js/index.html -c-1"
   },
   "author": "",
   "license": "",
@@ -31,6 +31,8 @@
     "browserify": "^14.3.0",
     "d3": "^4.8.0",
     "http-server": "^0.9.0",
+    "jquery": "^3.2.1",
+    "semantic-ui-css": "^2.2.10",
     "webpack": "^2.4.1"
   }
 }
