@@ -68,7 +68,7 @@ class Contributor {
    * @param host the host where this contributor is pointing to.
    * @param port the port in the host where this contributor is pointing to.
    */
-  Contributor(const T &p, const char *id, const char *host, int port) : p_(p), id_(id), host_(host), port_(port) {
+  Contributor(T &p, const char *id, const char *host, int port) : p_(p), id_(id), host_(host), port_(port) {
   }
 
   /**
@@ -111,7 +111,7 @@ class Contributor {
    * @param uri the uri of the target stream where data will be feed.
    * @param data data to send to the stream.
    */
-  inline void send(const char *uri, const char *data, int length)  {
+  inline void send(const char *uri, const char *data, int length) {
     p_.print("POST "); p_.print(uri); p_.println(" HTTP/1.1");            // POST URI
     p_.print("Host:"); p_.print(host_); p_.print(":"); p_.println(port_); // Host header
     p_.println("Content-Type: application/json");                         // JSON content type
@@ -124,7 +124,7 @@ class Contributor {
   // Public attributes
   // ---------------------------------------------------------------------------------------------------------------------
  public:
-  const T &p_;
+  T &p_;
   const char *id_;
 
   // ---------------------------------------------------------------------------------------------------------------------
