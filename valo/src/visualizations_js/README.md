@@ -3,6 +3,8 @@
 
 This project collects geolocation points from Valo which are emitted from the mobile [app](https://github.com/ITRS-Group/hackathon2017/tree/master/valo/src/mobile_app_js/ValoExample) and then renders on an interactive real time map. Using this experimental app will allow you to visualize and track attendees as they move across "La Termica" zone.
 
+![](https://github.com/ITRS-Group/hackathon2017/blob/ref/viz/valo/src/visualizations_js/preview.gif)
+
 # What do I need ?
 
 Before you start, just make sure your local setup includes [node](https://nodejs.org/en/) (version >=6) and your favorite IDE/editor. That should be enough, so easy!
