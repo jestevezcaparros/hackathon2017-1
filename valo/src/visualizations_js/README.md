@@ -1,7 +1,7 @@
 
-# Why would you like to try it out ?
+# Why should you try it out ?
 
-This project collects geolocation points from Valo which are emitted from the mobile [app](https://github.com/ITRS-Group/hackathon2017/tree/master/valo/src/mobile_app_js/ValoExample) and then renders on an interactive real time map. Using this experimental app will allow you to visualize and track attendees as they move across "La Termica" zone.
+This project collects geolocation points from Valo which are emitted from the mobile [app](https://github.com/ITRS-Group/hackathon2017/tree/master/valo/src/mobile_app_js/ValoExample) and then renders them on an interactive real time map. Using this experimental app will allow you to visualize and track attendees as they move across "La Termica" zone.
 
 ![](https://github.com/ITRS-Group/hackathon2017/blob/ref/viz/valo/src/visualizations_js/preview.gif)
 
