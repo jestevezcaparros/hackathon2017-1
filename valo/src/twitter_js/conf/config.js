@@ -427,7 +427,8 @@ const valoSchemas = {
                      "type":"string"
                   },
                   "created_at":{
-                     "type":"datetime"
+                     "type":"datetime",
+                     "annotations":["urn:itrs:default-timestamp"]
                   },
                   "in_reply_to_status_id_str":{
                      "type":"string"
@@ -752,7 +753,8 @@ const valoSchemas = {
                      "type":"string"
                   },
                   "created_at":{
-                     "type":"datetime"
+                     "type":"datetime",
+                     "annotations":["urn:itrs:default-timestamp"]
                   },
                   "in_reply_to_status_id_str":{
                      "type":"string"
