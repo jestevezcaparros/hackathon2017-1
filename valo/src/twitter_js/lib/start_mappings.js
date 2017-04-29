@@ -69,7 +69,6 @@ async function startMapping(mapping) {
         valoContributorId
     } = mapping;
 
-    console.log(mapping, "----");
     ////////////////////////////////////////////////////////////////////////////
     // Create valo stream if needed
     ////////////////////////////////////////////////////////////////////////////
@@ -154,6 +153,8 @@ async function startMapping(mapping) {
         observable.subscribe(
             async evt => {
                 try {
+                    // Show something in console
+                    console.log(`\nA TWEET from @${evt.user.screen_name} :\n ${evt.text}`);
                     //
                     // Update (mutate) created_at fields in tweet
                     //
