@@ -1,0 +1,297 @@
+{
+    "statuses": [
+        {
+            "created_at": "Fri Apr 21 15:50:18 +0000 2017",
+            "id": 855448618232418304,
+            "id_str": "855448618232418304",
+            "text": "RT @danilorossi_me: Preparing the frontend code for the #JOTB17 #hackathon with the @valo_io team: it's going to be fun \ud83d\ude0e #HackathonJOTB2017",
+            "truncated": false,
+            "entities": {
+                "hashtags": [
+                    {
+                        "text": "JOTB17",
+                        "indices": [
+                            56,
+                            63
+                        ]
+                    },
+                    {
+                        "text": "hackathon",
+                        "indices": [
+                            64,
+                            74
+                        ]
+                    },
+                    {
+                        "text": "HackathonJOTB2017",
+                        "indices": [
+                            122,
+                            140
+                        ]
+                    }
+                ],
+                "symbols": [],
+                "user_mentions": [
+                    {
+                        "screen_name": "danilorossi_me",
+                        "name": "Danilo Rossi",
+                        "id": 397849829,
+                        "id_str": "397849829",
+                        "indices": [
+                            3,
+                            18
+                        ]
+                    },
+                    {
+                        "screen_name": "valo_io",
+                        "name": "Valo_io",
+                        "id": 3319167250,
+                        "id_str": "3319167250",
+                        "indices": [
+                            84,
+                            92
+                        ]
+                    }
+                ],
+                "urls": []
+            },
+            "metadata": {
+                "iso_language_code": "en",
+                "result_type": "recent"
+            },
+            "source": "<a href=\"http://twitter.com\" rel=\"nofollow\">Twitter Web Client</a>",
+            "in_reply_to_status_id": null,
+            "in_reply_to_status_id_str": null,
+            "in_reply_to_user_id": null,
+            "in_reply_to_user_id_str": null,
+            "in_reply_to_screen_name": null,
+            "user": {
+                "id": 2456854778,
+                "id_str": "2456854778",
+                "name": "\u00c1lvaro Santamar\u00eda",
+                "screen_name": "DoFideas",
+                "location": "M\u00e1laga, Mediterranean Sea",
+                "description": "@valo_io team | T-cracia https://t.co/dKZ5e4qRwh | Coding ideas https://t.co/fa0YpHdbPJ | @DataBeersMLG with  @Yllo @lsybarguen @cibermarikiya",
+                "url": "http://t.co/XfckSv0trY",
+                "entities": {
+                    "url": {
+                        "urls": [
+                            {
+                                "url": "http://t.co/XfckSv0trY",
+                                "expanded_url": "http://t-cracia.info",
+                                "display_url": "t-cracia.info",
+                                "indices": [
+                                    0,
+                                    22
+                                ]
+                            }
+                        ]
+                    },
+                    "description": {
+                        "urls": [
+                            {
+                                "url": "https://t.co/dKZ5e4qRwh",
+                                "expanded_url": "http://t-cracia.com",
+                                "display_url": "t-cracia.com",
+                                "indices": [
+                                    25,
+                                    48
+                                ]
+                            },
+                            {
+                                "url": "https://t.co/fa0YpHdbPJ",
+                                "expanded_url": "http://dofideas.com",
+                                "display_url": "dofideas.com",
+                                "indices": [
+                                    64,
+                                    87
+                                ]
+                            }
+                        ]
+                    }
+                },
+                "protected": false,
+                "followers_count": 246,
+                "friends_count": 551,
+                "listed_count": 49,
+                "created_at": "Mon Apr 21 16:44:35 +0000 2014",
+                "favourites_count": 319,
+                "utc_offset": null,
+                "time_zone": null,
+                "geo_enabled": false,
+                "verified": false,
+                "statuses_count": 514,
+                "lang": "es",
+                "contributors_enabled": false,
+                "is_translator": false,
+                "is_translation_enabled": false,
+                "profile_background_color": "FFFFFF",
+                "profile_background_image_url": "http://pbs.twimg.com/profile_background_images/458289192099774464/feLqLbWq.png",
+                "profile_background_image_url_https": "https://pbs.twimg.com/profile_background_images/458289192099774464/feLqLbWq.png",
+                "profile_background_tile": false,
+                "profile_image_url": "http://pbs.twimg.com/profile_images/517055786506141696/ZYLpy1Rn_normal.jpeg",
+                "profile_image_url_https": "https://pbs.twimg.com/profile_images/517055786506141696/ZYLpy1Rn_normal.jpeg",
+                "profile_banner_url": "https://pbs.twimg.com/profile_banners/2456854778/1398762243",
+                "profile_link_color": "001994",
+                "profile_sidebar_border_color": "000000",
+                "profile_sidebar_fill_color": "DDEEF6",
+                "profile_text_color": "333333",
+                "profile_use_background_image": false,
+                "has_extended_profile": false,
+                "default_profile": false,
+                "default_profile_image": false,
+                "following": false,
+                "follow_request_sent": false,
+                "notifications": false,
+                "translator_type": "none"
+            },
+            "geo": null,
+            "coordinates": null,
+            "place": null,
+            "contributors": null,
+            "retweeted_status": {
+                "created_at": "Fri Apr 21 15:48:39 +0000 2017",
+                "id": 855448202962755584,
+                "id_str": "855448202962755584",
+                "text": "Preparing the frontend code for the #JOTB17 #hackathon with the @valo_io team: it's going to be fun \ud83d\ude0e #HackathonJOTB2017",
+                "truncated": false,
+                "entities": {
+                    "hashtags": [
+                        {
+                            "text": "JOTB17",
+                            "indices": [
+                                36,
+                                43
+                            ]
+                        },
+                        {
+                            "text": "hackathon",
+                            "indices": [
+                                44,
+                                54
+                            ]
+                        },
+                        {
+                            "text": "HackathonJOTB2017",
+                            "indices": [
+                                102,
+                                120
+                            ]
+                        }
+                    ],
+                    "symbols": [],
+                    "user_mentions": [
+                        {
+                            "screen_name": "valo_io",
+                            "name": "Valo_io",
+                            "id": 3319167250,
+                            "id_str": "3319167250",
+                            "indices": [
+                                64,
+                                72
+                            ]
+                        }
+                    ],
+                    "urls": []
+                },
+                "metadata": {
+                    "iso_language_code": "en",
+                    "result_type": "recent"
+                },
+                "source": "<a href=\"http://twitter.com\" rel=\"nofollow\">Twitter Web Client</a>",
+                "in_reply_to_status_id": null,
+                "in_reply_to_status_id_str": null,
+                "in_reply_to_user_id": null,
+                "in_reply_to_user_id_str": null,
+                "in_reply_to_screen_name": null,
+                "user": {
+                    "id": 397849829,
+                    "id_str": "397849829",
+                    "name": "Danilo Rossi",
+                    "screen_name": "danilorossi_me",
+                    "location": "Rome, Madrid, London & M\u00e1laga",
+                    "description": "Frontend Tech Lead at @valo_io",
+                    "url": "https://t.co/eS9FygE8Ft",
+                    "entities": {
+                        "url": {
+                            "urls": [
+                                {
+                                    "url": "https://t.co/eS9FygE8Ft",
+                                    "expanded_url": "http://danilorossi.me",
+                                    "display_url": "danilorossi.me",
+                                    "indices": [
+                                        0,
+                                        23
+                                    ]
+                                }
+                            ]
+                        },
+                        "description": {
+                            "urls": []
+                        }
+                    },
+                    "protected": false,
+                    "followers_count": 104,
+                    "friends_count": 214,
+                    "listed_count": 23,
+                    "created_at": "Tue Oct 25 07:25:45 +0000 2011",
+                    "favourites_count": 110,
+                    "utc_offset": 7200,
+                    "time_zone": "Rome",
+                    "geo_enabled": true,
+                    "verified": false,
+                    "statuses_count": 136,
+                    "lang": "es",
+                    "contributors_enabled": false,
+                    "is_translator": false,
+                    "is_translation_enabled": true,
+                    "profile_background_color": "000000",
+                    "profile_background_image_url": "http://abs.twimg.com/images/themes/theme1/bg.png",
+                    "profile_background_image_url_https": "https://abs.twimg.com/images/themes/theme1/bg.png",
+                    "profile_background_tile": false,
+                    "profile_image_url": "http://pbs.twimg.com/profile_images/718492102632595456/YG3Gu_ZW_normal.jpg",
+                    "profile_image_url_https": "https://pbs.twimg.com/profile_images/718492102632595456/YG3Gu_ZW_normal.jpg",
+                    "profile_banner_url": "https://pbs.twimg.com/profile_banners/397849829/1427445817",
+                    "profile_link_color": "1B95E0",
+                    "profile_sidebar_border_color": "000000",
+                    "profile_sidebar_fill_color": "000000",
+                    "profile_text_color": "000000",
+                    "profile_use_background_image": false,
+                    "has_extended_profile": true,
+                    "default_profile": false,
+                    "default_profile_image": false,
+                    "following": true,
+                    "follow_request_sent": false,
+                    "notifications": false,
+                    "translator_type": "none"
+                },
+                "geo": null,
+                "coordinates": null,
+                "place": null,
+                "contributors": null,
+                "is_quote_status": false,
+                "retweet_count": 9,
+                "favorite_count": 11,
+                "favorited": false,
+                "retweeted": false,
+                "lang": "en"
+            },
+            "is_quote_status": false,
+            "retweet_count": 9,
+            "favorite_count": 0,
+            "favorited": false,
+            "retweeted": false,
+            "lang": "en"
+        }
+    ],
+    "search_metadata": {
+        "completed_in": 0.038,
+        "max_id": 855448618232418304,
+        "max_id_str": "855448618232418304",
+        "query": "dofideas+hackathon",
+        "refresh_url": "?since_id=855448618232418304&q=dofideas%20hackathon&include_entities=1",
+        "count": 15,
+        "since_id": 0,
+        "since_id_str": "0"
+    }
+}
