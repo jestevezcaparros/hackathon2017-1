@@ -22,6 +22,7 @@ const valoClientConfigs = {
 
 const twitterClientConfigs = {
     twitter1 : {
+        // This config assumes the app's keys are in env variables
         consumer_key: process.env.TWITTER_CONSUMER_KEY,
         consumer_secret: process.env.TWITTER_CONSUMER_SECRET,
         access_token_key: process.env.TWITTER_ACCESS_TOKEN_KEY,
