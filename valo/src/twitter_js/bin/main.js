@@ -15,7 +15,7 @@ import startMappings from '../lib/start_mappings';
 async function main() {
 
     console.log(`*******************************************************************************`);
-    console.log(`*  Twitter Injector Starting at ${Date()} ...`);
+    console.log(`*  Twitter Injector starting at ${Date()} ...`);
     console.log(`*  Twitter Injector injects tweets in Valo.`);
     console.log(`*  (help) You can pass your file config name as a parameter.`);
     console.log(`*  (help) Otherwise, the default one in conf/config.json will be used`);
@@ -41,6 +41,7 @@ async function main() {
         if (!mappings) throw {msg: "Missing mappings in configuration"};
     } catch(e) {
         console.error("Error reading configuration", e);
+        throw e;
     }
 
     ////////////////////////////////////////////////////////////////////////////
@@ -50,6 +51,7 @@ async function main() {
         await startMappings(mappings);
     } catch(e) {
         console.error("Error starting mappings\n", e);
+        throw e;
     }
 }
 
