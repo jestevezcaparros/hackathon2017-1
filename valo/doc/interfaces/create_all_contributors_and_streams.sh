@@ -13,6 +13,7 @@ curl http://localhost:8888/contributors/demo/realsense -X PUT --data @./contribu
 #
 # Register contributor instances
 #
+curl http://localhost:8888/contributors/demo/iot_board/instances/surfboard205 -X PUT --data @./contributors/instances/instance_iot_surfboard205.json -H "Content-Type: application/json"
 curl http://localhost:8888/contributors/demo/iot_board/instances/board-00001 -X PUT --data @./contributors/instances/instance_iot_board_01.json -H "Content-Type: application/json"
 curl http://localhost:8888/contributors/demo/iot_board/instances/board-00002 -X PUT --data @./contributors/instances/instance_iot_board_02.json -H "Content-Type: application/json"
 curl http://localhost:8888/contributors/demo/mobile_user/instances/mobile-user-00001 -X PUT --data @./contributors/instances/instance_mobile_user_01.json -H "Content-Type: application/json"
