@@ -185,10 +185,7 @@ async function startMapping(mapping) {
             () => {
                 console.log(">>>> Twitter Stream Closed");
             } 
-
         );
-   
-
 
     } catch (e) {
         throw e;
