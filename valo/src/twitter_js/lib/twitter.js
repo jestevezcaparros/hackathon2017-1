@@ -71,6 +71,9 @@ function getStreamingStatusesFilter(
             );
             stream.on('data', event =>  {
                 observer.onNext(event);
+                // TODO: Be aware that not only tweets arrive here as events
+                // But other type of events (status deletion, etc)
+                // See: https://dev.twitter.com/streaming/overview/messages-types
             });
  
             stream.on('error', error => {
