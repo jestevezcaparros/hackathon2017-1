@@ -18,7 +18,8 @@
     "eventsource": "^0.2.2",
     "lodash": "^4.17.4",
     "mqtt": "^2.5.0",
-    "rx-lite": "^4.0.8"
+    "rx-lite": "^4.0.8",
+    "twitter": "^1.7.0"
   },
   "devDependencies": {
     "babel-cli": "^6.24.0",

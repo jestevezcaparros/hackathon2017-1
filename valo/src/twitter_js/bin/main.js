@@ -1,11 +1,6 @@
 "use strict";
 /**
- * Transport to Valo injector
- *
- * Main file for injecting data from transports (queue brokers, etc) into Valo
- *   There can be:
- *     - Multiple instances of Valo
- *     - Multiple innstances of different types of supported transports
+ * Twitter to Valo injector
  *
  * @license MIT
  * @author Álvaro Santamaría Herrero <asantamaria@itrsgroup.com>
@@ -20,8 +15,8 @@ import startMappings from '../lib/start_mappings';
 async function main() {
 
     console.log(`*******************************************************************************`);
-    console.log(`*  Transport to Valo Injector starting at ${Date()} ...`);
-    console.log(`*  This process injects events from a transport like MQTT  in Valo.`);
+    console.log(`*  Twitter Injector starting at ${Date()} ...`);
+    console.log(`*  Twitter Injector injects tweets in Valo.`);
     console.log(`*  (help) You can pass your file config name as a parameter.`);
     console.log(`*  (help) Otherwise, the default one in conf/config.json will be used`);
     console.log(`*******************************************************************************`);

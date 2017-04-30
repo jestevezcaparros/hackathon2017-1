@@ -34,8 +34,8 @@ const BULB3 = '3';
 //
 const LOCAL_VALO = {valoHost: "localhost", valoPort: 8888};
 const TENANT = "demo";
-const COLLECTION = "Twitter";
-const STREAM_NAME = "twitfeed0";
+const COLLECTION = "twitter";
+const STREAM_NAME = "tweets";
 
 //
 // Query 1 extracts field user.followers_count from a tweet
@@ -43,7 +43,7 @@ const STREAM_NAME = "twitfeed0";
 //
 const QUERY1 = `
 from /streams/${TENANT}/${COLLECTION}/${STREAM_NAME}
-select user.followers_count as followers
+select tweet.user.followers_count as followers
 `;
 
 //
@@ -51,8 +51,8 @@ select user.followers_count as followers
 //   averaged in the last minute and updated each second
 //
 const QUERY2 = `
-from /streams/demo/Twitter/twitfeed0
-group by created_at window of 1 minute every 1 second
+from /streams/${TENANT}/${COLLECTION}/${STREAM_NAME}
+group by tweet.created_at window of 1 minute every 1 second
 select count()/60.0 as tweetsPerSecond
 `
 
