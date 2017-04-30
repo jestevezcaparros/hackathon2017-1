@@ -11,23 +11,28 @@
 using namespace io::valo::iot;
 
 // Globals
-char ssid[] = "yourNetwork";      //  your network SSID (name)
-char pass[] = "secretPassword";   // your network password
+char ssid[] = "myWifiSSID";      //  your network SSID (name)
+char pass[] = "myWifiPasswd";   // your network password
 int status = WL_IDLE_STATUS;
+char CONTRIBUTOR_ID[] = "board-00001";
+char VALO_HOST[] = "192.168.1.35";
+int  VALO_PORT = 8888;
+char LATITUDE[] = "36.7585406465564";
+char LONGITUDE[] = "-4.3971722687";
 
 // Initialize the Wifi client library
 //WiFiClient client;
 
 // Contributor
 //Contributor<Print> con(client, "3452352345", "localhost", 8888);
-Contributor<Print> con(Serial, "3452352345", "localhost", 8888);
+Contributor<Print> con(Serial, CONTRIBUTOR_ID, VALO_HOST, VALO_PORT);
 
 // Sensors
-SensorSample temp("/streams/iot/team1/temperature", "temperature", "celsius");
-SensorSample humidity("/streams/iot/team1/humidity", "humidity", "percentage");
-SensorSample distance("/streams/iot/team1/distance", "distance", "meter");
-SensorSample luminance("/streams/iot/team1/luminance", "luminance", "lumex");
-SensorSample alcohol("/streams/iot/team1/alcohol", "alcohol", "vol");
+SensorSample temp("/streams/demo/iot_board/temperature", "temperature", "celsius");
+SensorSample humidity("/streams/demo/iot_board/humidity", "humidity", "percentage");
+SensorSample distance("/streams/demo/iot_board/distance", "distance", "meter");
+SensorSample luminance("/streams/demo/iot_board/luminance", "luminance", "lumex");
+SensorSample alcohol("/streams/demo/iot_board/alcohol", "alcohol", "vol");
 
 /**
  * Sets the Wifi
@@ -64,11 +69,11 @@ void setup() {
   //setupWifi();
 
   // Set the sensor static data
-  temp.setPosition("36.7585406465564", "-4.3971722687");
-  humidity.setPosition("36.7585406465564", "-4.3971722687");
-  distance.setPosition("36.7585406465564", "-4.3971722687");
-  luminance.setPosition("36.7585406465564", "-4.3971722687");
-  alcohol.setPosition("36.7585406465564", "-4.3971722687");
+  temp.setPosition(LATITUDE, LONGITUDE);
+  humidity.setPosition(LATITUDE, LONGITUDE);
+  distance.setPosition(LATITUDE, LONGITUDE);
+  luminance.setPosition(LATITUDE, LONGITUDE);
+  alcohol.setPosition(LATITUDE, LONGITUDE);
 }
 
 // Test some values for every sensor on the main loop
