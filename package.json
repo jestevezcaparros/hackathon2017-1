@@ -8,6 +8,11 @@
     "main": "./node_modules/.bin/babel-node ./src/bin/main.js",
 
     "createAllStreamsAndContributors": "cd valo/doc/interfaces && sh create_all_contributors_and_streams.sh; cd -",
+        
+    "launch:twitter": "babel-node valo/src/twitter_js/bin/main.js",
+    "launch:lights": "babel-node valo/src/philips_hue_js/bin/philips_hue_example_1.js",
+    "launch:transport": "babel-node valo/src/transport_to_valo_bridge_js/bin/main.js",
+    
     "premake:viz": "npm install",
     "make:viz": "webpack --config valo/src/visualizations_js/webpack.config.js",
     "prelaunch:viz": "npm install",
