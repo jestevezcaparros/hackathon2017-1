@@ -12,6 +12,7 @@
     "launch:twitter": "babel-node valo/src/twitter_js/bin/main.js",
     "launch:transport": "babel-node valo/src/transport_to_valo_bridge_js/bin/main.js",
     "launch:lights": "babel-node valo/src/philips_hue_js/bin/philips_hue_example_1.js",
+    "launch:simulator": "babel-node valo/src/simulator_js/bin/main.js",
     
     "premake:viz": "npm install",
     "make:viz": "webpack --config valo/src/visualizations_js/webpack.config.js",

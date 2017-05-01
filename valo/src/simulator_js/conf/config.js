@@ -310,8 +310,6 @@ async function onTickMobile (
     const elapsedIntervalHappinessUpdate = state.timestampLastHappinessUpdate ? 
         Date.now() - state.timestampLastHappinessUpdate: null;
     
-    
-    
     //
     // Update Location in Valo if enough time has passed
     //
@@ -376,5 +374,93 @@ async function onTickIotBoard(
     valoHost, valoPort, valoTenant,
     position, state
 ) {
-    console.log("TODO: implment onTickIotBoard");
+    const STREAM_COLLECTION = "iot_board";
+    const STREAM_NAME_LUMINANCE = "luminance";
+    const STREAM_NAME_TEMPERATURE = "temperature";
+    const STREAM_NAME_HUMIDITY = "humidity";
+    const STREAM_NAME_ALCOHOL = "alcohol";
+    const STREAM_NAME_DISTANCE = "distance";
+
+    const DEBOUNCE_TIME = 1000 * 10;
+
+    // Intervals in milliseconds
+    const elapsedInterval = state.timestampLast ? 
+        Date.now() - state.timestampLast : null;
+
+    //
+    // Update in Valo only if enough time has passed
+    //
+    if (
+        elapsedInterval === null 
+        || elapsedInterval > DEBOUNCE_TIME
+    ) {
+        //
+        // Build events
+        //
+        const luminanceEvt = {
+            "contributor" : contributorId,
+            "timestamp" : new Date(),
+            "position" : {
+                "longitude" : position.x,
+                "latitude" : position.y
+            },
+            "luminance" :  Math.random(), //TODO - Fix range
+            "units" : "nit"
+        };
+        //console.log(luminanceEvt);
+        const temperatureEvt = {
+            "contributor" : contributorId,
+            "timestamp" : new Date(),
+            "position" : {
+                "longitude" : position.x,
+                "latitude" : position.y
+            },
+            "temperature" :  Math.random(), //TODO - Fix range
+            "units" : "celsius"
+        };
+        console.log(temperatureEvt);
+        const humidityEvt = {
+            "contributor" : contributorId,
+            "timestamp" : new Date(),
+            "position" : {
+                "longitude" : position.x,
+                "latitude" : position.y
+            },
+            "humidity" :  Math.random(), //TODO - Fix range
+            "units" : "%"
+        };
+        //console.log(humidityEvt);
+        const alcoholEvt = {
+            "contributor" : contributorId,
+            "timestamp" : new Date(),
+            "position" : {
+                "longitude" : position.x,
+                "latitude" : position.y
+            },
+            "alcohol" :  Math.random(), //TODO - Fix range
+            "units" : "%"
+        };
+        //console.log(alcoholEvt);
+        const distanceEvt = {
+            "contributor" : contributorId,
+            "timestamp" : new Date(),
+            "position" : {
+                "longitude" : position.x,
+                "latitude" : position.y
+            },
+            "distance" :  Math.random(), //TODO - Fix range
+            "units" : "cm"
+        };
+        //console.log(distanceEvt);
+   
+        // Publish event(s) into Valo
+        await publishEventToStream(
+            { valoHost, valoPort },
+            [valoTenant, STREAM_COLLECTION , STREAM_NAME_TEMPERATURE],
+            temperatureEvt
+        );
+
+        // Update timestampLast
+        state.timestampLast = Date.now();
+    }  
 }
