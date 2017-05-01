@@ -19,4 +19,5 @@
 /contributors/demo/iot_board
 /contributors/demo/mobile_user
 /contributors/demo/realsense
+/contributors/demo/twitter_app
 ```
