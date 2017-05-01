@@ -1,6 +1,10 @@
 "use strict";
-/** 
- * Event simulator for Valo
+/**
+ * Contributors simulalor for Hackathon's streams - Draft-example
+ *
+ * @license MIT
+ * @author Álvaro Santamaría Herrero <asantamaria@itrsgroup.com>
+ * @author (Each contributor appends a line here)
  */
 import {
     publishEventToStream
@@ -89,7 +93,6 @@ function updateWalkerPosition(walkerState, resolution) {
 
 
 class Walker {
-
     constructor(
         resolution=1, 
         {
