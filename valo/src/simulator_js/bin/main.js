@@ -9,8 +9,16 @@
 import readConfig from '../lib/read_config';
 import {
     createContributorTypes,
-    registerContributors
+    registerContributors,
+    Contributor,
+    ContributorPool
 } from '../lib/contributors';
+import Walker from '../lib/walker';
+
+///////////////////////////////////////////////////////////////////////////////
+// DEFINITIONS
+///////////////////////////////////////////////////////////////////////////////
+const LOOP_INTERVAL = 1000; // In milliseconds
 
 //
 // MAIN
@@ -63,10 +71,59 @@ async function main() {
         // Create Contributor Types
         ///////////////////////////////////////////////////////////////////////
         await createContributorTypes(valoClient, contributorTypes);
+
         ///////////////////////////////////////////////////////////////////////
         // Register Contributors
         ///////////////////////////////////////////////////////////////////////
         await registerContributors(valoClient, contributors);
+
+        ///////////////////////////////////////////////////////////////////////
+        // Create a contributor pool
+        ///////////////////////////////////////////////////////////////////////
+        const pool = new ContributorPool(LOOP_INTERVAL);
+
+        ///////////////////////////////////////////////////////////////////////
+        // Add contributors to contributor pool
+        ///////////////////////////////////////////////////////////////////////
+        const c = new Contributor(
+            "mobile_user",
+            "mobile-user-00001",
+            () => {
+                console.log("here");
+            }
+        );
+        c.tick();
+        pool.addContributor(c);
+        contributors.forEach(
+            contributorInfo => {
+                const {
+                    id,
+                    contributorType,
+                    walkerData 
+                } = contributorInfo;
+                const {
+                    resolution,
+                    initPosVel,
+                    accRandomGenerator 
+                } = walkerData;
+                const onTick = contributorTypes[contributorType].onTickFunction;
+                const contributor = new Contributor(
+                    contributorType,
+                    id,
+                    onTick,
+                    new Walker(resolution, initPosVel, accRandomGenerator),
+                    valoClient
+                );
+                // Add contributor to pool
+                pool.addContributor(contributor); 
+            }
+        );
+        ///////////////////////////////////////////////////////////////////////
+        // Start the contributor pool
+        ///////////////////////////////////////////////////////////////////////
+        pool.run();
+        
+        
     } catch(e) {
         console.error("Error starting simulator\n", e);
         throw e;

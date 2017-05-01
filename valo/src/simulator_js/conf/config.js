@@ -13,6 +13,9 @@ import {
     uniformGenerator,
     constantGenerator
 } from '../../lib_js/util_js/random';
+import {
+    publishEventToStream
+} from '../../lib_js/valo_sdk_js/index';
 
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -58,7 +61,7 @@ const valoClient = {
 // WALKERS - Acceleration generators for walkers
 ///////////////////////////////////////////////////////////////////////////////
 // Walker resolution
-const TUNE_THIS = 1.0;
+const TUNE_THIS = 0.00001; // Tune this param to adjust the size of the steps
 const WALKER_RESOLUTION = TUNE_THIS * 1 / GRID_RESOLUTION;
 
 // Acceleration generators

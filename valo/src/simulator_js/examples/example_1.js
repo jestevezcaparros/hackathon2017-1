@@ -225,8 +225,6 @@ async function onTick1 (
     const elapsedIntervalHappinessUpdate = state.timestampLastHappinessUpdate ? 
         Date.now() - state.timestampLastHappinessUpdate: null;
     
-    
-    
     //
     // Update Location in Valo if enough time has passed
     //
@@ -305,10 +303,6 @@ class ContributorPool {
         this.contributors.push(contributor);
     }
     
-    show() {
-        console.log("a");
-    }
-
     async run(interval) {
         const t_interval = interval || this.interval;
         console.log(">>> Starting pool of contributors..."); 
