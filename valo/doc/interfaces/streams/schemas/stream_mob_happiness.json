@@ -23,7 +23,7 @@
                     "heading" : {"type": "double"}
                 }
             },
-            "happiness" : {"type": "int"}
+            "happiness" : {"type": "double"}
          }
       }
    }
