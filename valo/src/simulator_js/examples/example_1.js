@@ -37,8 +37,6 @@ const locationEvent = {
 };
 
 debugger
-console.log(locationEvent);
-console.log(publishEventToStream);
 
 //
 // AUX
@@ -128,7 +126,7 @@ class Walker {
         };
     }
 
-    tick() {
+    walk() {
         //console.log("TICK: ",this.state);
 
         // Update walker position & velocity
@@ -143,23 +141,158 @@ class Walker {
     }
 }
 
+//
+// A contributor
+//
+class Contributor {
+
+    constructor(
+        contributorType,
+        contributorId,
+        onTick, // Function 
+        walker = new Walker(0.000001, {initPosX:0, initPosY:0}),
+        { 
+            valoHost = "localhost",
+            valoPort = "8888",
+            valoTenant = "demo"
+        } = {}
+    ) {
+        console.log("constructor");
+
+        // Behaviors
+        this.onTick = onTick;
+        this.walker = walker;
+        // Attributes
+        this.contributor = {
+            type : contributorType,
+            id : contributorId
+        };
+        this.valo = {
+            host : valoHost,
+            port : valoPort,
+            tenant : valoTenant
+        };
+        // State
+        this.state = {};
+    }
+
+    tick() {
+        console.log("tick");
+        //
+        // Update my position
+        //
+        this.walker.walk();
+
+        //
+        //  Call onTick
+        //
+        this.onTick(
+            this.contributor.type,
+            this.contributor.id,
+            this.valo.host,
+            this.valo.port,
+            this.valo.tenant,
+            this.position,
+            this.state
+        );
+        
+    }
+
+    get position() {
+        return this.walker.position;
+    }
+}
+
+async function onTick1 (
+    contributorType, contributorId,
+    valoHost, valoPort, valoTenant,
+    position, state
+) {
+    const STREAM_COLLECTION = "mobile";
+    const STREAM_NAME_LOCATION = "location";
+    const STREAM_NAME_HAPPINESS = "happiness";
+    const DEBOUNCE_TIME_LOCATION = 1000;
+    const DEBOUNCE_TIME_HAPPINESS = 5000;
+    const LIKELIHOOD_PUBLISHING_HAPPINESS = 0.5
+
+    // Intervals in milliseconds
+    const elapsedIntervalLocationUpdate = state.timestampLastLocationUpdate ? 
+        Date.now() - state.timestampLastLocationUpdate: null;
+    const elapsedIntervalHappinessUpdate = state.timestampLastHappinessUpdate ? 
+        Date.now() - state.timestampLastHappinessUpdate: null;
+    
+    
+    
+    //
+    // Update Location in Valo if enough time has passed
+    //
+    if (
+        elapsedIntervalLocationUpdate === null 
+        || elapsedIntervalLocationUpdate > DEBOUNCE_TIME_LOCATION
+    ) {
+       // Build location event
+       const locationEvt = {
+           "contributor" : contributorId,
+           "timestamp" : new Date(),
+           "position" : {
+               "longitude" : position.x,
+               "latitude" : position.y
+           }
+       };
+   
+       // Publish event(s) into Valo
+       console.log(locationEvt);
+       await publishEventToStream(
+           { valoHost, valoPort },
+           [valoTenant, STREAM_COLLECTION , STREAM_NAME_LOCATION],
+           locationEvt
+       );
+       state.timestampLastLocationUpdate = Date.now();
+    }  
+
+    //
+    // Update Happiness in Valo if enough time has passed
+    //
+    if (
+        elapsedIntervalHappinessUpdate === null 
+        || elapsedIntervalHappinessUpdate > DEBOUNCE_TIME_HAPPINESS
+        && Math.random() < LIKELIHOOD_PUBLISHING_HAPPINESS
+    ) {
+       // Build location event
+       const happinessEvt = {
+           "contributor" : contributorId,
+           "timestamp" : new Date(),
+           "position" : {
+               "longitude" : position.x,
+               "latitude" : position.y
+           },
+           "happiness" :  Math.floor( 3 * Math.random() - 1 ) // Happiness interval is in [-1,0, +1]
+       };
+   
+       // Publish event(s) into Valo
+       console.log(happinessEvt);
+       await publishEventToStream(
+           { valoHost, valoPort },
+           [valoTenant, STREAM_COLLECTION , STREAM_NAME_HAPPINESS],
+           happinessEvt
+       );
+       state.timestampLastHappinessUpdate = Date.now();
+    }  
+
+    
+}
+
 (async function main() {
-    const w = new Walker(0.000001,{initPosX: 0, initPostY: 0});
-    w.tick();
-    console.log(w.position);
-    await sleep(100);
-    w.tick();
-    console.log(w.position);
-    await sleep(100);
-    w.tick();
-    console.log(w.position);
-    await sleep(100);
-    w.tick();
-    console.log(w.position);
+    const c = new Contributor(
+        "mobile_user",
+        "mobile-user-00001",
+        onTick1
+    );
+    c.tick();
+
     while (true) {
-        await sleep(100);
-        w.tick();
-        console.log(w.position);
+        await sleep(1000);
+        c.tick();
     }
 })();
 
