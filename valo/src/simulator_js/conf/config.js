@@ -46,14 +46,12 @@ const MAX_LON = LA_TERMICA_COORDINATES.bounds.ne.lon;
 const MAX_LAT = LA_TERMICA_COORDINATES.bounds.ne.lat;
 
 ///////////////////////////////////////////////////////////////////////////////
-// Clients' config
+// VALO Clients config
 ///////////////////////////////////////////////////////////////////////////////
-const valoClientConfigs = {
-    valo1 : {
-        host : 'localhost',
-        port : 8888,
-        tenant : 'demo'
-    }
+const valoClient = {
+    host : 'localhost',
+    port : 8888,
+    tenant : 'demo'
 };
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -128,11 +126,11 @@ const contributors = [
     // IOT BOARDS
     {
         id : "fake-board-00001",
-        valoClient: valoClientConfigs,
+        contributorType: "iot_board",
         valoData: {
             "id" : "fake-board-00001",
             "model" : "fake-surfboard",
-            "vendor" : "JOTB"
+            "vendor" : "FAKE"
         },
         walkerData : {
             resolution : WALKER_RESOLUTION,
@@ -147,11 +145,11 @@ const contributors = [
     },
     {
         id : "fake-board-00002",
-        valoClient: valoClientConfigs,
+        contributorType: "iot_board",
         valoData: {
             "id" : "fake-board-00002",
             "model" : "fake-surfboard",
-            "vendor" : "JOTB"
+            "vendor" : "FAKE"
         },
         walkerData : {
             resolution : WALKER_RESOLUTION,
@@ -166,11 +164,11 @@ const contributors = [
     },
     {
         id : "fake-board-00003",
-        valoClient: valoClientConfigs,
+        contributorType: "iot_board",
         valoData: {
             "id" : "fake-board-00003",
             "model" : "fake-surfboard",
-            "vendor" : "JOTB"
+            "vendor" : "FAKE"
         },
         walkerData : {
             resolution : WALKER_RESOLUTION,
@@ -185,11 +183,11 @@ const contributors = [
     },
     {
         id : "fake-board-00004",
-        valoClient: valoClientConfigs,
+        contributorType: "iot_board",
         valoData: {
             "id" : "fake-board-00004",
             "model" : "fake-surfboard",
-            "vendor" : "JOTB"
+            "vendor" : "FAKE"
         },
         walkerData : {
             resolution : WALKER_RESOLUTION,
@@ -206,13 +204,13 @@ const contributors = [
     // MOBILE USERS
     {
         id : "fake-mobile-user-00001",
-        valoClient: valoClientConfigs,
+        contributorType: "mobile_user",
         valoData: {
             "id" : "fake-mobile-user-00001",
             "user" : {
                 "name" : "fake-mobile-user-00001",
                 "typeOfParticipant" : "ORGANIZER",
-                "company" : "VALO",
+                "company" : "FAKE",
                 "country" : "Spain",
                 "role" : "Developer"
             }
@@ -221,13 +219,13 @@ const contributors = [
     },
     {
         id : "fake-mobile-user-00002",
-        valoClient: valoClientConfigs,
+        contributorType: "mobile_user",
         valoData: {
             "id" : "fake-mobile-user-00002",
             "user" : {
                 "name" : "fake-mobile-user-00002",
                 "typeOfParticipant" : "SPEAKER",
-                "company" : "VALO",
+                "company" : "FAKE",
                 "country" : "Spain",
                 "role" : "Developer"
             }
@@ -236,13 +234,13 @@ const contributors = [
     },
     {
         id : "fake-mobile-user-00003",
-        valoClient: valoClientConfigs,
+        contributorType: "mobile_user",
         valoData: {
             "id" : "fake-mobile-user-00003",
             "user" : {
                 "name" : "fake-mobile-user-00003",
                 "typeOfParticipant" : "ATTENDEE",
-                "company" : "VALO",
+                "company" : "FAKE",
                 "country" : "Spain",
                 "role" : "Developer"
             }
@@ -251,13 +249,13 @@ const contributors = [
     },
     {
         id : "fake-mobile-user-00004",
-        valoClient: valoClientConfigs,
+        contributorType: "mobile_user",
         valoData: {
             "id" : "fake-mobile-user-00004",
             "user" : {
                 "name" : "fake-mobile-user-00004",
                 "typeOfParticipant" : "GATECRASHER",
-                "company" : "VALO",
+                "company" : "FAKE",
                 "country" : "Spain",
                 "role" : "Developer"
             }
@@ -279,7 +277,8 @@ const contributors = [
 ///////////////////////////////////////////////////////////////////////////////
 const config = {
     contributorTypes,
-    contributors
+    contributors,
+    valoClient
 };
 export default config;
 
@@ -366,7 +365,9 @@ async function onTickMobile (
        state.timestampLastHappinessUpdate = Date.now();
     }  
 }
-
+//
+// Iot Boards - Custom contributor's onTick() function
+//
 async function onTickIotBoard(
     contributorType, contributorId,
     valoHost, valoPort, valoTenant,

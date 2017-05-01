@@ -7,7 +7,10 @@
  * @author (Each contributor appends a line here)
  */
 import readConfig from '../lib/read_config';
-//import startMappings from '../lib/start_mappings';
+import {
+    createContributorTypes,
+    registerContributors
+} from '../lib/contributors';
 
 //
 // MAIN
@@ -25,7 +28,10 @@ async function main() {
     ////////////////////////////////////////////////////////////////////////////
     // Context
     ////////////////////////////////////////////////////////////////////////////
-    let config;
+    let config,
+        valoClient,
+        contributorTypes,
+        contributors;
 
     ////////////////////////////////////////////////////////////////////////////
     // Read config
@@ -36,7 +42,12 @@ async function main() {
 
         // Read config
         config = readConfig(configFilePath);
-        console.log(JSON.stringify(config, null, 4));
+        valoClient = config.valoClient;
+        contributorTypes = config.contributorTypes;
+        contributors = config.contributors;
+        if (!valoClient) throw {msg: "Missing valoClient in configuration"};
+        if (!contributorTypes) throw {msg: "Missing contributorTypes in configuration"};
+        if (!contributors) throw {msg: "Missing contributors in configuration"};
     } catch(e) {
         console.error("Error reading configuration", e);
         throw e;
@@ -46,9 +57,18 @@ async function main() {
     // Start simulator
     ////////////////////////////////////////////////////////////////////////////
     try {
-        //await startMappings(mappings);
+        console.log(">>> Starting simulator...");
+
+        ///////////////////////////////////////////////////////////////////////
+        // Create Contributor Types
+        ///////////////////////////////////////////////////////////////////////
+        await createContributorTypes(valoClient, contributorTypes);
+        ///////////////////////////////////////////////////////////////////////
+        // Register Contributors
+        ///////////////////////////////////////////////////////////////////////
+        await registerContributors(valoClient, contributors);
     } catch(e) {
-        console.error("Error starting mappings\n", e);
+        console.error("Error starting simulator\n", e);
         throw e;
     }
 }
