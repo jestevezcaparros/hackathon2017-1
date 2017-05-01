@@ -5,6 +5,7 @@
 import {
     publishEventToStream
 } from '../../lib_js/valo_sdk_js';
+import WrapError from '../../lib_js/util_js/error';
 
 const LA_TERMICA_COORDINATES = {
   lat: 36.689150,
@@ -278,21 +279,95 @@ async function onTick1 (
        );
        state.timestampLastHappinessUpdate = Date.now();
     }  
+}
 
+class ContributorPool {
+
+    constructor(interval=1000) {
+        this.interval = interval;
+        this.contributors = [];
+        this.state = {
+            running: false
+        };
+    }
+
+    addContributor(contributor) {
+        if (contributor.constructor !== Contributor) {
+            const e = WrapError(new Error(), {
+                type: "ContributorExpected",
+                msg: ".addContributor() expects a contributor!"
+            });
+            throw e;
+        } 
+        this.contributors.push(contributor);
+    }
     
+    show() {
+        console.log("a");
+    }
+
+    async run(interval) {
+        const t_interval = interval || this.interval;
+        console.log(">>> Starting pool of contributors..."); 
+        if (! this.contributors.length > 0) {
+            console.log(">>> Pool has no contributors (yet). Refusing to start pool");
+            return;
+        }
+        this.state.running = true;
+
+
+        let sub_interval;
+        while(this.state.running) {
+            // Call tick() for all contributors in the pool...
+            this.contributors.forEach(
+                contributor => contributor.tick()
+            );        
+            // ... then wait for a while
+            await sleep(t_interval);
+        }
+    }
+
+    halt() {
+        console.log(">>> Stopping pool of contributors");
+        this.state.running = false;
+    }
+
 }
 
 (async function main() {
-    const c = new Contributor(
+    const c1 = new Contributor(
         "mobile_user",
         "mobile-user-00001",
         onTick1
     );
-    c.tick();
+    const c2 = new Contributor(
+        "mobile_user",
+        "mobile-user-00002",
+        onTick1
+    );
+    const c3 = new Contributor(
+        "mobile_user",
+        "mobile-user-00003",
+        onTick1
+    );
+    //c.tick();
 
+    const p = new ContributorPool(1000);
+    p.addContributor(c1);
+    p.addContributor(c2);
+    p.addContributor(c3);
+    p.run();
+
+    await sleep(100000);
+    p.halt();
+
+    //p.show();
+
+    /*
     while (true) {
         await sleep(1000);
         c.tick();
     }
+    */
 })();
 
