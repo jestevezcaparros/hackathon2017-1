@@ -32,7 +32,8 @@ const config = {
   watchOptions: {
     aggregateTimeout: 300,
     ignored: /node_modules/
-  }
+  },
+  devtool: 'eval-source-map'
 };
 
 module.exports = config;
