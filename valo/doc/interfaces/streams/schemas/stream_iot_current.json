@@ -1,0 +1,27 @@
+{
+   "schema":{
+      "version": "1.0",
+      "config": {},
+      "topDef": {
+         "type": "record",
+         "properties": {
+            "contributor": {
+               "type":"contributor", "definition":"iot_board"
+            },
+            "timestamp": {
+               "type": "datetime",
+               "annotations": ["urn:itrs:default-timestamp"]
+            },
+            "position": {
+                "type": "record",
+                "properties": {
+                    "latitude" : {"type": "double"},
+                    "longitude" : {"type": "double"}
+                }
+            },
+            "current" : {"type": "double"},
+            "units" : {"type": "string"}
+         }
+      }
+   }
+}

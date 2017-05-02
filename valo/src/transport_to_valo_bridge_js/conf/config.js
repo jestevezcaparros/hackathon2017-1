@@ -199,6 +199,31 @@ const valoSchemas = {
                 "units" : {"type": "string"}
             }
         }
+    },
+    iot_current: {
+        "version": "1.0",
+        "config": {},
+        "topDef": {
+            "type": "record",
+            "properties": {
+                "contributor": {
+                    "type":"contributor", "definition":"iot_board"
+                },
+                "timestamp": {
+                    "type": "datetime",
+                    "annotations": ["urn:itrs:default-timestamp"]
+                },
+                "position": {
+                    "type": "record",
+                    "properties": {
+                        "latitude" : {"type": "double"},
+                        "longitude" : {"type": "double"}
+                    }
+                },
+                "current" : {"type": "double"},
+                "units" : {"type": "string"}
+            }
+        }
     }
 };
 
@@ -260,6 +285,17 @@ const mappings = [
         "valoCollection" : "iot",
         "valoStream" : "distance",
         "valoSchema" : valoSchemas.iot_distance,
+        "valoRepo" : "tsr" // "tsr"|"ssr"|null
+    },
+    {
+        "transportType" : "mqtt",
+        "transportClient" : mqttClientConfigs.mqtt1,
+        "transportOrigin" : '/jonthebeach/sensors/current',
+        "valoClient" : valoClientConfigs.valo1,
+        "valoTenant" : "demo",
+        "valoCollection" : "iot",
+        "valoStream" : "current",
+        "valoSchema" : valoSchemas.iot_current,
         "valoRepo" : "tsr" // "tsr"|"ssr"|null
     }
 ];
