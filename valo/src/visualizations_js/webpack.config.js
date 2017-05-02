@@ -18,21 +18,22 @@ const config = {
   },
   module: {
     loaders: [
-            {
-                test: /\.js$/,
-                exclude: /node_modules/,
-                loader: "babel-loader", // or just "babel"
-                query: {
-                    presets: ['latest']
-                }
+        {
+            test: /\.js$/,
+            exclude: /node_modules/,
+            loader: "babel-loader", // or just "babel"
+            query: {
+                presets: ['latest']
             }
-        ]
+        }
+    ]
   },
   watch: true,
   watchOptions: {
     aggregateTimeout: 300,
     ignored: /node_modules/
-  }
+  },
+  devtool: 'eval-source-map'
 };
 
 module.exports = config;

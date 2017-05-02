@@ -3,6 +3,7 @@
  * Utils module
  * @license MIT
  * @author Danilo Rossi <drossi@itrsgroup.com>
+ * @author Zuri Pabón <zpabon@itrsgroup.com>
  * @author (Each contributor append a line here)
  */
 
