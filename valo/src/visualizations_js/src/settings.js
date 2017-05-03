@@ -9,14 +9,29 @@
  */
 export const DEBUG = false;
 export const HOST = {valoHost: "localhost", valoPort: 8888};
+export const ICON_URL = 'http://localhost:8080/valo/src/visualizations_js/icons/'
 export const TENANT = 'demo';
 // VALO QUERIES
-export const QUERY_MOB_HAPPINESS = 'from /streams/demo/mobile/happiness';
-export const HISTORICAL_QUERY_MOB_HAPPINESS = 'from historical /streams/demo/mobile/happiness order by timestamp take 10000';
-export const QUERY_MOB_LOCATION = 'from /streams/demo/mobile/location';
-export const HISTORICAL_QUERY_MOB_LOCATION = 'from historical /streams/demo/mobile/location order by timestamp take 10000';
-export const ICON_URL = 'http://localhost:8080/valo/src/visualizations_js/icons/'
-export const MAP_CONTAINER_CSS_SELECTOR = '.map-container';
+export const QUERY_MOB_HAPPINESS = `
+  from /streams/demo/mobile/happiness
+  select timestamp, contributor.user.typeOfParticipant as typeOfParticipant, position, happiness
+`;
+export const HISTORICAL_QUERY_MOB_HAPPINESS = `
+  from historical /streams/demo/mobile/happiness
+  select timestamp, contributor.user.typeOfParticipant as typeOfParticipant, position, happiness
+  order by timestamp
+  take 10000
+`;
+export const QUERY_MOB_LOCATION = `
+  from /streams/demo/mobile/location
+  select timestamp, contributor.user.typeOfParticipant as typeOfParticipant, position
+`;
+export const HISTORICAL_QUERY_MOB_LOCATION = `
+  from historical /streams/demo/mobile/location
+  select timestamp, contributor.user.typeOfParticipant as typeOfParticipant, position
+  order by timestamp
+  take 10000
+`;
 export const QUERY_HAPPINESS_AVG = `
   from /streams/demo/mobile/happiness
   group by contributor.user.typeOfParticipant, timestamp window of 1 minute every 1 second
@@ -24,6 +39,7 @@ export const QUERY_HAPPINESS_AVG = `
 `;
 export const HISTORICAL_QUERY_HAPPINESS_AVG = QUERY_HAPPINESS_AVG.replace('from ', 'from historical ');
 // Emulates how many people is publishing data to Valo
+export const MAP_CONTAINER_CSS_SELECTOR = '.map-container';
 export const PEOPLE = 3;
 // Use Record and Replay Version
 // (to enable it, append the query search ?replay to the server url)
