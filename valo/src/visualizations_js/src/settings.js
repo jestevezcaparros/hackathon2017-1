@@ -10,9 +10,6 @@
 export const DEBUG = false;
 export const HOST = {valoHost: "localhost", valoPort: 8888};
 export const TENANT = 'demo';
-export const ICON_URL = 'http://localhost:8081/icons/'
-export const MAP_CONTAINER_CSS_SELECTOR = '.map-container';
-
 // VALO QUERIES
 export const QUERY_MOB_HAPPINESS = 'from /streams/demo/mobile/happiness';
 export const HISTORICAL_QUERY_MOB_HAPPINESS = 'from historical /streams/demo/mobile/happiness order by timestamp take 10000';
