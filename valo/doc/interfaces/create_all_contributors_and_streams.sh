@@ -46,3 +46,6 @@ curl http://localhost:8888/streams/demo/iot_board/temperature/repository -X PUT 
 
 curl http://localhost:8888/streams/demo/iot_board/distance -X PUT --data @./streams/schemas/stream_iot_distance.json -H "Content-Type: application/json"
 curl http://localhost:8888/streams/demo/iot_board/distance/repository -X PUT --data  @./streams/schemas/repo_ssr.json -H "Content-Type: application/json"
+
+curl http://localhost:8888/streams/demo/twitter/tweets -X PUT --data @./streams/schemas/stream_tweet.json -H "Content-Type: application/json"
+curl http://localhost:8888/streams/demo/twitter/tweets/repository -X PUT --data  @./streams/schemas/repo_ssr.json -H "Content-Type: application/json"
