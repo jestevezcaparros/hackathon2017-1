@@ -61,7 +61,7 @@ export function createLocationMapPoint(valoPayload){
 
 export function createGroupAverage(valoPayload){
   return new GroupAverage(
-    valoPayload.avg,
-    valoPayload.participant
+    valoPayload['AverageHappiness'],
+    valoPayload['TypeOfParticipant']
   );
 }
