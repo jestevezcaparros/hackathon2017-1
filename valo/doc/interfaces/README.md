@@ -11,6 +11,7 @@
 /streams/demo/iot_board/temperature
 /streams/demo/iot_board/distance
 /streams/demo/iot_board/current
+/streams/demo/twitter/tweets
 ```
 
 # Contributor types
