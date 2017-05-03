@@ -79,8 +79,8 @@ async function initMap(){
     });
 
     // read average by contributor
-    Valo.readGroupsAvg(valoPayload => {
-
+    Valo.readGroupsAvg((err, valoPayload) => {
+ 
       // create a GroupAverage element
       const groupAverage = createGroupAverage(valoPayload);
 
