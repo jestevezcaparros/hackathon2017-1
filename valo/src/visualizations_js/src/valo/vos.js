@@ -31,6 +31,18 @@ class GroupAverage {
   }
 }
 
+class Tweet {
+  constructor(fields) {
+    this.followers_count = fields.followers_count;
+    this.screen_name = fields.screen_name;
+    this.name = fields.name;
+    this.profile_image_url_https = fields.profile_image_url_https;
+    this.text = fields.text;
+    this.created_at = fields.created_at;
+    this.location = fields.location;
+  }
+}
+
 /**
  * Create a valid MapPoint given an event from Valo mobile happiness stream
  * @method createHappinessMapPoint
@@ -61,9 +73,21 @@ export function createLocationMapPoint(valoPayload){
   );
 }
 
+/**
+ * Create a valid GroupAverage given an event from Valo mobile happiness stream with the proper query
+ * @method createGroupAverage
+ * @param  {Object}                valoPayload   A mob_happiness Valo stream event, from the proper query
+* @return {GroupAverage}                         A valid GroupAverage
+ */
 export function createGroupAverage(valoPayload){
   return new GroupAverage(
     valoPayload['AverageHappiness'],
     valoPayload['TypeOfParticipant']
   );
+}
+
+
+
+export function createTweet(valoPayload){
+  return new Tweet(valoPayload);
 }

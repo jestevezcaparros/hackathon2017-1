@@ -14,10 +14,7 @@ export default function(domElement) {
   //
 
   const progressContainer = document.createElement('div');
-  progressContainer.classList.add('ui');
-  progressContainer.classList.add('indicating');
-  progressContainer.classList.add('progress');
-  progressContainer.classList.add('small');
+  ['ui', 'indicating', 'progress', 'small'].forEach( className => progressContainer.classList.add(className) );
 
   const iconsContainer = document.createElement('div');
   iconsContainer.style.textAlign = 'center';

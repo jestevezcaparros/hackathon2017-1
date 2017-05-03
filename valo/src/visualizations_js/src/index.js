@@ -21,10 +21,12 @@ import * as Valo from './valo/dao'
 import {
   createHappinessMapPoint,
   createLocationMapPoint,
-  createGroupAverage
+  createGroupAverage,
+  createTweet
 } from './valo/vos'
 
 import percentBar from './components/percent_bar'
+import tweetBox from './components/tweet_box'
 
 import {
   printError,
@@ -50,6 +52,7 @@ function getNextBarChartContainer() {
 async function initMap(){
 
   let averageBars = new Map();
+  let tweetBoxComponent = null;
 
   try {
 
@@ -81,10 +84,20 @@ async function initMap(){
       map.addPoints(createLocationMapPoint(valoPayload));
     });
 
+
+    // read tweets
+    Valo.readTweets((err, valoPayload) => {
+
+        // (create twitter box component)
+        tweetBoxComponent = tweetBoxComponent || tweetBox(document.querySelector('.tweet-container'));
+
+        // show tweet in the UI
+        tweetBoxComponent.show( createTweet(valoPayload) );
+
+    })
+
     // read average by contributor
     Valo.readGroupsAvg((err, valoPayload) => {
-
-      console.log('GROUP', valoPayload);
 
       // create a GroupAverage element
       const groupAverage = createGroupAverage(valoPayload);
