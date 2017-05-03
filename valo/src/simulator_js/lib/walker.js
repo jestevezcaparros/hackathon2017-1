@@ -4,13 +4,17 @@
  *
  * @license MIT
  * @author Álvaro Santamaría Herrero <asantamaria@itrsgroup.com>
- * @author (Each contributor appends a line here)
+ * @author Zuri Pabón <zpabon@itrsgroup.com>
  */
 import {
     uniformGenerator
 } from '../../lib_js/util_js/random';
 
-/** 
+import {
+  laTermicaBorders
+} from './map_borders';
+
+/**
  * Walker class
  */
 export default class Walker {
@@ -19,16 +23,18 @@ export default class Walker {
      *                   Adjust it upon creation to fit to your walking space.
      * @param {Object} - Initial position and veolocity (x,y coordinates)
      * @param {Function} - Random generator, used for updating acceleration
+     * @param {Function} - A polygon instance, given as array of points, the walker is limit to walk in
      */
     constructor(
-        resolution=1, 
+        resolution=1,
         {
-            initPosX = 0, 
+            initPosX = 0,
             initPosY = 0,
             initVelX = 0,
             initVelY = 0
         } = {},
-        accelerationRandomGenerator = uniformGenerator(-1,1)
+        accelerationRandomGenerator = uniformGenerator(-1,1),
+        delimitTo = laTermicaBorders()
     ) {
         const {
             x: initAccX,
@@ -44,7 +50,7 @@ export default class Walker {
             pos: {
                 x: initPosX,
                 y: initPosY
-            },   
+            },
             vel: {
                 x: initVelX,
                 y: initVelY
@@ -55,19 +61,21 @@ export default class Walker {
             },
             timestamp: Date.now(),
         };
+        // The bounds a walker is limited to walk into
+        this.delimitTo = delimitTo;
     }
 
-    /** 
+    /**
      * Update walker position & velocity & acceleration
      */
     walk() {
-        // Update position and velocity 
-        updateWalkerPosition(this.state, this.resolution);
+        // Update position and velocity
+        updateWalkerPosition(this.state, this.resolution, this.delimitTo);
         // Updtate walker acceleration (random)
-        this.state.acc = this.accelerationRandomGenerator(); 
+        this.state.acc = this.accelerationRandomGenerator();
     }
-    
-    /** 
+
+    /**
      * Returns walker's position {x,y}
      * @getter
      */
@@ -79,29 +87,38 @@ export default class Walker {
 ///////////////////////////////////////////////////////////////////////////////
 // PRIVATE
 ///////////////////////////////////////////////////////////////////////////////
-function updateWalkerPosition(walkerState, resolution) {
+function updateWalkerPosition(walkerState, resolution, areaToDelimit) {
     // Two impurities here:
     // - Consciously mutates! walker's state and returns reference to it
     // - Gets current time with Date.now()
-    
+
     //
     // Update timestamp and get time interval
     //
     const now = Date.now();
     const interval_ms = now - walkerState.timestamp;
     // Mutate!
-    walkerState.timestamp = now; 
+    walkerState.timestamp = now;
 
     //
     // Update position
     //
-    walkerState.pos.x = walkerState.vel.x * interval_ms * resolution + walkerState.pos.x;
-    walkerState.pos.y = walkerState.vel.y * interval_ms * resolution + walkerState.pos.y;
+    const x = walkerState.vel.x * interval_ms * resolution + walkerState.pos.x;
+    const y = walkerState.vel.y * interval_ms * resolution + walkerState.pos.y;
     //
     // Update velocity
     //
     walkerState.vel.x = walkerState.acc.x * interval_ms + walkerState.vel.x;
     walkerState.vel.y = walkerState.acc.y * interval_ms + walkerState.vel.y;
-    
-    return walkerState; 
+
+    if(areaToDelimit && !areaToDelimit.contains({x, y})){
+      walkerState.vel.x = -walkerState.vel.x
+      walkerState.vel.y = -walkerState.vel.y;
+      return walkerState
+    }
+
+    walkerState.pos.y = y;
+    walkerState.pos.x = x;
+
+    return walkerState;
 }

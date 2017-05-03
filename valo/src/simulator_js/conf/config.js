@@ -16,11 +16,13 @@ import {
 import {
     publishEventToStream
 } from '../../lib_js/valo_sdk_js/index';
-
+import {
+  Borders
+} from '../lib/map_borders';
 
 ///////////////////////////////////////////////////////////////////////////////
 // CONSTANTS
-/////////////////////////////////////////////////////////////////////////////// 
+///////////////////////////////////////////////////////////////////////////////
 const LA_TERMICA_COORDINATES = {
   lat: 36.689150,
   lon: -4.445000,
@@ -36,9 +38,15 @@ const LA_TERMICA_COORDINATES = {
     }
   }
 };
+const LA_TERMICA_BORDERS = Borders([
+  [ 36.688839, -4.446547 ],
+  [ 36.689908, -4.446453 ],
+  [ 36.689564, -4.443819 ],
+  [ 36.688394, -4.444114 ]
+]);
 // Imagine a grid on the map, with GRID_RESOLUTION square tiles of side SIZE long
 const GRID_RESOLUTION = 1000;
-const GRID_SIZE = LA_TERMICA_COORDINATES.bounds.ne.lon 
+const GRID_SIZE = LA_TERMICA_COORDINATES.bounds.ne.lon
     - LA_TERMICA_COORDINATES.bounds.sw.lon;
 // Center
 const ORIGIN_LON = LA_TERMICA_COORDINATES.lon;
@@ -61,8 +69,8 @@ const valoClient = {
 // WALKERS - Acceleration generators for walkers
 ///////////////////////////////////////////////////////////////////////////////
 // Walker resolution
-const TUNE_THIS = 0.00001; // Tune this param to adjust the size of the steps
-const WALKER_RESOLUTION = TUNE_THIS * 1 / GRID_RESOLUTION;
+const TUNE_THIS = 9; // Tune this param to adjust the size of the steps
+const WALKER_RESOLUTION = 0.000000001 * TUNE_THIS * 1 / GRID_RESOLUTION;
 
 // Acceleration generators
 const accGeneratorMobile = uniformGenerator(-1,1);
@@ -281,7 +289,8 @@ const contributors = [
 const config = {
     contributorTypes,
     contributors,
-    valoClient
+    valoClient,
+    LA_TERMICA_BORDERS
 };
 export default config;
 
@@ -305,16 +314,16 @@ async function onTickMobile (
     const LIKELIHOOD_PUBLISHING_HAPPINESS = 0.5
 
     // Intervals in milliseconds
-    const elapsedIntervalLocationUpdate = state.timestampLastLocationUpdate ? 
+    const elapsedIntervalLocationUpdate = state.timestampLastLocationUpdate ?
         Date.now() - state.timestampLastLocationUpdate: null;
-    const elapsedIntervalHappinessUpdate = state.timestampLastHappinessUpdate ? 
+    const elapsedIntervalHappinessUpdate = state.timestampLastHappinessUpdate ?
         Date.now() - state.timestampLastHappinessUpdate: null;
-    
+
     //
     // Update Location in Valo if enough time has passed
     //
     if (
-        elapsedIntervalLocationUpdate === null 
+        elapsedIntervalLocationUpdate === null
         || elapsedIntervalLocationUpdate > DEBOUNCE_TIME_LOCATION
     ) {
        // Build location event
@@ -326,7 +335,7 @@ async function onTickMobile (
                "latitude" : position.y
            }
        };
-   
+
        // Publish event(s) into Valo
        console.log(locationEvt);
        await publishEventToStream(
@@ -335,13 +344,13 @@ async function onTickMobile (
            locationEvt
        );
        state.timestampLastLocationUpdate = Date.now();
-    }  
+    }
 
     //
     // Update Happiness in Valo if enough time has passed
     //
     if (
-        elapsedIntervalHappinessUpdate === null 
+        elapsedIntervalHappinessUpdate === null
         || elapsedIntervalHappinessUpdate > DEBOUNCE_TIME_HAPPINESS
         && Math.random() < LIKELIHOOD_PUBLISHING_HAPPINESS
     ) {
@@ -355,7 +364,7 @@ async function onTickMobile (
            },
            "happiness" :  Math.floor( 3 * Math.random() - 1 ) // Happiness interval is in [-1,0, +1]
        };
-   
+
        // Publish event(s) into Valo
        console.log(happinessEvt);
        await publishEventToStream(
@@ -364,7 +373,7 @@ async function onTickMobile (
            happinessEvt
        );
        state.timestampLastHappinessUpdate = Date.now();
-    }  
+    }
 }
 //
 // Iot Boards - Custom contributor's onTick() function
@@ -384,14 +393,14 @@ async function onTickIotBoard(
     const DEBOUNCE_TIME = 1000 * 10;
 
     // Intervals in milliseconds
-    const elapsedInterval = state.timestampLast ? 
+    const elapsedInterval = state.timestampLast ?
         Date.now() - state.timestampLast : null;
 
     //
     // Update in Valo only if enough time has passed
     //
     if (
-        elapsedInterval === null 
+        elapsedInterval === null
         || elapsedInterval > DEBOUNCE_TIME
     ) {
         //
@@ -452,7 +461,7 @@ async function onTickIotBoard(
             "units" : "cm"
         };
         //console.log(distanceEvt);
-   
+
         // Publish event(s) into Valo
         await publishEventToStream(
             { valoHost, valoPort },
@@ -462,5 +471,5 @@ async function onTickIotBoard(
 
         // Update timestampLast
         state.timestampLast = Date.now();
-    }  
+    }
 }
