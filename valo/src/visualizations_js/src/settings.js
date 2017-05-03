@@ -9,7 +9,7 @@
  */
 export const DEBUG = false;
 export const HOST = {valoHost: "localhost", valoPort: 8888};
-export const ICON_URL = 'http://localhost:8080/valo/src/visualizations_js/icons/'
+export const ICON_URL = 'http://localhost:8080/icons/'
 export const TENANT = 'demo';
 // VALO QUERIES
 export const QUERY_MOB_HAPPINESS = `
