@@ -88,7 +88,6 @@ async function initMap(){
         // (create twitter box component)
         tweetBoxComponent = tweetBoxComponent || tweetBox(document.querySelector('.tweet-container'));
 
-        console.log('>>>>> valoPayload', valoPayload)
         // show tweet in the UI
         tweetBoxComponent.show( createTweet(valoPayload) );
 

@@ -8,11 +8,6 @@
  */
 export default function(domElement) {
 
-  // const label = document.createElement('div');
-  // label.classList.add('tweet_box');
-  //
-  // domElement.appendChild(label);
-
   // <a class="ui card" href="http://www.dog.com">
   //   <div class="content">
   //     <div class="header">Cute Dog</div>
