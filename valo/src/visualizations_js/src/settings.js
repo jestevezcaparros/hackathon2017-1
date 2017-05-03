@@ -14,13 +14,14 @@ export const QUERY_MOB_HAPPINESS = 'from /streams/demo/mobile/happiness';
 export const HISTORICAL_QUERY_MOB_HAPPINESS = 'from historical /streams/demo/mobile/happiness order by timestamp take 10000';
 export const QUERY_MOB_LOCATION = 'from /streams/demo/mobile/location';
 export const HISTORICAL_QUERY_MOB_LOCATION = 'from historical /streams/demo/mobile/location order by timestamp take 10000';
-export const ICON_URL = 'http://localhost:8081/icons/'
+export const ICON_URL = 'http://localhost:8080/valo/src/visualizations_js/icons/'
 export const MAP_CONTAINER_CSS_SELECTOR = '.map-container';
 // Emulates how many people is publishing data to Valo
 export const PEOPLE = 3;
 // Use Record and Replay Version
 // (to enable it, append the query search ?replay to the server url)
 export const REPLAY = false;
+export const REPLAY_INTERVAL = 50;
 export const LA_TERMICA_COORDINATES = {
   lat: 36.689150,
   lon: -4.445000,
