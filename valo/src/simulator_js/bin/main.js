@@ -18,7 +18,7 @@ import Walker from '../lib/walker';
 ///////////////////////////////////////////////////////////////////////////////
 // DEFINITIONS
 ///////////////////////////////////////////////////////////////////////////////
-const LOOP_INTERVAL = 1000; // In milliseconds
+const LOOP_INTERVAL = 200; // In milliseconds
 
 //
 // MAIN
@@ -85,45 +85,41 @@ async function main() {
         ///////////////////////////////////////////////////////////////////////
         // Add contributors to contributor pool
         ///////////////////////////////////////////////////////////////////////
-        const c = new Contributor(
-            "mobile_user",
-            "mobile-user-00001",
-            () => {
-                console.log("here");
-            }
-        );
-        c.tick();
-        pool.addContributor(c);
+
         contributors.forEach(
             contributorInfo => {
                 const {
                     id,
                     contributorType,
-                    walkerData 
+                    walkerData
                 } = contributorInfo;
                 const {
                     resolution,
                     initPosVel,
-                    accRandomGenerator 
+                    accRandomGenerator
                 } = walkerData;
                 const onTick = contributorTypes[contributorType].onTickFunction;
                 const contributor = new Contributor(
                     contributorType,
                     id,
                     onTick,
-                    new Walker(resolution, initPosVel, accRandomGenerator),
+                    new Walker(
+                      resolution,
+                      initPosVel,
+                      accRandomGenerator,
+                      config.LA_TERMICA_BORDERS),
                     valoClient
                 );
                 // Add contributor to pool
-                pool.addContributor(contributor); 
+                pool.addContributor(contributor);
             }
         );
         ///////////////////////////////////////////////////////////////////////
         // Start the contributor pool
         ///////////////////////////////////////////////////////////////////////
         pool.run();
-        
-        
+
+
     } catch(e) {
         console.error("Error starting simulator\n", e);
         throw e;

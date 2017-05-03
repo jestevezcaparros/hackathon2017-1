@@ -34,6 +34,7 @@ import {
   QUERY_HAPPINESS_AVG,
   HISTORICAL_QUERY_HAPPINESS_AVG,
   REPLAY,
+  REPLAY_INTERVAL,
   DEBUG
 } from '../settings'
 
@@ -42,9 +43,10 @@ import Rx from 'rx-lite';
 const SHOULD_REPLAY = REPLAY || window.location.search.includes('replay');
 
 function replayObservabable(observable){
+  const Identity = i => i;
   return observable.zip(
-    Rx.Observable.interval(500),
-    i => i // Identity function
+    Rx.Observable.interval(REPLAY_INTERVAL),
+    Identity // Identity function
   );
 }
 /**
@@ -62,9 +64,8 @@ function replayObservabable(observable){
 export async function readMobileHappinesEvents(callback){
  try {
     let dataBuffer = [];
-    const { observable } = await (DEBUG ?
-      runSingleQueryMocked(SHOULD_REPLAY ? HISTORICAL_QUERY_MOB_HAPPINESS : QUERY_MOB_HAPPINESS) :
-      runSingleQuery(HOST, TENANT, SHOULD_REPLAY ? HISTORICAL_QUERY_MOB_HAPPINESS: QUERY_MOB_HAPPINESS));
+    const query = SHOULD_REPLAY ? HISTORICAL_QUERY_MOB_HAPPINESS : QUERY_MOB_HAPPINESS;
+    const { observable } = await (DEBUG ? runSingleQueryMocked(query) : runSingleQuery(HOST, TENANT, query));
     if(!callback || !isFunction(callback)) return observable;
     const _observable = SHOULD_REPLAY ? replayObservabable(observable) : observable;
     _observable.subscribe(
@@ -92,12 +93,11 @@ export async function readMobileHappinesEvents(callback){
 export async function readMobileLocationEvents(callback){
   try {
      let dataBuffer = [];
-     const { observable } = await (DEBUG ?
-       runSingleQueryMocked(SHOULD_REPLAY ? HISTORICAL_QUERY_MOB_LOCATION : QUERY_MOB_LOCATION) :
-       runSingleQuery(HOST, TENANT, SHOULD_REPLAY ? HISTORICAL_QUERY_MOB_LOCATION : QUERY_MOB_LOCATION));
-    if(!callback || !isFunction(callback)) return observable;
-    const _observable = SHOULD_REPLAY ? replayObservabable(observable) : observable;
-    _observable.subscribe(
+     const query = SHOULD_REPLAY ? HISTORICAL_QUERY_MOB_LOCATION : QUERY_MOB_LOCATION;
+     const { observable } = await (DEBUG ? runSingleQueryMocked(query) : runSingleQuery(HOST, TENANT, query));
+     if(!callback || !isFunction(callback)) return observable;
+     const _observable = SHOULD_REPLAY ? replayObservabable(observable) : observable;
+     _observable.subscribe(
      payload => payload && callback(null, payload),
      error => callback(error),
      completed => callback(null, null));

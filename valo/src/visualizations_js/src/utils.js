@@ -108,21 +108,21 @@ function drawRooms(map){
 
 function drawMarkers(map){
   // Add Icons
-  addMarker(map,
-      `${ICON_URL}campero.svg`, {
-      latitude: 36.689040,
-      longitude: -4.444238
-  });
-  addMarker(map,
-      `${ICON_URL}pitufo.svg`, {
-      latitude: 36.688839,
-      longitude: -4.445384
-  });
-  addMarker(map,
-      `${ICON_URL}mollete.svg`, {
-      latitude: 36.689175,
-      longitude: -4.445105
-  });
+  // addMarker(map,
+  //     `${ICON_URL}campero.svg`, {
+  //     latitude: 36.689040,
+  //     longitude: -4.444238
+  // });
+  // addMarker(map,
+  //     `${ICON_URL}pitufo.svg`, {
+  //     latitude: 36.688839,
+  //     longitude: -4.445384
+  // });
+  // addMarker(map,
+  //     `${ICON_URL}mollete.svg`, {
+  //     latitude: 36.689175,
+  //     longitude: -4.445105
+  // });
 }
 
 function resetPolygons(){
