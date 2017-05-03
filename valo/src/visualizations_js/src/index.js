@@ -21,10 +21,12 @@ import * as Valo from './valo/dao'
 import {
   createHappinessMapPoint,
   createLocationMapPoint,
-  createGroupAverage
+  createGroupAverage,
+  createTweet
 } from './valo/vos'
 
 import percentBar from './components/percent_bar'
+import tweetBox from './components/tweet_box'
 
 import {
   printError,
@@ -78,9 +80,20 @@ async function initMap(){
       map.addPoints(createLocationMapPoint(valoPayload));
     });
 
+    const tweetBoxComponent = tweetBox(document.querySelector('.tweet-container'));
+
+    Valo.readTweets((err, valoPayload) => {
+
+
+      const tweet = createTweet(valoPayload);
+
+        tweetBoxComponent.show(tweet);
+
+    })
+
     // read average by contributor
     Valo.readGroupsAvg((err, valoPayload) => {
- 
+
       // create a GroupAverage element
       const groupAverage = createGroupAverage(valoPayload);
 

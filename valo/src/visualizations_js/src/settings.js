@@ -24,6 +24,10 @@ export const QUERY_HAPPINESS_AVG = `
   select typeOfParticipant as TypeOfParticipant, 100 * avg( (happiness+1.0) / 2.0) as AverageHappiness
 `;
 export const HISTORICAL_QUERY_HAPPINESS_AVG = QUERY_HAPPINESS_AVG.replace('from ', 'from historical ');
+export const QUERY_TWEETS = `
+  from /streams/demo/twitter/tweets
+  select tweet.text, tweet.user.name, tweet.user.screen_name, tweet.user.followers_count, tweet.user.profile_image_url_https, tweet.coordinates
+`;
 
 // Emulates how many people is publishing data to Valo
 export const PEOPLE = 3;
