@@ -52,6 +52,7 @@ function getNextBarChartContainer() {
 async function initMap(){
 
   let averageBars = new Map();
+  let tweetBoxComponent = null;
 
   try {
 
@@ -80,14 +81,16 @@ async function initMap(){
       map.addPoints(createLocationMapPoint(valoPayload));
     });
 
-    const tweetBoxComponent = tweetBox(document.querySelector('.tweet-container'));
 
+    // read tweets
     Valo.readTweets((err, valoPayload) => {
 
+        // (create twitter box component)
+        tweetBoxComponent = tweetBoxComponent || tweetBox(document.querySelector('.tweet-container'));
 
-      const tweet = createTweet(valoPayload);
-
-        tweetBoxComponent.show(tweet);
+        console.log('>>>>> valoPayload', valoPayload)
+        // show tweet in the UI
+        tweetBoxComponent.show( createTweet(valoPayload) );
 
     })
 

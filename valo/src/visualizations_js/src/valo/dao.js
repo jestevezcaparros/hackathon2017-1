@@ -34,6 +34,7 @@ import {
   QUERY_HAPPINESS_AVG,
   HISTORICAL_QUERY_HAPPINESS_AVG,
   QUERY_TWEETS,
+  HISTORICAL_QUERY_TWEETS,
   REPLAY,
   DEBUG
 } from '../settings'
@@ -139,7 +140,7 @@ export async function readTweets(callback){
 
   try {
      let dataBuffer = [];
-     const { observable } = await runSingleQuery(HOST, TENANT, QUERY_TWEETS);
+     const { observable } = await runSingleQuery(HOST, TENANT, SHOULD_REPLAY ? HISTORICAL_QUERY_TWEETS : QUERY_TWEETS);
      if(!callback || !isFunction(callback)) return observable;
      const _observable = SHOULD_REPLAY ? replayObservabable(observable) : observable;
      _observable.subscribe(

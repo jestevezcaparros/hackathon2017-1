@@ -38,7 +38,8 @@ class Tweet {
     this.name = fields.name;
     this.profile_image_url_https = fields.profile_image_url_https;
     this.text = fields.text;
-    this.coordinates = fields.coordinates;
+    this.created_at = fields.created_at;
+    this.location = fields.location;
   }
 }
 
