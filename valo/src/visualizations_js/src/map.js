@@ -39,7 +39,7 @@ function initCanvasOverlay(){
       const projection = this.getProjection();
       this.context.save();
       this.context.clearRect(0, 0, this.mapsize.width, this.mapsize.height);
-      this.context.globalAlpha = 0.6;
+      this.context.globalAlpha = 0.8;
       this.context.drawImage(this.virtualCanvas, 0, 0);
       this.context.globalAlpha = 1;
       this.context.fillStyle = 'blue';

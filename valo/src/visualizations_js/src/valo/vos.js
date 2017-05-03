@@ -26,8 +26,8 @@ class MapPoint {
 
 class GroupAverage {
   constructor(average, group) {
-    this.average = average;
-    this.group = group;
+    this.average = average || 0;
+    this.group = group || "";
   }
 }
 
@@ -67,7 +67,9 @@ export function createLocationMapPoint(valoPayload){
   return new MapPoint(
     valoPayload.position.latitude,
     valoPayload.position.longitude,
-    'footprints'
+    valoPayload.typeOfParticipant ?
+    `footprints-${valoPayload.typeOfParticipant.toLowerCase()}` :
+    `footprints`
   );
 }
 

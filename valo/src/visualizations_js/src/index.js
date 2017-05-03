@@ -64,6 +64,7 @@ async function initMap(){
 
     // read events from Valo mob_happiness stream
     Valo.readMobileHappinesEvents((error, valoPayload) => {
+      console.log('HApiness', valoPayload)
       // Manage your error
       if(error) return printError(error);
 
@@ -73,6 +74,8 @@ async function initMap(){
 
     // read events from Valo mob_location stream
     Valo.readMobileLocationEvents((error, valoPayload) => {
+
+      console.log('Location', valoPayload)
 
       // Manage your error
       if(error) return printError(error);
