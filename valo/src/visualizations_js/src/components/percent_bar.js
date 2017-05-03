@@ -17,6 +17,7 @@ export default function(domElement) {
   progressContainer.classList.add('ui');
   progressContainer.classList.add('indicating');
   progressContainer.classList.add('progress');
+  progressContainer.classList.add('small');
 
   const iconsContainer = document.createElement('div');
   iconsContainer.style.textAlign = 'center';
@@ -30,6 +31,11 @@ export default function(domElement) {
 
   const bar = document.createElement('div');
   bar.classList.add('bar');
+
+  const progress = document.createElement('div');
+  progress.classList.add('progress');
+
+  bar.appendChild(progress);
 
   const label = document.createElement('div');
   label.classList.add('label');

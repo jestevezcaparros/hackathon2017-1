@@ -306,7 +306,7 @@ export async function runSingleQuery(
                   default:
                     return observer.onNext(msg);
                 }
-              } catch (e) {
+              } catch (err) {
                 observer.onError(err);
               }
             };
