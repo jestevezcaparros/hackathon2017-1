@@ -31,6 +31,8 @@ import {
   HISTORICAL_QUERY_MOB_HAPPINESS,
   QUERY_MOB_LOCATION,
   HISTORICAL_QUERY_MOB_LOCATION,
+  QUERY_HAPPINESS_AVG,
+  HISTORICAL_QUERY_HAPPINESS_AVG,
   REPLAY,
   REPLAY_INTERVAL,
   DEBUG
@@ -117,21 +119,19 @@ export async function readMobileLocationEvents(callback){
 */
 export async function readGroupsAvg(callback){
 
-  function getRandomInteger(low, high) {
-    return Math.floor(Math.random() * (high - low + 1) + low)
-  }
-  function getRandomHappiness(low, high) {
-    return (Math.random() * (high - low) + low).toFixed(4)
-  }
-  const groups = ['Group 1 Happiness', 'Group 2 Happiness', 'Group 3 Happiness', 'Group 4 Happiness']
-
-   setInterval(() => {
-     const payload = {
-       "avg": getRandomInteger(0, 100), //getRandomHappiness(-1, 1),
-       "participant": groups[getRandomInteger(0, groups.length - 1)],
-     };
-     console.log('payload', payload);
-     payload && callback(payload);
-   }, 1000);
+  try {
+     let dataBuffer = [];
+     const { observable } = await runSingleQuery(HOST, TENANT, SHOULD_REPLAY ? HISTORICAL_QUERY_HAPPINESS_AVG : QUERY_HAPPINESS_AVG);
+     if(!callback || !isFunction(callback)) return observable;
+     const _observable = SHOULD_REPLAY ? replayObservabable(observable) : observable;
+     _observable.subscribe(
+      payload => payload && callback(null, payload),
+      error => callback(error),
+      completed => callback(null, null)
+    );
+  } catch (error) {
+    printError(error);
+    callback(error);
+  } 
 
 }
