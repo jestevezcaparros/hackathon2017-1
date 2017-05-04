@@ -7,7 +7,6 @@
  * @author Danilo Rossi <drossi@itrsgroup.com>
  * @author (Each contributor append a line here)
  */
-export const DEBUG = false;
 export const HOST = {valoHost: "localhost", valoPort: 8888};
 export const ICON_URL = 'http://localhost:8080/icons/'
 export const TENANT = 'demo';
