@@ -7,7 +7,7 @@
  * @author (Each contributor append a line here)
  */
 
-import {createMap} from '../utils';
+import {createMap} from '../../utils';
 import PositionOverlay from './position_overlay';
 import TemperatureOverlay from './temperature_overlay';
 

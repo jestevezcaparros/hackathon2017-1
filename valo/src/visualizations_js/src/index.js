@@ -19,12 +19,21 @@ import {
 import * as Valo from './valo/dao'
 
 import {
+  createGroupAverage
+} from './vo/group_average'
+
+import {
+  createIOTPoint
+} from './vo/iot_point'
+
+import {
   createHappinessMapPoint,
-  createLocationMapPoint,
-  createIOTPoint,
-  createGroupAverage,
+  createLocationMapPoint
+} from './vo/map_point'
+
+import {
   createTweet
-} from './valo/vos'
+} from './vo/tweet'
 
 import percentBar from './components/percent_bar'
 import tweetBox from './components/tweet_box'

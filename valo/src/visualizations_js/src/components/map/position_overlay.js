@@ -7,7 +7,7 @@
 * @author (Each contributor append a line here)
 */
 
-import {getIcon, plotPoint} from '../utils';
+import {getIcon, plotPoint} from '../../utils';
 
 export default function(map){
 
