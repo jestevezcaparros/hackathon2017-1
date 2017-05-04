@@ -7,7 +7,7 @@
 
 This project collects geolocation points from Valo which are emitted from the mobile [app](https://github.com/ITRS-Group/hackathon2017/tree/master/valo/src/mobile_app_js/ValoExample) and then renders them on an interactive real time map. Using this experimental app will allow you to visualize and track attendees as they move across "La Termica" zone.
 
-![](https://github.com/ITRS-Group/hackathon2017/blob/ref/viz/valo/src/visualizations_js/docs/assets/preview.gif)
+![](https://github.com/ITRS-Group/hackathon2017/blob/master/valo/src/visualizations_js/docs/assets/preview.gif)
 
 
 ### That's too cool: how can I run it on my laptop?!
@@ -53,7 +53,7 @@ A VO (**Value Object**) is a small object that represents a simple entity. In ou
 
 This is a simple diagram that describes the visualization frontend architecture:
 
-![MacDown logo](https://github.com/ITRS-Group/hackathon2017/blob/ref/viz/valo/src/visualizations_js/docs/assets/frontend_architecture.gif)
+![MacDown logo](https://github.com/ITRS-Group/hackathon2017/blob/master/valo/src/visualizations_js/docs/assets/frontend_architecture.png)
 
 In general, we will want to implement some kind of visualization, and we will need some data from Valo in order to do it. We defined a standard flow, for the sake of simplicity, so that it will be easier for you to start playing with the code:
 
