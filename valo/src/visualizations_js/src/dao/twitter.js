@@ -8,9 +8,9 @@
  * @author Zuri Pabón <zpabon@itrsgroup.com>
  */
 
+
  import {
-   readHistoricalEvents,
-   readRealTimeEvents
+   readEvents
  } from './common';
 
  import {

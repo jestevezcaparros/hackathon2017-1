@@ -15,25 +15,18 @@ import {
   MAP_OPTIONS
 } from './settings'
 
-import * as Valo from './dao/valo';
+// import DAOs
+import * as TweetDAO from './dao/twitter';
+import * as MobileDAO from './dao/mobile';
+import * as IotDAO from './dao/iot';
 
-import {
-  createLocationAttenderPoint,
-  createHappinessAttenderPoint
-} from './vo/attender_map_point';
+// import VOs
+import * as AttenderVO from './vo/attender_map_point';
+import * as IOTMapPointVO from './vo/iot_map_point';
+import * as TweetVO from './vo/tweet';
+import * as GroupVO from './vo/group_average';
 
-import {
-  createIOTPoint
-} from './vo/iot_map_point';
-
-import {
-  createTweet
-} from './vo/tweet';
-
-import {
-  createGroupAverage
-} from './vo/group_average';
-
+// import UI Components
 import percentBar from './components/percent_bar'
 import tweetBox from './components/tweet_box'
 
@@ -42,14 +35,23 @@ import {
   printLog
 } from './utils';
 
-
-async function initUI(){
+(function init(){
 
   try {
 
+    // track the average happiness bar charts
     let averageBars = new Map();
+
+    // reference to the tweet visualization
     let tweetBoxComponent = null;
 
+    // This creates a google Maps Api v3 instance rendering the map
+    const map = JotbMap({
+      domElement: document.querySelector(MAP_CONTAINER_CSS_SELECTOR),
+      options: MAP_OPTIONS
+    });
+
+    // utility function
     function getNextBarChartContainer() {
       var chartContainer = document.createElement('div');
       chartContainer.classList.add('avg-chart-container');
@@ -62,21 +64,21 @@ async function initUI(){
     });
 
     // read tweets
-    Valo.readTweets((err, valoPayload) => {
-
+    TweetDAO.readTweets((err, valoPayload) => {
+      console.log('valoPayload', valoPayload)
       // (create twitter box component)
       tweetBoxComponent = tweetBoxComponent || tweetBox(document.querySelector('.tweet-container'));
 
       // show tweet in the UI
-      tweetBoxComponent.show( createTweet(valoPayload) );
+      tweetBoxComponent.show( TweetVO.createTweet(valoPayload) );
 
     })
 
     // read average by contributor
-    Valo.readAverageHappinesEvents((err, valoPayload) => {
+    MobileDAO.readAverageHappinesEvents((err, valoPayload) => {
 
       // create a GroupAverage element
-      const groupAverage = createGroupAverage(valoPayload);
+      const groupAverage = GroupVO.createGroupAverage(valoPayload);
 
       // no bar chart for this group, create a new one
       if(!averageBars.has(groupAverage.group)) {
@@ -99,65 +101,38 @@ async function initUI(){
         averageBars.get(groupAverage.group).updateAvg(groupAverage.average);
       }
     });
+
+    // read events from Valo mob_happiness stream
+    MobileDAO.readHappinesEvents((error, valoPayload) => {
+      // Manage your error
+      if(error) return printError(error);
+
+      // convert Valo event to MapPoint, add it to the map
+      map.attenders.add(AttenderVO.createHappinessAttenderPoint(valoPayload));
+    });
+
+    // read events from Valo mob_location stream
+    MobileDAO.readLocationEvents((error, valoPayload) => {
+
+      // Manage your error
+      if(error) return printError(error);
+
+      // convert Valo event to MapPoint, add it to the map
+      map.attenders.add(AttenderVO.createLocationAttenderPoint(valoPayload));
+    });
+
+    // read events from Valo mob_happiness stream
+    IotDAO.readTemperatureEvents((error, valoPayload) => {
+
+      // Manage your error
+      if(error) return printError(error);
+      // convert Valo event to MapPoint, add it to the map
+      map.iot.add(IOTMapPointVO.createIOTPoint(valoPayload));
+    });
+
   }
   catch(e){
     printError(e);
   }
-}
 
-/**
-* This creates a google Maps Api v3 instance rendering the map
-* afterwards it starts listening to real time events coming from Valo.
-*
-* It updates the map with the data retrieved from Valo which includes the
-* contributor position (given as pairs of lat and long) along the contributor
-* status (either of happy, neutral or sad)
-* @return undefined
-*/
-async function initMap(){
-
-  try {
-
-    // Init and render the map onto the DOM
-    const map = JotbMap({
-      domElement: document.querySelector(MAP_CONTAINER_CSS_SELECTOR),
-      options: MAP_OPTIONS
-    });
-
-    // read events from Valo mob_happiness stream
-    Valo.readHappinesEvents((error, valoPayload) => {
-      // Manage your error
-      if(error) return printError(error);
-
-      // convert Valo event to MapPoint, add it to the map
-      map.attenders.add(createHappinessAttenderPoint(valoPayload));
-    });
-
-    // read events from Valo mob_location stream
-    Valo.readLocationEvents((error, valoPayload) => {
-
-      // Manage your error
-      if(error) return printError(error);
-
-      // convert Valo event to MapPoint, add it to the map
-      map.attenders.add(createLocationAttenderPoint(valoPayload));
-    });
-
-    // read events from Valo mob_happiness stream
-    Valo.readTemperatureEvents((error, valoPayload) => {
-
-      // Manage your error
-      if(error) return printError(error);
-      // convert Valo event to MapPoint, add it to the map
-      map.iot.add(createIOTPoint(valoPayload));
-    });
-
-  } catch (error) {
-    printError(error);
-  }
-}
-
-(function init(){
-  initUI();
-  initMap();
 })();
