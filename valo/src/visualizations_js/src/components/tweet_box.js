@@ -100,9 +100,9 @@ export default function(domElement) {
 
     show(tweet) {
       let hours = (new Date()).getHours();
-      hours = (hours.length<10)?"0"+hours:hours;
+      hours = (hours<10)?"0"+hours:hours;
       let minutes = (new Date()).getMinutes();
-      minutes = (minutes.length<10)?"0"+minutes:minutes;
+      minutes = (minutes<10)?"0"+minutes:minutes;
 
       tweetName.textContent = tweet.name;
       tweetScreenName.textContent = "@"+tweet.screen_name;
