@@ -130,6 +130,11 @@ svg {
         padding-top: 1px;
       }
 
+/* UI CARD */
+/*.ui.card .date a,
+.ui.card .date a:hover {
+  color: #28ffff !important;
+}*/
 
 /* UI MENU */
 .ui.menu {
