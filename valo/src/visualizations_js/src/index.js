@@ -8,7 +8,7 @@
  * @author Danilo Rossi <drossi@itrsgroup.com>
  */
 
-import JotbMap from './map/';
+import JotbMap from './components/map/';
 
 import {
   MAP_CONTAINER_CSS_SELECTOR,
@@ -65,6 +65,7 @@ async function initMap(){
 
     // read events from Valo mob_happiness stream
     Valo.readMobileHappinesEvents((error, valoPayload) => {
+
       // Manage your error
       if(error) return printError(error);
 
@@ -84,6 +85,7 @@ async function initMap(){
 
     // read events from Valo mob_happiness stream
     Valo.readIOTEvents((error, valoPayload) => {
+
       // Manage your error
       if(error) return printError(error);
       // convert Valo event to MapPoint, add it to the map
