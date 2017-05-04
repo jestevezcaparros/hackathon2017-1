@@ -4,72 +4,115 @@
  * Utils module
  * @license MIT
  * @author Danilo Rossi <drossi@itrsgroup.com>
+ * @author Javier Latorre <jdelatorre@itrsgroup.com>
  * @author (Each contributor append a line here)
  */
 export default function(domElement) {
 
-  // <a class="ui card" href="http://www.dog.com">
-  //   <div class="content">
-  //     <div class="header">Cute Dog</div>
-  //     <div class="meta">
-  //       <span class="category">Animals</span>
+  // <div class="tweet-container">
+  //   <div class="ui grid">
+  //     <div class="twelve wide column">
+  //       <div class="user-container">
+  //         <img class="blue-wave" src="./src/images/blue-wave.png"/>
+  //         <img class="avatar-img" src="" alt="avatar-img"/>
+  //         <div class="name-container">
+  //           <p class="tweet-name"></p>
+  //           <p class="tweet-screen-name"></p>
+  //         </div>
+  //       </div>
+  //       <div class="tweet-text"></div>
   //     </div>
-  //     <div class="description">
-  //       <p></p>
+  //     <div class="four wide column right-column">
+  //       <p class="live-in-text">LIVE IN #JOTB17</p>
+  //       <div class="time-container">
+  //         <img class="red-wave" src="./src/images/red-wave.png"/>
+  //         <span class="time"></span>
+  //       </div>
   //     </div>
   //   </div>
-  //   <div class="extra content">
-  //     <div class="right floated author">
-  //       <img class="ui avatar image" src="/images/avatar/small/matt.jpg"> Matt
-  //     </div>
-  //   </div>
-  // </a>
+  // </div>
 
-  const wrapper = document.createElement('a');
-  ['ui', 'card'].forEach( className => wrapper.classList.add(className) );
+  const wrapper = document.createElement('div');
+  wrapper.classList.add('wrapper');
 
-  const divContent = document.createElement('div');
-  divContent.classList.add('content');
+  const ui_grid = document.createElement('div');
+  ['ui', 'grid'].forEach( className => ui_grid.classList.add(className) );
 
-  const divHeader = document.createElement('div');
-  divHeader.classList.add('header');
+  const leftColumn = document.createElement('div');
+  ['fourteen', 'wide', 'column'].forEach( className => leftColumn.classList.add(className) );
 
-  const divMeta = document.createElement('div');
-  divHeader.classList.add('meta');
+  const userContainer = document.createElement('div');
+  userContainer.classList.add('user-container');
 
-  const spanCategory = document.createElement('span');
-  spanCategory.classList.add('category');
+  const blueWave = document.createElement('img');
+  blueWave.classList.add('blue-wave');
 
-  const divDescription = document.createElement('div');
-  divDescription.classList.add('description');
+  const avatarImg = document.createElement('img');
+  avatarImg.classList.add('avatar-img');
 
-  const divExtra = document.createElement('div');
-  ['extra', 'content'].forEach( className => divExtra.classList.add(className) );
+  const nameContainer = document.createElement('div');
+  nameContainer.classList.add('name-container');
 
-  const divFloated = document.createElement('div');
-  ['right', 'floated', 'author'].forEach( className => divFloated.classList.add(className) );
+  const tweetName = document.createElement('p');
+  tweetName.classList.add('tweet-name');
 
-  const img = document.createElement('img');
-  ['ui', 'avatar', 'image'].forEach( className => img.classList.add(className) );
+  const tweetScreenName = document.createElement('p');
+  tweetScreenName.classList.add('tweet-screen-name');
 
-  divMeta.appendChild(spanCategory);
-  divContent.appendChild(divHeader);
-  divContent.appendChild(divMeta);
-  divContent.appendChild(divDescription);
-  divFloated.appendChild(img);
-  divExtra.appendChild(divFloated);
-  wrapper.appendChild(divContent);
-  wrapper.appendChild(divExtra);
+  const tweetText = document.createElement('div');
+  tweetText.classList.add('tweet-text');
 
+  const rightColumn = document.createElement('div');
+  ['two', 'wide', 'column', 'right-column'].forEach( className => rightColumn.classList.add(className) );
+
+  const liveInText = document.createElement('p');
+  liveInText.classList.add('live-in-text');
+
+  const timeContainer = document.createElement('div');
+  timeContainer.classList.add('time-container');
+
+  const redWave = document.createElement('img');
+  redWave.classList.add('red-wave');
+
+  const time = document.createElement('p');
+  time.classList.add('time');
+
+
+  timeContainer.appendChild(redWave);
+  timeContainer.appendChild(time);
+  rightColumn.appendChild(liveInText);
+  rightColumn.appendChild(timeContainer);
+
+  nameContainer.appendChild(tweetName);
+  nameContainer.appendChild(tweetScreenName);
+  userContainer.appendChild(blueWave);
+  userContainer.appendChild(avatarImg);
+  userContainer.appendChild(nameContainer);
+  leftColumn.appendChild(userContainer);
+  leftColumn.appendChild(tweetText);
+
+  ui_grid.appendChild(leftColumn);
+  ui_grid.appendChild(rightColumn);
+  wrapper.appendChild(ui_grid);
   domElement.appendChild(wrapper);
 
   return {
 
     show(tweet) {
-      divHeader.textContent = `${tweet.name} (${tweet.followers_count})`;//tweet.name;
-      spanCategory.textContent = tweet.screen_name;
-      divDescription.textContent = tweet.text;
-      img.src = tweet.profile_image_url_https;
+      let hours = (new Date()).getHours();
+      hours = (hours.length<10)?"0"+hours:hours;
+      let minutes = (new Date()).getMinutes();
+      minutes = (minutes.length<10)?"0"+minutes:minutes;
+
+      tweetName.textContent = tweet.name;
+      tweetScreenName.textContent = "@"+tweet.screen_name;
+      tweetText.textContent = tweet.text;
+      liveInText.textContent = "LIVE IN #JOTB17";
+      time.textContent = `${hours}:${minutes}`;
+
+      avatarImg.src = tweet.profile_image_url_https;
+      redWave.src = "./src/images/red-wave.png";
+      blueWave.src = "./src/images/blue-wave.png";
     }
 
   };
