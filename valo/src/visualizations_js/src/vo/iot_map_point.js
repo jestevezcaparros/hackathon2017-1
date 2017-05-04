@@ -8,12 +8,24 @@
  * @author Zuri Pabón <zpabon@itrsgroup.com>
  */
 
+import MapPoint from './map_point';
+
 /**
- * Create a valid MapPoint given an event from Valo mobile location stream
- * @method createLocationMapPoint
- * @param  {Object}                valoPayload   A mob_location Valo stream event
- * @return {MapPoint}                            A valid MapPoint
+ * Represents a iot map point for google maps
  */
+class IOTPoint extends MapPoint {
+  constructor(latitude, longitude, contributor, temperature) {
+    super(latitude, longitude);
+    this.contributor = contributor;
+    this.temperature = temperature;
+  }
+}
+
 export function createIOTPoint(valoPayload){
-  return valoPayload;
+  return new IOTPoint(
+    valoPayload.position.latitude,
+    valoPayload.position.longitude,
+    valoPayload.contributor,
+    valoPayload.temperature
+  );
 }

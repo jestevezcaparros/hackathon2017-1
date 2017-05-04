@@ -8,6 +8,7 @@
  * @author Zuri Pabón <zpabon@itrsgroup.com>
  */
 
+import MapPoint from './map_point';
 
  // icons base folder
  import {
@@ -15,24 +16,23 @@
  } from '../settings'
 
  /**
-  * Represents a map point for google maps
+  * Represents an attender point for google maps
   */
- class MapPoint {
+ class AttenderPoint extends MapPoint {
    constructor(latitude, longitude, icon) {
-     this.latitude = latitude;
-     this.longitude = longitude;
+     super(latitude, longitude);
      this.icon = `${ICON_URL}${icon}.svg`;
    }
  }
 
  /**
-  * Create a valid MapPoint given an event from Valo mobile location stream
-  * @method createLocationMapPoint
+  * Create a valid AttenderPoint given an event from Valo mobile location stream
+  * @method createLocationAttenderPoint
   * @param  {Object}                valoPayload   A mob_location Valo stream event
-  * @return {MapPoint}                            A valid MapPoint
+  * @return {AttenderPoint}                            A valid AttenderPoint
   */
- export function createLocationMapPoint(valoPayload){
-   return new MapPoint(
+ export function createLocationAttenderPoint(valoPayload){
+   return new AttenderPoint(
      valoPayload.position.latitude,
      valoPayload.position.longitude,
      valoPayload.typeOfParticipant ?
@@ -45,10 +45,10 @@
   * Create a valid MapPoint given an event from Valo mobile happiness stream
   * @method createHappinessMapPoint
   * @param  {Object}                valoPayload   A mob_happiness Valo stream event
-  * @return {MapPoint}                            A valid MapPoint
+  * @return {AttenderPoint}                            A valid AttenderPoint
   */
- export function createHappinessMapPoint(valoPayload){
-   return new MapPoint(
+ export function createHappinessAttenderPoint(valoPayload){
+   return new AttenderPoint(
      valoPayload.position.latitude,
      valoPayload.position.longitude,
      valoPayload.happiness

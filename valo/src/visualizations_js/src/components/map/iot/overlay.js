@@ -55,7 +55,7 @@ export default class IOTOverlayView extends OverlayView {
     */
     getThermometer(id) {
       if(this._thermometers[id]) return this._thermometers[id];
-      this._thermometers[id] = Thermometer(this.iotContainerElement);
+      this._thermometers[id] = new Thermometer(this.iotContainerElement);
       this._thermometers[id].setRange([0,40]);
       return this._thermometers[id];
     }
@@ -77,8 +77,8 @@ export default class IOTOverlayView extends OverlayView {
     * @return IOTOverlayView instance
     */
     add(point) {
-      const thermometer = this.getThermometer(point.contributor, point.position);
-      const geopoint = new window.google.maps.LatLng(point.position.latitude, point.position.longitude);
+      const thermometer = this.getThermometer(point.contributor);
+      const geopoint = new window.google.maps.LatLng(point.latitude, point.longitude);
       const projection = this.getProjection();
       thermometer.setPosition(projection.fromLatLngToDivPixel(geopoint));
       thermometer.setTemperature(point.temperature);
