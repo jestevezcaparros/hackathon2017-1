@@ -35,6 +35,8 @@ import {
   HISTORICAL_QUERY_HAPPINESS_AVG,
   QUERY_TEMP,
   HISTORICAL_QUERY_TEMP,
+  QUERY_TWEETS,
+  HISTORICAL_QUERY_TWEETS,
   REPLAY,
   REPLAY_INTERVAL,
   DEBUG
@@ -145,7 +147,6 @@ export async function readIOTEvents(callback){
   select contributor.user.typeOfParticipant as participant, happiness, timestamp
   group by participant
   select avg(happiness), participant
-
 *
 */
 export async function readGroupsAvg(callback){
@@ -153,6 +154,29 @@ export async function readGroupsAvg(callback){
   try {
      let dataBuffer = [];
      const { observable } = await runSingleQuery(HOST, TENANT, SHOULD_REPLAY ? HISTORICAL_QUERY_HAPPINESS_AVG : QUERY_HAPPINESS_AVG);
+     if(!callback || !isFunction(callback)) return observable;
+     const _observable = SHOULD_REPLAY ? replayObservabable(observable) : observable;
+     _observable.subscribe(
+      payload => payload && callback(null, payload),
+      error => callback(error),
+      completed => callback(null, null)
+    );
+  } catch (error) {
+    printError(error);
+    callback(error);
+  }
+
+}
+
+/* TODO
+*
+*
+*/
+export async function readTweets(callback){
+
+  try {
+     let dataBuffer = [];
+     const { observable } = await runSingleQuery(HOST, TENANT, SHOULD_REPLAY ? HISTORICAL_QUERY_TWEETS : QUERY_TWEETS);
      if(!callback || !isFunction(callback)) return observable;
      const _observable = SHOULD_REPLAY ? replayObservabable(observable) : observable;
      _observable.subscribe(

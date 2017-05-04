@@ -21,6 +21,21 @@ html, body {
   border-radius: 10px;
 }
 
+.tweet-container {
+  z-index: 1;
+  position: absolute;
+  bottom: 10px;
+  right: 5px;
+  /*height: 100px;
+  width: 200px;*/
+  background: white;
+}
+.tweet-container .ui.card {
+  width: auto;
+}
+
+
+
 .avg-container .avg-chart-container {
   padding-top: 20px;
 }
