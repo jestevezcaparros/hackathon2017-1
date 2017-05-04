@@ -69,3 +69,63 @@ svg {
   width: 20%;
   height: 20%;
 }
+.thermometer {
+  width: 50px;
+  height: 110px;
+  display: block;
+  position: absolute;
+  opacity: 0.6;
+  transform: translate(-50%, 0px) scale(0.6);
+}
+
+.tube {
+  border: 5px solid #5C525F;
+  border-bottom: transparent;
+  box-sizing: border-box;
+  display: block;
+  position: absolute;
+  z-index: 1;
+  left: 14px;
+  width: 25px;
+  height: 62px;
+  border-radius: 50px 50px 0 0;
+  background: #FFF;
+}
+
+.bulb {
+  box-shadow: 0 0 0 5px #FFF, 0 0 0 10px #5C525F;
+  background: #66A683;
+  display: block;
+  text-align: center;
+  font-size: 20px;
+  line-height: 37px;
+  color: #FFF;
+  position: absolute;
+  bottom: 10px;
+  left: 9px;
+  width: 35px;
+  height: 35px;
+  border-radius: 100%;
+}
+
+.stem {
+  background: transparent;
+  position: relative;
+  display: block;
+  width: 10px;
+  height: 56px;
+  border-radius: 10px 10px 0 0;
+  margin: 5px auto;
+}
+
+.stem .fluid {
+  background: #66A683;
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: 25px 25px 0 0;
+  position: absolute;
+  bottom: 0;
+  transition-timing-function: linear;
+  transition: height 2s;
+}

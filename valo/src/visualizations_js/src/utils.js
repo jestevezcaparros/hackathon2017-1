@@ -6,11 +6,7 @@
  * @author Zuri Pabón <zpabon@itrsgroup.com>
  * @author (Each contributor append a line here)
  */
-
-import {
-    runSingleQuery
-} from '../../lib_js/valo_sdk_js';
-
+ 
 import {
   AUDITORIO_POLYGON,
   POLYGON_ROOM_STYLE,

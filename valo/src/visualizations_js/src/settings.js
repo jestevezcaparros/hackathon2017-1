@@ -32,12 +32,21 @@ export const HISTORICAL_QUERY_MOB_LOCATION = `
   order by timestamp
   take 10000
 `;
-export const QUERY_HAPPINESS_AVG = `
+export const QUERY_TEMP = `
+  from /streams/demo/iot_board/temperature
+  select timestamp, contributor, temperature, position
+`;
+export const HISTORICAL_QUERY_TEMP = `
+  from historical /streams/demo/iot_board/temperature
+  select timestamp, temperature, position
+  take 10000
+`;
+export const QUERY_MOB_HAPPINESS_AVG = `
   from /streams/demo/mobile/happiness
   group by contributor.user.typeOfParticipant, timestamp window of 1 minute every 1 second
   select typeOfParticipant as TypeOfParticipant, 100 * avg( (happiness+1.0) / 2.0) as AverageHappiness
 `;
-export const HISTORICAL_QUERY_HAPPINESS_AVG = QUERY_HAPPINESS_AVG.replace('from ', 'from historical ');
+export const HISTORICAL_QUERY_MOB_HAPPINESS_AVG = QUERY_MOB_HAPPINESS_AVG.replace('from ', 'from historical ');
 export const QUERY_TWEETS = `
   from /streams/demo/twitter/tweets
   select tweet.text, tweet.user.name, tweet.user.screen_name, tweet.user.location, tweet.user.followers_count, tweet.user.profile_image_url_https, tweet.created_at
@@ -49,7 +58,7 @@ export const MAP_CONTAINER_CSS_SELECTOR = '.map-container';
 export const PEOPLE = 3;
 // Use Record and Replay Version
 // (to enable it, append the query search ?replay to the server url)
-export const REPLAY = false;
+export const REPLAY = window.location.search.includes('replay');
 export const REPLAY_INTERVAL = 50;
 export const LA_TERMICA_COORDINATES = {
   lat: 36.689150,

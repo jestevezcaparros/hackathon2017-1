@@ -8,23 +8,25 @@
  * @author Danilo Rossi <drossi@itrsgroup.com>
  */
 
-import JotbMap from './map';
+import JotbMap from './components/map/';
 
 import {
   MAP_CONTAINER_CSS_SELECTOR,
-  LA_TERMICA_COORDINATES,
   MAP_OPTIONS
 } from './settings'
 
-import * as Valo from './valo/dao'
+// import DAOs
+import * as TweetDAO from './dao/twitter';
+import * as MobileDAO from './dao/mobile';
+import * as IotDAO from './dao/iot';
 
-import {
-  createHappinessMapPoint,
-  createLocationMapPoint,
-  createGroupAverage,
-  createTweet
-} from './valo/vos'
+// import VOs
+import * as AttenderVO from './vo/attender_map_point';
+import * as IOTMapPointVO from './vo/iot_map_point';
+import * as TweetVO from './vo/tweet';
+import * as GroupVO from './vo/group_average';
 
+// import UI Components
 import percentBar from './components/percent_bar'
 import tweetBox from './components/tweet_box'
 
@@ -33,74 +35,50 @@ import {
   printLog
 } from './utils';
 
-function getNextBarChartContainer() {
-  var chartContainer = document.createElement('div');
-  chartContainer.classList.add('avg-chart-container');
-  document.querySelector('.avg-container').appendChild(chartContainer);
-  return chartContainer;
-}
-
-/**
-* This creates a google Maps Api v3 instance rendering the map
-* afterwards it starts listening to real time events coming from Valo.
-*
-* It updates the map with the data retrieved from Valo which includes the
-* contributor position (given as pairs of lat and long) along the contributor
-* status (either of happy, neutral or sad)
-* @return undefined
-*/
-async function initMap(){
-
-  let averageBars = new Map();
-  let tweetBoxComponent = null;
+(function init(){
 
   try {
 
-    // Init and render the map onto the DOM
+    // track the average happiness bar charts
+    let averageBars = new Map();
+
+    // reference to the tweet visualization
+    let tweetBoxComponent = null;
+
+    // This creates a google Maps Api v3 instance rendering the map
     const map = JotbMap({
       domElement: document.querySelector(MAP_CONTAINER_CSS_SELECTOR),
       options: MAP_OPTIONS
     });
 
-    // read events from Valo mob_happiness stream
-    Valo.readMobileHappinesEvents((error, valoPayload) => {
-      console.log('HApiness', valoPayload)
-      // Manage your error
-      if(error) return printError(error);
+    // utility function
+    const getNextBarChartContainer = function() {
+      var chartContainer = document.createElement('div');
+      chartContainer.classList.add('avg-chart-container');
+      document.querySelector('.avg-container').appendChild(chartContainer);
+      return chartContainer;
+    }
 
-      // convert Valo event to MapPoint, add it to the map
-      map.addPoints(createHappinessMapPoint(valoPayload));
+    document.querySelector('#top-menu-about').addEventListener('click', function(event) {
+      $('.ui.basic.modal.about').modal('show');
     });
-
-    // read events from Valo mob_location stream
-    Valo.readMobileLocationEvents((error, valoPayload) => {
-
-      console.log('Location', valoPayload)
-
-      // Manage your error
-      if(error) return printError(error);
-
-      // convert Valo event to MapPoint, add it to the map
-      map.addPoints(createLocationMapPoint(valoPayload));
-    });
-
 
     // read tweets
-    Valo.readTweets((err, valoPayload) => {
+    TweetDAO.readTweets((err, valoPayload) => {
+      console.log('valoPayload', valoPayload)
+      // (create twitter box component)
+      tweetBoxComponent = tweetBoxComponent || tweetBox(document.querySelector('.tweet-container'));
 
-        // (create twitter box component)
-        tweetBoxComponent = tweetBoxComponent || tweetBox(document.querySelector('.tweet-container'));
-
-        // show tweet in the UI
-        tweetBoxComponent.show( createTweet(valoPayload) );
+      // show tweet in the UI
+      tweetBoxComponent.show( TweetVO.createTweet(valoPayload) );
 
     })
 
     // read average by contributor
-    Valo.readGroupsAvg((err, valoPayload) => {
+    MobileDAO.readAverageHappinesEvents((err, valoPayload) => {
 
       // create a GroupAverage element
-      const groupAverage = createGroupAverage(valoPayload);
+      const groupAverage = GroupVO.createGroupAverage(valoPayload);
 
       // no bar chart for this group, create a new one
       if(!averageBars.has(groupAverage.group)) {
@@ -122,25 +100,39 @@ async function initMap(){
         // update existing bar chart for current event participant
         averageBars.get(groupAverage.group).updateAvg(groupAverage.average);
       }
-    })
+    });
 
-    //@TODO This should be moved to the data_generator, it remains here
-    // just for testing purposes
-    // if(DEBUG){
-    //   Array.from({length: PEOPLE})
-    //     .forEach(() => _readMobileLocationEvents(map));
-    // }
+    // read events from Valo mob_happiness stream
+    MobileDAO.readHappinesEvents((error, valoPayload) => {
+      // Manage your error
+      if(error) return printError(error);
 
-  } catch (error) {
-    printError(error);
+      // convert Valo event to MapPoint, add it to the map
+      map.attenders.add(AttenderVO.createHappinessAttenderPoint(valoPayload));
+    });
+
+    // read events from Valo mob_location stream
+    MobileDAO.readLocationEvents((error, valoPayload) => {
+
+      // Manage your error
+      if(error) return printError(error);
+
+      // convert Valo event to MapPoint, add it to the map
+      map.attenders.add(AttenderVO.createLocationAttenderPoint(valoPayload));
+    });
+
+    // read events from Valo mob_happiness stream
+    IotDAO.readTemperatureEvents((error, valoPayload) => {
+
+      // Manage your error
+      if(error) return printError(error);
+      // convert Valo event to MapPoint, add it to the map
+      map.iot.add(IOTMapPointVO.createIOTPoint(valoPayload));
+    });
+
   }
-}
+  catch(e){
+    printError(e);
+  }
 
-(function init(){
-
-  document.querySelector('#top-menu-about').addEventListener('click', function(event) {
-    $('.ui.basic.modal.about').modal('show');
-  });
-
-  window.initMap = initMap;
 })();
