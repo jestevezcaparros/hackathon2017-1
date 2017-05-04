@@ -52,7 +52,7 @@ import {
     });
 
     // utility function
-    function getNextBarChartContainer() {
+    const getNextBarChartContainer = function() {
       var chartContainer = document.createElement('div');
       chartContainer.classList.add('avg-chart-container');
       document.querySelector('.avg-container').appendChild(chartContainer);
