@@ -70,7 +70,7 @@ async function initMap(){
       if(error) return printError(error);
 
       // convert Valo event to MapPoint, add it to the map
-      map.position.addPoints(createHappinessMapPoint(valoPayload));
+      map.attenders.add(createHappinessMapPoint(valoPayload));
     });
 
     // read events from Valo mob_location stream
@@ -80,7 +80,7 @@ async function initMap(){
       if(error) return printError(error);
 
       // convert Valo event to MapPoint, add it to the map
-      map.position.addPoints(createLocationMapPoint(valoPayload));
+      map.attenders.add(createLocationMapPoint(valoPayload));
     });
 
     // read events from Valo mob_happiness stream
@@ -89,7 +89,10 @@ async function initMap(){
       // Manage your error
       if(error) return printError(error);
       // convert Valo event to MapPoint, add it to the map
-      map.temperature.addTemperature(createIOTPoint(valoPayload));
+
+      debugger
+      
+      map.iot.add(createIOTPoint(valoPayload));
     });
 
 
@@ -150,5 +153,5 @@ async function initMap(){
     $('.ui.basic.modal.about').modal('show');
   });
 
-  window.initMap = initMap;
+  initMap();
 })();

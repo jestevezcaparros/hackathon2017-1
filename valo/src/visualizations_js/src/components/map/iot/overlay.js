@@ -9,39 +9,82 @@
 
 import Thermometer from './thermometer';
 
-export default function(map){
+const OverlayView = window.google.maps.OverlayView;
 
-  function DivOverlay() {
-    this._thermometers = {};
-    this.map = map;
-    this.setMap(map);
-  }
+export default class IOTOverlayView extends OverlayView {
 
-  DivOverlay.prototype = new window.google.maps.OverlayView();
-  DivOverlay.prototype.getThermometer = function(id, position) {
+    /**
+    * IOTOverlayView constructor function
+    * Adds the overlay view to the map
+    *
+    * @param {Map} map A google.maps.Map instance
+    * @return IOTOverlayView instance
+    */
+    constructor(map){
+      super();
+      this._thermometers = {};
+      this.map = map;
+      this.mapsize = document.body.getBoundingClientRect();
+      this.setMap(map);
+    }
+
+    /**
+    * IOTOverlayView constructor function
+    * Adds the overlay view to the map
+    *
+    * @param {string} type The HTMLElement tag to add to the overlay
+    * @param {string} id The HTMLElement id
+    * @return IOTOverlayView instance
+    */
+    createOverlayElement(type, id){
+      if(!id || this[id]) throw Error(`${id} element already exists`);
+      this[id] = document.createElement(type);
+      this[id].id = id;
+      this[id].className = "overlay";
+      this[id].height = `${this.mapsize.height}px`;
+      this[id].width = `${this.mapsize.width}px`;
+      this.getPanes().overlayLayer.appendChild(this[id]);
+      return this;
+    }
+
+    /**
+    * Creates or get a thermometer instance
+    *
+    * @param {string} id The thermometer id
+    * @return Thermometer instance
+    */
+    getThermometer(id) {
       if(this._thermometers[id]) return this._thermometers[id];
-      this._thermometers[id] = Thermometer(this.overlay);
+      this._thermometers[id] = Thermometer(this.iotContainerElement);
       this._thermometers[id].setRange([0,40]);
       return this._thermometers[id];
-  }
-  DivOverlay.prototype.draw = function() {};
-  DivOverlay.prototype.onAdd = function() {
-    // Create thermometer container and add class
-    const {width, height} = document.body.getBoundingClientRect();
-    this.overlay = document.createElement('div');
-    this.overlay.classList.add('overlay');
-    this.overlay.style.width = `${width}px`;
-    this.overlay.style.height = `${height}px`;
-    this.getPanes().overlayLayer.appendChild(this.overlay);
-  };
+    }
 
-  DivOverlay.prototype.addTemperature = function(data) {
-    const getThermometer = this.getThermometer(data.contributor, data.position);
-    const geopoint = new window.google.maps.LatLng(data.position.latitude, data.position.longitude);
-    const projection = this.getProjection();
-    getThermometer.setPosition(projection.fromLatLngToDivPixel(geopoint));
-    getThermometer.setTemperature(data.temperature);
-  }
+    /**
+    * Called once the overlay is added to the map
+    * It is used to add the required DOM elements to the map
+    * @return IOTOverlayView instance
+    */
+    onAdd() {
+      // Create thermometer container and add class
+      this.createOverlayElement('div', 'iotContainerElement');
+      return this;
+    }
 
-  return new DivOverlay();
+    /**
+    * This adds new points to the overlay.
+    * @param {IOTPoint} point a list IOTPoint
+    * @return IOTOverlayView instance
+    */
+    add(point) {
+      const thermometer = this.getThermometer(point.contributor, point.position);
+      const geopoint = new window.google.maps.LatLng(point.position.latitude, point.position.longitude);
+      const projection = this.getProjection();
+      thermometer.setPosition(projection.fromLatLngToDivPixel(geopoint));
+      thermometer.setTemperature(point.temperature);
+      return this;
+    }
+
+    /* Not implemented */
+    draw(){}
 }
