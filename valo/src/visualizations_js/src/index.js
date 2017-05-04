@@ -8,7 +8,7 @@
  * @author Danilo Rossi <drossi@itrsgroup.com>
  */
 
-import JotbMap from './map';
+import JotbMap from './map/';
 
 import {
   MAP_CONTAINER_CSS_SELECTOR,
@@ -21,6 +21,7 @@ import * as Valo from './valo/dao'
 import {
   createHappinessMapPoint,
   createLocationMapPoint,
+  createIOTPoint,
   createGroupAverage
 } from './valo/vos'
 
@@ -61,30 +62,33 @@ async function initMap(){
 
     // read events from Valo mob_happiness stream
     Valo.readMobileHappinesEvents((error, valoPayload) => {
-      console.log('HApiness', valoPayload)
       // Manage your error
       if(error) return printError(error);
 
       // convert Valo event to MapPoint, add it to the map
-      map.addPoints(createHappinessMapPoint(valoPayload));
+      map.position.addPoints(createHappinessMapPoint(valoPayload));
     });
 
     // read events from Valo mob_location stream
     Valo.readMobileLocationEvents((error, valoPayload) => {
 
-      console.log('Location', valoPayload)
-
       // Manage your error
       if(error) return printError(error);
 
       // convert Valo event to MapPoint, add it to the map
-      map.addPoints(createLocationMapPoint(valoPayload));
+      map.position.addPoints(createLocationMapPoint(valoPayload));
+    });
+
+    // read events from Valo mob_happiness stream
+    Valo.readIOTEvents((error, valoPayload) => {
+      // Manage your error
+      if(error) return printError(error);
+      // convert Valo event to MapPoint, add it to the map
+      map.temperature.addTemperature(createIOTPoint(valoPayload));
     });
 
     // read average by contributor
     Valo.readGroupsAvg((err, valoPayload) => {
-
-      console.log('GROUP', valoPayload);
 
       // create a GroupAverage element
       const groupAverage = createGroupAverage(valoPayload);

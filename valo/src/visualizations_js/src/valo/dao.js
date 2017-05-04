@@ -33,6 +33,8 @@ import {
   HISTORICAL_QUERY_MOB_LOCATION,
   QUERY_HAPPINESS_AVG,
   HISTORICAL_QUERY_HAPPINESS_AVG,
+  QUERY_TEMP,
+  HISTORICAL_QUERY_TEMP,
   REPLAY,
   REPLAY_INTERVAL,
   DEBUG
@@ -107,6 +109,35 @@ export async function readMobileLocationEvents(callback){
   }
 }
 
+/**
+* It creates a new Valo session and runs the QUERY_MOB_HAPPINESS query
+* Once query is created on Valo it is started and a new SSE connection is opened
+* That connection is wrapped around an RxJS observable object so it is just
+* needed to subscribe to the observable to process the payloads coming from Valo
+*
+* @param {Function<ErrorObject, PayloadObject>} callback? If provided,
+* the observable is not returned. This callback will be called every time a new
+* event comes or if an error happends. If no callback is provided, the observable
+* is returned instead.
+* @return RxJS.Observable?
+*/
+export async function readIOTEvents(callback){
+  try {
+     let dataBuffer = [];
+     const query = SHOULD_REPLAY ? HISTORICAL_QUERY_TEMP : QUERY_TEMP;
+     const { observable } = await (DEBUG ? runSingleQueryMocked(query) : runSingleQuery(HOST, TENANT, query));
+     if(!callback || !isFunction(callback)) return observable;
+     const _observable = SHOULD_REPLAY ? replayObservabable(observable) : observable;
+     _observable.subscribe(
+     payload => payload && callback(null, payload),
+     error => callback(error),
+     completed => callback(null, null));
+  } catch (error) {
+    printError(error);
+    callback(error);
+  }
+}
+
 /* TODO mocked up data from Valo
 * should be a query like:
 
@@ -132,6 +163,6 @@ export async function readGroupsAvg(callback){
   } catch (error) {
     printError(error);
     callback(error);
-  } 
+  }
 
 }

@@ -9,7 +9,7 @@
  */
 export const DEBUG = false;
 export const HOST = {valoHost: "localhost", valoPort: 8888};
-export const ICON_URL = 'http://localhost:8080/valo/src/visualizations_js/icons/'
+export const ICON_URL = 'http://localhost:8080/icons/'
 export const TENANT = 'demo';
 // VALO QUERIES
 export const QUERY_MOB_HAPPINESS = `
@@ -30,6 +30,15 @@ export const HISTORICAL_QUERY_MOB_LOCATION = `
   from historical /streams/demo/mobile/location
   select timestamp, contributor.user.typeOfParticipant as typeOfParticipant, position
   order by timestamp
+  take 10000
+`;
+export const QUERY_TEMP = `
+  from /streams/demo/iot_board/temperature
+  select timestamp, contributor, temperature, position
+`;
+export const HISTORICAL_QUERY_TEMP = `
+  from historical /streams/demo/iot_board/temperature
+  select timestamp, temperature, position
   take 10000
 `;
 export const QUERY_HAPPINESS_AVG = `

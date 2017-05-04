@@ -1,17 +1,17 @@
 "use strict";
 /**
- * Map module
- * @license MIT
- * @author Andres Ramirez <aramirez@itrsgroup.com>
- * @author Zuri Pabón <zpabon@itrsgroup.com>
- * @author (Each contributor append a line here)
- */
+* Map module
+* @license MIT
+* @author Andres Ramirez <aramirez@itrsgroup.com>
+* @author Zuri Pabón <zpabon@itrsgroup.com>
+* @author (Each contributor append a line here)
+*/
 
-import {getIcon, plotPoint, createMap} from './utils';
+import {getIcon, plotPoint} from '../utils';
 
-function initCanvasOverlay(){
+export default function(map){
 
-  function CanvasOverlay(map) {
+  function CanvasOverlay() {
       const {width, height} = document.body.getBoundingClientRect();
       const initCanvas = label => {
         this[label] = document.createElement("canvas");
@@ -58,11 +58,5 @@ function initCanvasOverlay(){
       this.draw();
   }
 
-  return CanvasOverlay;
-
-}
-
-export default (...args) => {
-  const CanvasOverlay = initCanvasOverlay();
-  return new CanvasOverlay(createMap(...args));
+  return new CanvasOverlay();
 }

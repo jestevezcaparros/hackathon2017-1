@@ -61,6 +61,16 @@ export function createLocationMapPoint(valoPayload){
   );
 }
 
+/**
+ * Create a valid MapPoint given an event from Valo mobile location stream
+ * @method createLocationMapPoint
+ * @param  {Object}                valoPayload   A mob_location Valo stream event
+ * @return {MapPoint}                            A valid MapPoint
+ */
+export function createIOTPoint(valoPayload){
+  return valoPayload;
+}
+
 export function createGroupAverage(valoPayload){
   return new GroupAverage(
     valoPayload['AverageHappiness'],
