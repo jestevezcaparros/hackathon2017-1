@@ -146,8 +146,8 @@ const contributors = [
         walkerData : {
             resolution : WALKER_RESOLUTION,
             initPosVel : {
-                initPosX : ORIGIN_LON - 100 * GRID_SIZE,
-                initPosY : ORIGIN_LAT - 100 * GRID_SIZE,
+                initPosX : -4.444078,
+                initPosY : 36.689484,
                 initVelX : 0,
                 initVelY : 0
             },
@@ -165,8 +165,8 @@ const contributors = [
         walkerData : {
             resolution : WALKER_RESOLUTION,
             initPosVel : {
-                initPosX : ORIGIN_LON + 100 * GRID_SIZE,
-                initPosY : ORIGIN_LAT - 100 * GRID_SIZE,
+                initPosX : -4.444214,
+                initPosY : 36.689181,
                 initVelX : 0,
                 initVelY : 0
             },
@@ -184,8 +184,8 @@ const contributors = [
         walkerData : {
             resolution : WALKER_RESOLUTION,
             initPosVel : {
-                initPosX : ORIGIN_LON + 100 * GRID_SIZE,
-                initPosY : ORIGIN_LAT + 100 * GRID_SIZE,
+                initPosX : -4.443800,
+                initPosY : 36.689414,
                 initVelX : 0,
                 initVelY : 0
             },
@@ -203,8 +203,8 @@ const contributors = [
         walkerData : {
             resolution : WALKER_RESOLUTION,
             initPosVel : {
-                initPosX : ORIGIN_LON - 100 * GRID_SIZE,
-                initPosY : ORIGIN_LAT + 100 * GRID_SIZE,
+                initPosX : -4.443970,
+                initPosY : 36.689100,
                 initVelX : 0,
                 initVelY : 0
             },
@@ -424,7 +424,7 @@ async function onTickIotBoard(
                 "longitude" : position.x,
                 "latitude" : position.y
             },
-            "temperature" :  Math.random(), //TODO - Fix range
+            "temperature" :  ~~(Math.random()*40), //TODO - Fix range
             "units" : "celsius"
         };
         console.log(temperatureEvt);
