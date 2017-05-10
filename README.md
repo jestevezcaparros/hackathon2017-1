@@ -35,8 +35,11 @@ Danilo Rossi, Zuri Pabón, Andrés Ramírez, Andras Kecskes
 Contributed to the preparation of the Hackathon (coding and documenting):
 
 **Documentation and design**: Angela Dini, Paul Baxter,  Katharine Murphy
+
 **IoT devices** : David Torelli, Rémi Selva, Francisco Parada, David Sobieplan
+
 **Mobile application**:  Leo Andre Namuco
+
 **Visualizations**: Danilo Rossi, Zuri Pabón, Andrés Ramírez, Javier Latorre
 
 ### Participants
