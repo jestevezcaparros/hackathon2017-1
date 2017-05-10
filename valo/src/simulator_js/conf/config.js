@@ -220,7 +220,7 @@ const contributors = [
             "id" : "fake-mobile-user-00001",
             "user" : {
                 "name" : "fake-mobile-user-00001",
-                "typeOfParticipant" : "ORGANIZER",
+                "typeOfParticipant" : "fake organizer",
                 "company" : "FAKE",
                 "country" : "Spain",
                 "role" : "Developer"
@@ -235,7 +235,7 @@ const contributors = [
             "id" : "fake-mobile-user-00002",
             "user" : {
                 "name" : "fake-mobile-user-00002",
-                "typeOfParticipant" : "SPEAKER",
+                "typeOfParticipant" : "fake speaker",
                 "company" : "FAKE",
                 "country" : "Spain",
                 "role" : "Developer"
@@ -250,7 +250,7 @@ const contributors = [
             "id" : "fake-mobile-user-00003",
             "user" : {
                 "name" : "fake-mobile-user-00003",
-                "typeOfParticipant" : "ATTENDEE",
+                "typeOfParticipant" : "fake attendee",
                 "company" : "FAKE",
                 "country" : "Spain",
                 "role" : "Developer"
@@ -265,7 +265,7 @@ const contributors = [
             "id" : "fake-mobile-user-00004",
             "user" : {
                 "name" : "fake-mobile-user-00004",
-                "typeOfParticipant" : "GATECRASHER",
+                "typeOfParticipant" : "fake gatecrasher",
                 "company" : "FAKE",
                 "country" : "Spain",
                 "role" : "Developer"
