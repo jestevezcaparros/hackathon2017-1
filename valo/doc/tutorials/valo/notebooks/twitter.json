@@ -1,0 +1,24 @@
+{
+    "id": "nerGrk7R5RljPr4S",
+    "name": "Twitter",
+    "collection": "Hackathon",
+    "description": "",
+    "panels": [
+        {
+            "type": "query",
+            "command": "from /streams/demo/twitter/tweets\nselect tweet.lang, tweet.source, tweet.user.name, tweet.user.followers_count as f, tweet.user.friends_count as g, tweet.created_at as t\nselect bivar(f, g), last(t) as T\nselect bivar.pearsonsR as R, T\n--group by T window of 1 minute every 1 second\n--select avg(R), T",
+            "uuid": "j0vFuGQ0JZCo2F79",
+            "settings": "{\"axisSelection\":{\"TableChart\":{},\"BubbleChart\":{\"x\":[\"bivar.interceptYX\"],\"y\":[\"bivar.interceptXY\"],\"size\":[\"bivar.slopeYX\"]},\"ColumnChart\":{\"y\":\"pearsonsR\"},\"LineChart\":{\"x\":[\"T\"],\"y\":[\"R\"]}},\"groupSelection\":[\"bivar.interceptXY\"],\"selectedChartType\":\"LineChart\",\"resultsWindow\":null,\"userAnnotations\":[]}",
+            "variables": []
+        },
+        {
+            "type": "query",
+            "command": "from /streams/demo/twitter/tweets\ngroup by tweet.created_at as c window of 1 minute every 1 second\nselect count()/60.0 as tweetsPerSecond, c\n",
+            "uuid": "9bpaswcQuA82mxkI",
+            "settings": "{\"axisSelection\":{\"TableChart\":{},\"ColumnChart\":{\"y\":\"tweetsPerSecond\"},\"LineChart\":{\"x\":\"c\",\"y\":\"tweetsPerSecond\"}},\"groupSelection\":[],\"selectedChartType\":\"LineChart\",\"resultsWindow\":null,\"userAnnotations\":[]}",
+            "variables": []
+        }
+    ],
+    "vector": "AdpHyx+Q3RFahpP8+Golv78AAAAAAAAAOA==",
+    "uri": "/notebook/demo/ikabo/nerGrk7R5RljPr4S"
+}

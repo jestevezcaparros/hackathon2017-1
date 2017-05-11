@@ -1,0 +1,17 @@
+{
+    "id": "ZMOfZaLJTZpSTcAe",
+    "name": "Location and Happiness",
+    "collection": "Hackathon",
+    "description": "",
+    "panels": [
+        {
+            "type": "query",
+            "command": "from /streams/demo/mobile/happiness\ngroup by contributor.user.typeOfParticipant as p\nselect p, avg(happiness), count()",
+            "uuid": "CLVAWfaJWdGV9aw6",
+            "settings": "{\"axisSelection\":{\"TableChart\":{},\"BubbleChart\":{\"x\":[\"position.altitude\"],\"y\":[\"position.latitude\"],\"size\":[]},\"LineChart\":{\"x\":\"timestamp\",\"y\":\"position.altitude\"},\"SparkLines\":{\"x\":\"timestamp\",\"y\":\"position.altitude\"},\"ColumnChart\":{\"y\":\"avg\"},\"KPIChart\":{\"field\":\"avg\"}},\"groupSelection\":[\"p\"],\"selectedChartType\":\"ColumnChart\",\"resultsWindow\":null,\"userAnnotations\":[]}",
+            "variables": []
+        }
+    ],
+    "vector": "AdpHyx+Q3RFahpP8+Golv78AAAAAAAAANA==",
+    "uri": "/notebook/demo/ikabo/ZMOfZaLJTZpSTcAe"
+}
