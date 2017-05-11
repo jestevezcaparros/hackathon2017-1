@@ -25,22 +25,29 @@ Under `teams/` we will put all the code, documentation and presentations created
 ### Requirements
 You will need to have installed in your environment:
 
-- First, clone this repository in your computer and install its dependencies:
+- A **[Git](https://git-scm.com/)** client.
+
+- **Java Run Environment**. Valo needs version: `1.8.0_131`  to run smoothly. [Download it here](http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html)
+
+- **[NodeJS](https://nodejs.org/es/)**. The running environment for javascript outside a web browser. 
+
+- **[Babel](https://babeljs.io/)**. A transpiler from Ecmascript2015 and beyond to Ecmascript5. Our examples and code use the latest elegant flavor of Javascript and need this! Although it is installed locally in our local hackathon repository, it is convenient to have it installed globally in our system.
+~~~shell
+$ npm i --global babel-cli babel-present-env
+~~~
+- **[Curl](https://curl.haxx.se/dlwiz/?type=bin)**. The command line tool for sending and receiving HTTP.
+
+- **[Advanced Rest Client](https://advancedrestclient.com/)**. A GUI alternative to *Curl*.
+
+- Clone this repository in your computer and install its dependencies:
 ~~~shell
 $ git clone https://github.com/ITRS-Group/hackathon2017.git
 
 $ npm install
 ~~~
 
-- **Java Run Environment**. Valo needs version: `1.8.0_51`  to run smoothly. [Download it here](http://www.oracle.com/technetwork/java/javase/downloads/java-archive-javase8-2177648.html#sjre-8u51-oth-JPR)
-
--  **[NodeJS](https://nodejs.org/es/)**. The running environment for javascript outside a web browser. 
-
-- **[Babel](https://babeljs.io/)**. A transpiler from Ecmascript2015 and beyond to Ecmascript5. Our examples and code use the latest elegant flavor of Javascript and need this!
-
 - **[Valo](https://valo.io/)**. See [Getting Started](https://valo.io/docs/current/Valo/getting_started/get_start_links.html) for installing it.
 
-- **[Curl](https://curl.haxx.se/)**. The command line tool for sending and receiving HTTP.
 
 ### Run stuff
 There are different parts of the Hackathon's base scenario that must be launched, preferably in order.
