@@ -2,11 +2,11 @@
 
 This is the repository for the Valo [Hackathon](https://jonthebeach.com/hackathon) and [J On The Beach 2017](https://jonthebeach.com/).
 
-The purpose of the hackathon is *hackhing the J On The Beach conference*. For doing so, we will use [Valo](https://valo.io/) as the core real-time analytics engine. We will feed Valo from IoT and mobile devices. Then we will create data visualizations that help us get insights about the J On The Beach itself. 
+The purpose of the hackathon is *hacking the J On The Beach conference*. In order to do so, we will use [Valo](https://valo.io/) as the core real-time analytics engine. We will feed Valo from IoT and mobile devices. Then we will create data visualizations that help us get insights about J On The Beach itself. 
 
 ## Documentation and Tutorials
 
-Below you have a quick [Getting started]() section. Find extended documents and tutorials in the [Wiki](https://github.com/ITRS-Group/hackathon2017/wiki). 
+Below you will see a quick [Getting started]() section. Find extended documents and tutorials in the [Wiki](https://github.com/ITRS-Group/hackathon2017/wiki). 
 
 ## How to contribute
 
@@ -18,7 +18,7 @@ Below you have a quick [Getting started]() section. Find extended documents and 
 
 Under `valo/` we put all the code (examples, helpers) and documentation created by Valo for the participants to use.
 
-Under `teams/` we will put all the code, documentation and presentation the teams of participants will generate during the Hackathon.
+Under `teams/` we will put all the code, documentation and presentations created by the Hackathon teams. 
 
 ## Getting started
 
@@ -36,14 +36,14 @@ $ npm install
 
 -  **[NodeJS](https://nodejs.org/es/)**. The running environment for javascript outside a web browser. 
 
-- **[Babel](https://babeljs.io/)**. A transpiler from Ecmascript2015 and beyond to Ecmascript5. Our examples and code use the latests elegant flavor of Javascript and need this!
+- **[Babel](https://babeljs.io/)**. A transpiler from Ecmascript2015 and beyond to Ecmascript5. Our examples and code use the latest elegant flavor of Javascript and need this!
 
 - **[Valo](https://valo.io/)**. See [Getting Started](https://valo.io/docs/current/Valo/getting_started/get_start_links.html) for installing it.
 
 - **[Curl](https://curl.haxx.se/)**. The command line tool for sending and receiving HTTP.
 
 ### Run stuff
-There are different parts of the base hackathon's scenario that are to be launched, preferably in order.
+There are different parts of the Hackathon's base scenario that must be launched, preferably in order.
 
 1. Run **Valo**
 
@@ -64,32 +64,32 @@ There are different parts of the base hackathon's scenario that are to be launch
 For running **Valo**, see instructions at [Getting Started](https://valo.io/docs/current/Valo/getting_started/run_valo.htm). 
 
 #### Create contributors and streams
-When running things for the 1st time we need to create the streams and contributors in Valo. The following script assumes you are running a Unix shell. If not, inspect the target shell script and run the curl commands it contains.
+When running things for the 1st time, we need to create the streams and contributors in Valo. The following script assumes you are running a Unix shell. If not, inspect the target shell script and run the curl commands it contains.
 1. From the root of this repository:
 ~~~shell
 $ npm run createAllStreamsAndContributors 
 ~~~
-2. If your are curious or run into trouble, Inspect the master `package.json`file at the root of the repository to see what script you are starting with the command above:
+2. If you are curious or run into trouble, inspect the master `package.json`file at the root of the repository to see what script you are starting with the command above:
 ~~~shell
 $ grep createAllStreamsAndContributors package.json 
     "createAllStreamsAndContributors": "cd valo/doc/interfaces && sh create_all_contributors_and_streams.sh; cd -"
 ~~~
 
 #### Start the simulator
-The simulator injects fake events in Valo, from fake users using the mobile application. Two types of events: user location and user rating of the event.
+The simulator injects fake events into Valo, from fake users using the mobile application. There are two types of events: user location and user rating of the event.
 
 1. From the root of this repository:
 ~~~shell
 $ npm run launch:simulator
 ~~~
-2. If your are curious or run into trouble, Inspect the master `package.json`file at the root of the repository to see what script you are starting with the command above:
+2. If you are curious or run into trouble, inspect the master `package.json`file at the root of the repository to see what script you are starting with the command above:
 ~~~shell
 $ grep "launch:simulator" package.json 
     "launch:simulator": "babel-node valo/src/simulator_js/bin/main.js",
 ~~~
 
 #### Start the Twitter feed
-This starts a script that listens for a Twitter stream and publish the events into Valo.
+This starts a script that listens to a Twitter stream and publishes the events into Valo.
 
 1. You need a Twitter account. 
 
@@ -111,7 +111,7 @@ export TWITTER_ACCESS_TOKEN_SECRET='your_access_token_secret'
 ~~~shell
 $ npm run launch:twitter
 ~~~
-7. If your are curious or run into trouble, Inspect the master `package.json`file at the root of the repository to see what script you are starting with the command above:
+7. If you are curious or run into trouble, inspect the master `package.json`file at the root of the repository to see what script you are starting with the command above:
 ~~~shell
 $ grep launch:twitter package.json 
    "launch:twitter": "babel-node valo/src/twitter_js/bin/main.js",
@@ -135,7 +135,7 @@ Some of the IoT board may publish events to a MQTT server like `mqtt://iot.eclip
 ~~~shell
 $ npm run launch:transport
 ~~~
-2. If your are curious or run into trouble, Inspect the master `package.json`file at the root of the repository to see what script you are starting with the command above:
+2. If you are curious or run into trouble, inspect the master `package.json`file at the root of the repository to see what script you are starting with the command above:
 ~~~shell
 $ grep launch:transport package.json 
     "launch:transport": "babel-node valo/src/transport_to_valo_bridge_js/bin/main.js",
