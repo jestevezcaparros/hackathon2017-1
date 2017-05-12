@@ -35,9 +35,13 @@ You will need to have installed in your environment:
 ~~~shell
 $ npm i --global babel-cli babel-present-env
 ~~~
-- **[Curl](https://curl.haxx.se/dlwiz/?type=bin)**. The command line tool for sending and receiving HTTP.
 
-- **[Advanced Rest Client](https://advancedrestclient.com/)**. A GUI alternative to *Curl*.
+- One of the following alternatives for sending HTTP requests:
+	- **[Curl](https://curl.haxx.se/dlwiz/?type=bin)**. The command line tool for sending and receiving HTTP.
+
+	- **[Advanced Rest Client](https://advancedrestclient.com/)**. A GUI alternative to *Curl*.
+
+- (Optional) **[Wireshark](https://www.wireshark.org/)** for capturing and analyzing HTTP traffic.
 
 - Clone this repository in your computer and install its dependencies:
 ~~~shell
