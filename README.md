@@ -50,7 +50,7 @@ $ git clone https://github.com/ITRS-Group/hackathon2017.git
 $ npm install
 ~~~
 
-- **[Valo](https://valo.io/)**. See [Getting Started](https://valo.io/docs/current/Valo/getting_started/get_start_links.html) for installing it.
+- **[Valo](https://valo.io/)**. Download from [here](http://zen.itrsgroup.com/l/81822/2017-05-12/4d61g8). Go to [Getting Started](https://valo.io/docs/current/Valo/getting_started/get_start_links.html) and install it.
 
 
 ### Run stuff
