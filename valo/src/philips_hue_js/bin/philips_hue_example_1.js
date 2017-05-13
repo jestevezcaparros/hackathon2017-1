@@ -23,7 +23,7 @@ import {
 // 
 // Philips Hue
 //
-const HUE_HOST = "192.168.1.33";
+const HUE_HOST = "192.168.1.34";
 const HUE_USER = "Odw-QQ0AxXDObwFjoX5KpeocXORnk6jjNieUirFq";
 const HUE_URI_PREFIX = `http://${HUE_HOST}`;
 const BULB1 = '1';
