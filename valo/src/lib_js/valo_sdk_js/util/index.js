@@ -56,6 +56,13 @@ export function processValoSseObservable(rawObservable) {
  * Retry-on-conflict DECORATOR for API calls
  * TODO: only useful for api functions with a body to be sent (3rd param)
  *  as this decorator expects the options in the 4th parameter.
+ *
+ *
+ * This is a naïve. Different conflictive versions
+ *   could coexist in a Valo cluster and we are solving the conflict
+ *   by picking the 1st version listed, instead of merging!!!
+ * However, it is useful and convenient for hacking purposes 
+ *   in a single-node cluster.
  */
 export function retryOnConflict(f) {
 
@@ -65,6 +72,9 @@ export function retryOnConflict(f) {
         if (resultArray.length < 2) {
             return null;
         } else {
+            // TODO: this is very naïve. Different conflictive versions
+            //  could coexist in a Valo cluster and we are solving the conflict
+            //  by picking the 1st version listed, instead of merging!!!
             return resultArray[1];
         }
     };
@@ -82,12 +92,18 @@ export function retryOnConflict(f) {
             } else {
                 // Handle 409 by retrying ONCE with correct headers
                 const response = e.response;
-                const valoConfigVersion = getValoConfigVersionFromBody(response.data);
+                const valoConfigVersion = getValoConfigVersionFromBody(
+                    response.data
+                );
                 // TODO: steps above could fail and throw errors!!
-                console.log(`> CONFLICT: found existing version ${valoConfigVersion} . Retrying 1 time ...`);
-                // Update headers argument, "Valo-Config-Version" field --- [host, port, path, body, headers]
-                // TODO: This takes for granted that headers field is in options param in position 3
-                // This obviously does not work for api functions that do not have a body to be sent
+                console.log(
+                    `> CONFLICT: found existing version ${valoConfigVersion}.Retrying 1 time ...`);
+                // Update headers argument, "Valo-Config-Version" field 
+                //      --- [host, port, path, body, headers]
+                // TODO: This takes for granted that headers field is in 
+                //      options param in position 3.
+                // This obviously does not work for api functions that 
+                //      do not have a body to be sent.
                 const receivedHeaders = args[3] && args[3].headers  || {};
                 args[3] = Object.assign(
                     {},
