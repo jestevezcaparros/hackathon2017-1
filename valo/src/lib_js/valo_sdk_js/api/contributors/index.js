@@ -21,7 +21,7 @@
  const DEFAULT_HEADERS = {"Content-Type" : "application/json"};
 
  /**
-  * Get contributor type - Get /contributors/:tenant/:type
+  * Get contributor type - GET /contributors/:tenant/:type
   * https://valo.io/docs/api_reference/contributors_api.html#get-a-contributor-type
   *
   * @async

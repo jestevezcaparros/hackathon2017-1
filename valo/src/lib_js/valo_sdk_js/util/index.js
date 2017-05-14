@@ -58,11 +58,9 @@ export function processValoSseObservable(rawObservable) {
  *  as this decorator expects the options in the 4th parameter.
  *
  *
- * This is a naïve. Different conflictive versions
- *   could coexist in a Valo cluster and we are solving the conflict
- *   by picking the 1st version listed, instead of merging!!!
- * However, it is useful and convenient for hacking purposes 
- *   in a single-node cluster.
+ * TODO: This is a naïve. Different conflictive versions
+ *   could coexist in a Valo cluster, however we assume we will receive only
+ *   one version, which is the usual case for a single-node cluster.
  */
 export function retryOnConflict(f) {
 
@@ -73,8 +71,8 @@ export function retryOnConflict(f) {
             return null;
         } else {
             // TODO: this is very naïve. Different conflictive versions
-            //  could coexist in a Valo cluster and we are solving the conflict
-            //  by picking the 1st version listed, instead of merging!!!
+            //  could coexist in a Valo cluster and we would need to 
+            //  send all of them in the retry request in order to overwrite!
             return resultArray[1];
         }
     };

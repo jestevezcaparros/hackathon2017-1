@@ -109,7 +109,7 @@ export async function setStreamRepository(
 }
 
 /**
- * Sets stream's repository in Valo - PUT /streams/:tenant/:collection/:name/repository
+ * Sets stream's repository in Valo - POST /streams/:tenant/:collection/:name
  * https://valo.io/docs/api_reference/streams_api.html#post-data-to-a-stream
  *
  * @async
