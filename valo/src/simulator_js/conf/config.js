@@ -5,8 +5,10 @@
  * Config should be better written (really?) in JSON files, which are parsed and joined.
  *   While we are experimenting, we will use this JS config file which is easier
  *   to load and modify.
+ *
  * @license MIT
  * @author Álvaro Santamaría Herrero <asantamaria@itrsgroup.com>
+ * @author Zuri Pabón <zpabon@itrsgroup.com>
  * @author (Each contributor appends a line here)
  */
 import {

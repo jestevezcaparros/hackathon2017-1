@@ -76,6 +76,7 @@ For running **Valo**, see instructions at [Getting Started](https://valo.io/docs
 
 #### Create contributors and streams
 When running things for the 1st time, we need to create the streams and contributors in Valo. The following script assumes you are running a Unix shell. If not, inspect the target shell script and run the curl commands it contains.
+
 1. From the root of this repository:
 ~~~shell
 $ npm run createAllStreamsAndContributors 

@@ -135,7 +135,7 @@ async function publishEvent_A() {
         );
         return response;
     } catch(e) {
-        console.error(">>> setRepo_A ", e);
+        console.error(">>> publishEvent_A ", e);
         throw e;
     }
 }
