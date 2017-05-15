@@ -1,127 +1,25 @@
 page-home {
-  .button.button-happy {
-    border-color: transparent;
-    background-color: #32db64;
-    color: #000000;
+
+  .face-buttons {
+    padding-top: 1rem;
+    button {
+      width: 100%;
+      background: transparent;
+      img {
+        width: 70%;
+      }
+      p {
+        font-family: "SourceCodePro-Medium";
+        text-transform: uppercase;
+        font-size: 1.4em;
+        margin: 5px;
+      }
+    }
   }
 
-  .button.button-happy:hover {
-    color: #000000;
-    background-color: #66f466;
-    text-decoration: none;
-  }
-
-  .button.button-happy.activated,
-  .button.button-happy.active {
-    background-color: #32db64;
-  }
-
-  .button.button-happy.button-clear {
-    border-color: transparent;
-    background: none;
-    box-shadow: none;
-    color: #32db64;
-  }
-
-  .button.button-happy.button-icon {
-    border-color: transparent;
-    background: none;
-  }
-
-  .button.button-happy.button-outline {
-    border-color: #32db64;
-    background: transparent;
-    color: #32db64;
-  }
-
-  .button.button-happy.button-outline.activated,
-  .button.button-happy.button-outline.active {
-    background-color: #32db64;
-    box-shadow: none;
-    color: #000000;
-  }
-
-  .button.button-meh {
-    border-color: transparent;
-    background-color: #387ef5;
-    color: #000000;
-  }
-
-  .button.button-meh:hover {
-    color: #000000;
-    background-color: #6666f4;
-    text-decoration: none;
-  }
-
-  .button.button-meh.activated,
-  .button.button-meh.active {
-    background-color: #387ef5;
-  }
-
-  .button.button-meh.button-clear {
-    border-color: transparent;
-    background: none;
-    box-shadow: none;
-    color: #387ef5;
-  }
-
-  .button.button-meh.button-icon {
-    border-color: transparent;
-    background: none;
-  }
-
-  .button.button-meh.button-outline {
-    border-color: #387ef5;
-    background: transparent;
-    color: #387ef5;
-  }
-
-  .button.button-meh.button-outline.activated,
-  .button.button-meh.button-outline.active {
-    background-color: #387ef5;
-    box-shadow: none;
-    color: #000000;
-  }
-
-  .button.button-sad {
-    border-color: transparent;
-    background-color: #f53d3d;
-    color: #000000;
-  }
-
-  .button.button-sad:hover {
-    color: #000000;
-    background-color: #f46666;
-    text-decoration: none;
-  }
-
-  .button.button-sad.activated,
-  .button.button-sad.active {
-    background-color: #f53d3d;
-  }
-
-  .button.button-sad.button-clear {
-    border-color: transparent;
-    background: none;
-    box-shadow: none;
-    color: #f53d3d;
-  }
-
-  .button.button-sad.button-icon {
-    border-color: transparent;
-    background: none;
-  }
-
-  .button.button-sad.button-outline {
-    border-color: #f53d3d;
-    background: transparent;
-    color: #f53d3d;
-  }
-
-  .button.button-sad.button-outline.activated,
-  .button.button-sad.button-outline.active {
-    background-color: #f53d3d;
-    box-shadow: none;
-    color: #000000;
+  .wait-message {
+    font-family: "SourceCodePro-Regular";
+    text-align: center;
+    color: $light;
   }
 }

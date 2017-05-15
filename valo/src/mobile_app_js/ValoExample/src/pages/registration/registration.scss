@@ -1,3 +1,35 @@
 page-registration {
 
+  .clear {
+    margin-bottom: 15rem;
+  }
+
+  .submit {
+    font-family: "SourceCodePro-Medium";
+    text-transform: uppercase;
+    font-size: 1.5rem;
+  }
+
+  //overriding
+  .item-block {
+    margin-bottom: 6px;
+    font-family: "SourceCodePro-Regular";
+  }
+  .list-ios .item-block .item-inner {
+    border-color: $secondary;
+  }
+  .item-label-floating .select-ios,
+  .item-ios.item-label-floating .text-input {
+    margin-bottom: 2px;
+    font-size: 1.5rem;
+    font-family: "SourceCodePro-Bold";
+  }
+  .list-ios > .item-block:last-child,
+  .list-ios > .item-wrapper:last-child .item-block {
+    border-bottom: none;
+    .item-inner {
+      border-bottom: 0.55px solid $secondary;
+    }
+  }
+
 }

@@ -1,34 +1,48 @@
-<ion-content padding>
+
+
+<ion-content>
 
   <div *ngIf="isInitialized() == true">
-    <ion-navbar color='primary'>
-      <ion-title>Rate JOTB 2017</ion-title>
-    </ion-navbar>
 
-    <h3>How happy are you with the event right now?</h3>
+    <header class="header">
+      <img class="logo" src="../../assets/images/jontb-logo.png" alt="logo">
+      <h1 class="title">Rate JOTB 2017</h1>
+    </header>
 
-    <p>
-      <button ion-button icon-left class="button button-happy" [disabled]="buttonsDisabled" (click)="sendRating($event, 1)">
-      <ion-icon name="happy"></ion-icon>
-        This is great!
-      </button>
-      <br/>
-      <button ion-button icon-left class="button button-meh" [disabled]="buttonsDisabled" (click)="sendRating($event, 0)">
-      <ion-icon name="happy"></ion-icon>
-        It's OK
-      </button>
-      <br/>
-      <button ion-button icon-left class="button button-sad" [disabled]="buttonsDisabled" (click)="sendRating($event, -1)">
-      <ion-icon name="sad"></ion-icon>
-        Needs improvement
-      </button>
-    </p>
-    <p *ngIf="buttonsDisabled">
-      Please wait for some time before sending another rating.
-    </p>
+    <div padding>
+      <h2 class="subtitle">/*-- How happy are you with the event <span class="secondary">right now</span>? -------*/</h2>
+      <div class="face-buttons">
+        <ion-grid>
+          <ion-row>
+            <ion-col col-4>
+              <button class="button button-happy" [disabled]="buttonsDisabled" (click)="sendRating($event, 1)">
+                <img src="../../assets/images/great_face.png" alt="button-happy">
+                <p>Great!</p>
+              </button>
+            </ion-col>
+            <ion-col col-4>
+              <button class="button button-meh" [disabled]="buttonsDisabled" (click)="sendRating($event, 0)">
+                <img src="../../assets/images/meh_face.png" alt="button-meh">
+                <p>Meh.</p>
+              </button>
+            </ion-col>
+            <ion-col col-4>
+              <button class="button button-sad" [disabled]="buttonsDisabled" (click)="sendRating($event, -1)">
+                <img src="../../assets/images/angry_face.png" alt="button-sad">
+                <p>Grrr!</p>
+              </button>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </div>
+      <p class="wait-message" *ngIf="buttonsDisabled">
+        Please wait for some time before sending another rating.
+      </p>
+    </div>
+
   </div>
 
-  <div *ngIf="isInitialized() == false">
+  <div *ngIf="isInitialized() == false" padding>
     <ion-navbar color='primary'>
       <ion-title>Valo Example</ion-title>
     </ion-navbar>

@@ -14,3 +14,80 @@
 // To declare rules for a specific mode, create a child rule
 // for the .md, .ios, or .wp mode classes. The mode class is
 // automatically applied to the <body> element in the app.
+
+.header {
+  background: $primary;
+  padding: 1.2rem;
+  .logo {
+    width: 50px;
+  }
+  .title {
+    font-family: "SourceCodePro-Medium";
+    display: inline-block;
+    text-transform: uppercase;
+    vertical-align: top;
+    color: $secondary;
+    font-size: 2rem;
+    margin: 1.2rem;
+  }
+}
+
+.subtitle {
+  font-family: "SourceCodePro-Bold";
+  font-size: 1.5rem;
+  padding-top: 1rem;
+  .secondary {
+    color: $secondary;
+  }
+}
+
+// tabs overriding
+.tabs-ios-footer .tabbar {
+  padding: 6px 0;
+}
+.ion-ios-home,
+.ion-ios-home-outline,
+.ion-ios-book,
+.ion-ios-book-outline,
+.ion-ios-contacts,
+.ion-ios-contacts-outline {
+  background-repeat: no-repeat;
+  background-position: 50%;
+  height: 100%;
+  background-size:contain;
+  &::before {
+    content: "";
+  }
+}
+
+.ion-ios-home-outline{
+  background-image: url('../assets/images/home.png');
+}
+.ion-ios-home{
+  background-image: url('../assets/images/home-selected.png');
+}
+.ion-ios-book-outline{
+  background-image: url('../assets/images/registration.png');
+}
+.ion-ios-book{
+  background-image: url('../assets/images/registration-selected.png');
+}
+.ion-ios-contacts-outline{
+  background-image: url('../assets/images/contact.png');
+}
+.ion-ios-contacts{
+  background-image: url('../assets/images/contact-selected.png');
+}
+
+.tabs-ios-footer .tab-button-icon {
+  color: white;
+}
+.tabs-ios-footer .tab-button[aria-selected=true], .tabs-ios-footer .tab-button[aria-selected=true] .tab-button-icon {
+  color: $secondary;
+}
+.tab-button-text {
+  text-transform: uppercase;
+  font-family: "SourceCodePro-Bold";
+  font-size: 1.2rem;
+  padding-top: 2px;
+}

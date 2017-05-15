@@ -1,3 +1,28 @@
 page-contact {
 
+.centered-menu {
+  position: relative;
+  top: 32%;
+  transform: perspective(1px) translateY(-50%);
+  .contact-list {
+    padding: 0;
+    li {
+      list-style: none;
+      text-align: center;
+      padding: 1em 0;
+      img {
+        width: 30px;
+      }
+      a {
+        text-decoration: none;
+        color: $light;
+        font-size: 1.8rem;
+        font-family: "SourceCodePro-Bold";
+        vertical-align: top;
+      }
+    }
+  }
+}
+
+
 }
