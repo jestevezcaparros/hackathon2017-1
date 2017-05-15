@@ -17,14 +17,11 @@ const config = {
     filename: 'bundle.js'
   },
   module: {
-    loaders: [
+    rules: [
             {
                 test: /\.js$/,
                 exclude: /node_modules/,
-                loader: "babel-loader", // or just "babel"
-                query: {
-                    presets: ['latest']
-                }
+                loader: "babel-loader"
             }
         ]
   },
@@ -33,7 +30,10 @@ const config = {
     aggregateTimeout: 300,
     ignored: /node_modules/
   },
-  devtool: 'eval-source-map'
+  devtool: 'inline-source-map',
+  devServer: {
+    port: 8081,
+  },
 };
 
 module.exports = config;
