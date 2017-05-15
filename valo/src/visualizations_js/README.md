@@ -16,7 +16,7 @@ If just want to play with it but not interested in hacking it, then follow this 
 - Clone this Github repository: `git clone https://github.com/ITRS-Group/hackathon2017.git`
 - Install local dependencies `cd hackathon2017 && npm run prelaunch:viz`
 - Build solution `npm run make:viz`
-- Run the project launcher script: `run launch:viz`
+- Run the project launcher script: `npm run launch:viz`
 
 After running the last command your default browser should opens up displaying the map.
 If you have any problem, please talk to an organizer for help.
